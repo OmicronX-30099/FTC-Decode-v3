@@ -13,7 +13,7 @@ object TurretSubsystem: Subsystem {
     private const val GEAR_RATIO: Double = 3337.0/3600.0
     internal var targetAngle: Double = 0.0
 
-    internal fun updateTurret() { turretServos.position = (normalizeAngle(targetAngle) * GEAR_RATIO) / 355.0 }
+    internal fun updateTurret() { turretServos.position = ((normalizeAngle(targetAngle) * GEAR_RATIO) / 355.0) + 0.5 }
 }
 
 internal enum class TurretState: State {

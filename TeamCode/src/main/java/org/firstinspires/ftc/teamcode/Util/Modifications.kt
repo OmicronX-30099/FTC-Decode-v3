@@ -20,4 +20,4 @@ fun NextFTCOpMode.includePedro(followerFactory: (HardwareMap) -> Follower) {
     addComponents(PedroComponent(followerFactory))
 }
 
-internal var currAlliance: Alliance = Alliance.BLUE
+var currAlliance: Alliance = Alliance.BLUE

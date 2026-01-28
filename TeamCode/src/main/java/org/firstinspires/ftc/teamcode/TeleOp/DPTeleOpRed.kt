@@ -7,6 +7,7 @@ import dev.nextftc.extensions.pedro.PedroDriverControlled
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.hardware.driving.DriverControlledCommand
+import org.firstinspires.ftc.teamcode.Constants.PedroConstants
 import org.firstinspires.ftc.teamcode.Enums.Alliance
 import org.firstinspires.ftc.teamcode.Final.Subsystems.ShooterSystem
 import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.IntakeSubsystem
@@ -16,12 +17,14 @@ import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.FlywheelState
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.TurretState
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.currAlliance
+import org.firstinspires.ftc.teamcode.Util.includePedro
 import kotlin.math.PI
 
 @TeleOp(name = "Red TeleOp - DP")
 class DPTeleOpRed: NextFTCOpMode() {
     init {
         addSubsystems(ShooterSystem, IntakeSubsystem)
+        includePedro(PedroConstants::createFollower)
     }
 
     val drivetrain: DriverControlledCommand by lazy {
