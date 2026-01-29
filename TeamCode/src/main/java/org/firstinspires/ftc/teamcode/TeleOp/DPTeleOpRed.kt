@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode.TeleOp
 
 import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import com.qualcomm.robotcore.hardware.AnalogInput
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.extensions.pedro.PedroDriverControlled
+import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.hardware.driving.DriverControlledCommand
@@ -35,6 +37,8 @@ class DPTeleOpRed: NextFTCOpMode() {
             true
         )
     }
+    val turretEncoder by lazy { ActiveOpMode.hardwareMap.get(AnalogInput::class.java, "te") }
+
 
     override fun onStartButtonPressed() {
         currAlliance = Alliance.RED
@@ -106,5 +110,8 @@ class DPTeleOpRed: NextFTCOpMode() {
 
     override fun onUpdate() {
         ShooterSystem.updateShooter()
+        telemetry.addData("asdf",turretEncoder.voltage / 3.3 * 360.0)
+
+        telemetry.update()
     }
 }

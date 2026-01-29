@@ -10,7 +10,7 @@ object TurretSubsystem: Subsystem {
     private val torctexTurretServo: ServoEx = ServoEx("ft",-0.1)
     private val turretServos: ServoGroup = ServoGroup(axonTurretServo, torctexTurretServo)
 
-    private const val GEAR_RATIO: Double = 3337.0/3600.0
+    private const val GEAR_RATIO: Double = 0.9375
     internal var targetAngle: Double = 0.0
 
     internal fun updateTurret() { turretServos.position = ((normalizeAngle(targetAngle) * GEAR_RATIO) / 355.0) + 0.5 }

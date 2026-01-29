@@ -10,8 +10,8 @@ import dev.nextftc.hardware.impl.MotorEx
 import org.firstinspires.ftc.teamcode.Final.Subsystems.State
 
 object FlywheelSubsystem: Subsystem {
-    private val topFlywheelMotor: MotorEx = MotorEx("fwl")
-    private val bottomFlywheelMotor: MotorEx = MotorEx("fwr")
+    private val topFlywheelMotor: MotorEx = MotorEx("fwt")
+    private val bottomFlywheelMotor: MotorEx = MotorEx("fwb")
     private val flywheelMotors: MotorGroup = MotorGroup(topFlywheelMotor, bottomFlywheelMotor)
 
     private val flywheelPIDCoefficients: PIDCoefficients = PIDCoefficients(0.0075,0.0,0.0)
