@@ -23,8 +23,8 @@ import org.firstinspires.ftc.teamcode.Util.currStartPose
 import org.firstinspires.ftc.teamcode.Util.includePedro
 import kotlin.math.PI
 
-@TeleOp(name = "Red TeleOp - DP")
-class DPTeleOpRed: NextFTCOpMode() {
+@TeleOp(name = "Blue TeleOp - DP")
+class DPTeleOpBlue: NextFTCOpMode() {
     init {
         addSubsystems(ShooterSystem, IntakeSubsystem)
         includePedro(PedroConstants::createFollower)
@@ -40,7 +40,7 @@ class DPTeleOpRed: NextFTCOpMode() {
     }
 
     override fun onStartButtonPressed() {
-        currAlliance = Alliance.RED
+        currAlliance = Alliance.BLUE
         drivetrain.schedule()
         follower.setStartingPose(currStartPose)
         Gamepads.gamepad1.rightTrigger.greaterThan(0.0)
