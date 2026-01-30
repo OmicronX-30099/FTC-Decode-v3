@@ -20,7 +20,7 @@ object PassiveSystem: SubsystemGroup(BIMSubsystem, IntakeSubsystem, TransferSubs
                 TransferSubsystem.transfer(0.75)
                 ShooterGateSubsystem.open()
             },
-            Delay(0.85),
+            Delay(0.8),
             InstantCommand {
                 ShooterGateSubsystem.block()
                 IntakeSubsystem.intake(0.0)
