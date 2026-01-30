@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems
 import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.hardware.impl.ServoEx
 import dev.nextftc.hardware.positionable.ServoGroup
-import org.firstinspires.ftc.teamcode.Final.Subsystems.State
+import org.firstinspires.ftc.teamcode.Systems.State
 
 object TurretSubsystem: Subsystem {
     private val axonTurretServo: ServoEx = ServoEx("lt",-0.1)

@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.Util
 import com.pedropathing.follower.Follower
 import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.hardware.HardwareMap
-import dev.nextftc.bindings.Button
-import dev.nextftc.bindings.button
 import dev.nextftc.core.components.BindingsComponent
 import dev.nextftc.core.components.SubsystemComponent
 import dev.nextftc.core.subsystems.Subsystem

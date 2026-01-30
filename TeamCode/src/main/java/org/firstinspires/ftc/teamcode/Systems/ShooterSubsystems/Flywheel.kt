@@ -7,7 +7,7 @@ import dev.nextftc.control2.feedforward.SimpleFeedforward
 import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.hardware.controllable.MotorGroup
 import dev.nextftc.hardware.impl.MotorEx
-import org.firstinspires.ftc.teamcode.Final.Subsystems.State
+import org.firstinspires.ftc.teamcode.Systems.State
 
 object FlywheelSubsystem: Subsystem {
     private val topFlywheelMotor: MotorEx = MotorEx("fwt")
