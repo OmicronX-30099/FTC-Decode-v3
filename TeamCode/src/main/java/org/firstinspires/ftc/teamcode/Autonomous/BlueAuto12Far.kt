@@ -80,6 +80,7 @@ class BlueAuto12Far: NextFTCOpMode() {
 
     override fun onUpdate() {
         ShooterSystem.updateShooter()
+        telemetry.update()
     }
 
     fun buildPaths() {
