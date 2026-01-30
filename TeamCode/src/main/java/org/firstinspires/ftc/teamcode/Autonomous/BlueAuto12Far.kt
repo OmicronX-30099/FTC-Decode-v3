@@ -78,6 +78,10 @@ class BlueAuto12Far: NextFTCOpMode() {
         main.schedule()
     }
 
+    override fun onUpdate() {
+        ShooterSystem.updateShooter()
+    }
+
     fun buildPaths() {
         val pushPath = follower.pathBuilder().addPath(
             BezierLine(
