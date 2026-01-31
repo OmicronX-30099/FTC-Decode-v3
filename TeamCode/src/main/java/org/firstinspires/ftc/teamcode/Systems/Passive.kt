@@ -18,7 +18,7 @@ object PassiveSystem: SubsystemGroup(BIMSubsystem, IntakeSubsystem, TransferSubs
 ) {
     val shootTripleCommand: Command
         get() = IfElseCommand(
-            { inFarZone() },
+            { follower.pose.distanceFrom(currAlliance.goalPose) > 101.0 },
             shootTripleCommandFar,
             shootTripleCommandClose
         )
@@ -50,13 +50,6 @@ object PassiveSystem: SubsystemGroup(BIMSubsystem, IntakeSubsystem, TransferSubs
                 TransferSubsystem.transfer(0.0)
             }
         )
-    internal fun inFarZone(): Boolean {
-        if (follower.pose.distanceFrom(currAlliance.goalPose) > 101.0) {
-            return true
-        } else {
-            return false
-        }
-    }
     val shootSingular: Command
         get() = SequentialGroup(
             InstantCommand {
