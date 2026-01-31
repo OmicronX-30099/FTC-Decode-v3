@@ -4,6 +4,7 @@ import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
 import com.pedropathing.paths.PathChain
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import dev.nextftc.core.commands.Command
 import dev.nextftc.core.commands.delays.Delay
 import dev.nextftc.core.commands.delays.WaitUntil
@@ -25,7 +26,7 @@ import org.firstinspires.ftc.teamcode.Util.currAlliance
 import org.firstinspires.ftc.teamcode.Util.includePedro
 import kotlin.math.PI
 
-
+@Autonomous(name = "Red 18 Far", group = "18 ball", preselectTeleOp = "Red TeleOp - DP")
 class Red18BallFar: NextFTCOpMode() {
     init {
         addSubsystems(ShooterSystem, PassiveSystem)
