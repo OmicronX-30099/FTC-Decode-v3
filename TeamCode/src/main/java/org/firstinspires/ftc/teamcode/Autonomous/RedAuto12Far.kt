@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.Util.includePedro
 import kotlin.math.PI
 
 
-@Autonomous(name = "Red Far 12 ball Auto", group = "Red 12 autos", preselectTeleOp = "Red TeleOp - DP")
+@Autonomous(name = "Path Tester", group = "Red 12 autos")
 class PathTester: NextFTCOpMode() {
     init {
         addSubsystems(ShooterSystem, PassiveSystem)
