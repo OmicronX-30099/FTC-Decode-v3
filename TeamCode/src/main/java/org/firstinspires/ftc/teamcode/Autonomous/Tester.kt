@@ -54,6 +54,7 @@ class PathTester: NextFTCOpMode() {
                     }
                 )
             ),
+            Delay(0.25),
             PassiveSystem.shootTripleCommand
         )
         main.schedule()
