@@ -47,7 +47,7 @@ class PathTester: NextFTCOpMode() {
             ParallelGroup(
                 FollowPath(paths[1]),
                 SequentialGroup(
-                    Delay(1.0),
+                    Delay(0.5),
                     InstantCommand {
                         IntakeSubsystem.intake(0.0)
                         TransferSubsystem.transfer(0.0)
