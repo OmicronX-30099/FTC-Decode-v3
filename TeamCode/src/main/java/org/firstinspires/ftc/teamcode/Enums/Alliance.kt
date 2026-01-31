@@ -7,7 +7,7 @@ import dev.nextftc.units.unittypes.Inches
 
 enum class Alliance {
     RED {
-        override val goalPose: Pose = Pose(this.fieldWidth.magnitude, this.fieldLength.magnitude)
+        override val goalPose: Pose = Pose(this.fieldWidth.magnitude-5.0, this.fieldLength.magnitude)
         override val turretTargetPose: Pose = Pose(this.goalPose.x - this.turretAimOffsetX.magnitude, this.goalPose.y - this.turretAimOffsetY.magnitude)
 
         override val firstResetPose: Pose = Pose(0.0,0.0)

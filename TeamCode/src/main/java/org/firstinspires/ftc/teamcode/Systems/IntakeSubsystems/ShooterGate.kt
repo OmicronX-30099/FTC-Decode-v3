@@ -12,5 +12,5 @@ object ShooterGateSubsystem: Subsystem {
     }
 
     internal fun open() { shooterGateServo.position = 0.1 }
-    internal fun block() { shooterGateServo.position = 0.4 }
+    internal fun block() { shooterGateServo.position = 0.45 }
 }
