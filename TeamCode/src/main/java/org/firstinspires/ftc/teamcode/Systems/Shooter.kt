@@ -22,7 +22,7 @@ object ShooterSystem: SubsystemGroup(TurretSubsystem, FlywheelSubsystem) {
         FlywheelSubsystem.updateFlywheel()
     }
     private fun calculateTurretAngle(botPose: Pose): Double {
-        return Math.toDegrees(atan2(botPose.y - currAlliance.goalPose.y, botPose.x - currAlliance.goalPose.x) - botPose.heading)
+        return Math.toDegrees(atan2(botPose.y - currAlliance.turretTargetPose.y, botPose.x - currAlliance.turretTargetPose.x) - botPose.heading)
     }
     private fun calculateFlywheelVelocity(botPose: Pose): Double {
         val d: Double = botPose.distanceFrom(currAlliance.goalPose)
