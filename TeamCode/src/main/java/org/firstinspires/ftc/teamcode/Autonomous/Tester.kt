@@ -24,7 +24,7 @@ import kotlin.math.PI
 
 
 @Autonomous(name = "Tester", group = "Tests")
-class PathTester: NextFTCOpMode() {
+class Tester: NextFTCOpMode() {
     init {
         addSubsystems(ShooterSystem, PassiveSystem)
         includePedro(PedroConstants::createFollower)
@@ -88,9 +88,6 @@ class PathTester: NextFTCOpMode() {
     }
 
     override fun onUpdate() {
-        telemetry.addData("x",follower.pose.x)
-        telemetry.addData("y",follower.pose.y)
-        telemetry.addData("h",Math.toDegrees(follower.pose.heading))
         ShooterSystem.updateShooter()
         telemetry.update()
     }
