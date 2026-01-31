@@ -84,7 +84,7 @@ class PathTester: NextFTCOpMode() {
                 Pose(98.500, 36.000),
                 Pose(81.100, 14.500)
             )
-        ).setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(45.0))
+        ).setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(90.0))
 
             .build()
         paths += Path1
