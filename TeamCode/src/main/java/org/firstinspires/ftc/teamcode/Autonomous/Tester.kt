@@ -36,8 +36,8 @@ class PathTester: NextFTCOpMode() {
     }
 
     override fun onStartButtonPressed() {
-        follower.setStartingPose(Pose(87.000, 9.700, PI/2))
         buildPaths()
+        follower.setStartingPose(Pose(87.000, 9.700, PI/2))
         val main = SequentialGroup(
             InstantCommand {
                 IntakeSubsystem.intake(1.0)
