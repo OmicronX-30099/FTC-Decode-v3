@@ -9,8 +9,8 @@ import dev.nextftc.units.unittypes.Inches
 enum class Alliance {
     RED {
         override val goalPose: Pose = Pose(this.fieldWidth.magnitude, this.fieldLength.magnitude)
-        override val farTurretTargetPose: Pose = Pose(this.goalPose.x - this.turretAimCloseOffsetX.magnitude, this.goalPose.y)
-        override val closeTurretTargetPose: Pose = Pose(this.goalPose.x - this.turretFarAimOffsetX.magnitude, this.goalPose.y)
+        override val farTurretTargetPose: Pose = Pose(this.goalPose.x - this.turretFarAimOffsetX.magnitude, this.goalPose.y)
+        override val closeTurretTargetPose: Pose = Pose(this.goalPose.x - this.turretAimCloseOffsetX.magnitude, this.goalPose.y)
 
         override fun turretTargetPose(): Pose {
             return if (follower.pose.distanceFrom(goalPose) > 100) { this.farTurretTargetPose}
@@ -25,8 +25,8 @@ enum class Alliance {
     },
     BLUE {
         override val goalPose: Pose = Pose(0.0, this.fieldLength.magnitude)
-        override val farTurretTargetPose: Pose = Pose(this.goalPose.x + this.turretAimCloseOffsetX.magnitude, this.goalPose.y)
-        override val closeTurretTargetPose: Pose = Pose(this.goalPose.x + this.turretFarAimOffsetX.magnitude, this.goalPose.y)
+        override val farTurretTargetPose: Pose = Pose(this.goalPose.x + this.turretFarAimOffsetX.magnitude, this.goalPose.y)
+        override val closeTurretTargetPose: Pose = Pose(this.goalPose.x + this.turretAimCloseOffsetX.magnitude, this.goalPose.y)
 
         override fun turretTargetPose(): Pose {
             return if (follower.pose.distanceFrom(goalPose) > 100) { this.farTurretTargetPose}
@@ -53,6 +53,6 @@ enum class Alliance {
 
     open val fieldWidth: Measure<DistanceUnit> = Inches.of(141.5)
     open val fieldLength: Measure<DistanceUnit> = Inches.of(141.5)
-    open val turretAimCloseOffsetX: Measure<DistanceUnit> = Inches.of(6.0)
-    open val turretFarAimOffsetX: Measure<DistanceUnit> = Inches.of(14.5)
+    open val turretAimCloseOffsetX: Measure<DistanceUnit> = Inches.of(2.5)
+    open val turretFarAimOffsetX: Measure<DistanceUnit> = Inches.of(6.0)
 }
