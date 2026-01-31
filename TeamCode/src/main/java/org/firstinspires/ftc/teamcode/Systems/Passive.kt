@@ -28,7 +28,7 @@ object PassiveSystem: SubsystemGroup(
         get() = SequentialGroup(
             InstantCommand {
                 IntakeSubsystem.intake(1.0)
-                TransferSubsystem.transfer(0.75)
+                TransferSubsystem.transfer(1.0)
                 ShooterGateSubsystem.open()
             },
             Delay(0.85),
@@ -45,7 +45,7 @@ object PassiveSystem: SubsystemGroup(
                 TransferSubsystem.transfer(0.6)
                 ShooterGateSubsystem.open()
             },
-            Delay(1.0),
+            Delay(1.3),
             InstantCommand {
                 ShooterGateSubsystem.block()
                 IntakeSubsystem.intake(0.0)
@@ -59,7 +59,7 @@ object PassiveSystem: SubsystemGroup(
                 TransferSubsystem.transfer(1.0)
                 ShooterGateSubsystem.open()
             },
-            Delay(0.5),
+            Delay(0.25),
             InstantCommand {
                 ShooterGateSubsystem.block()
                 IntakeSubsystem.intake(0.0)
