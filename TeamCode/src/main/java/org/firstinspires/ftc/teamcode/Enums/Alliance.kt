@@ -53,6 +53,6 @@ enum class Alliance {
 
     open val fieldWidth: Measure<DistanceUnit> = Inches.of(141.5)
     open val fieldLength: Measure<DistanceUnit> = Inches.of(141.5)
-    open val turretAimCloseOffsetX: Measure<DistanceUnit> = Inches.of(2.5)
+    open val turretAimCloseOffsetX: Measure<DistanceUnit> = Inches.of(0.0)
     open val turretFarAimOffsetX: Measure<DistanceUnit> = Inches.of(6.0)
 }
