@@ -61,6 +61,9 @@ class PathTester: NextFTCOpMode() {
     }
 
     override fun onUpdate() {
+        telemetry.addData("x",follower.pose.x)
+        telemetry.addData("y",follower.pose.y)
+        telemetry.addData("h",Math.toDegrees(follower.pose.heading))
         ShooterSystem.updateShooter()
         telemetry.update()
     }
