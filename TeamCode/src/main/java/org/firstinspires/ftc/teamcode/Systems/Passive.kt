@@ -8,12 +8,14 @@ import dev.nextftc.core.commands.utility.InstantCommand
 import dev.nextftc.core.subsystems.SubsystemGroup
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.BIMSubsystem
+import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.BreakBeamSubsystem
 import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.IntakeSubsystem
 import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.ShooterGateSubsystem
 import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.TransferSubsystem
 import org.firstinspires.ftc.teamcode.Util.currAlliance
 
-object PassiveSystem: SubsystemGroup(BIMSubsystem, IntakeSubsystem, TransferSubsystem,
+object PassiveSystem: SubsystemGroup(
+    BreakBeamSubsystem, BIMSubsystem, IntakeSubsystem, TransferSubsystem,
     ShooterGateSubsystem
 ) {
     val shootTripleCommand: Command

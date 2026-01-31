@@ -24,7 +24,7 @@ import kotlin.math.PI
 
 
 @Autonomous(name = "Tester", group = "Tests")
-class PathTester: NextFTCOpMode() {
+class Tester: NextFTCOpMode() {
     init {
         addSubsystems(ShooterSystem, PassiveSystem)
         includePedro(PedroConstants::createFollower)
