@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.Autonomous
 
-import com.pedropathing.geometry.BezierLine
+import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.Pose
 import com.pedropathing.paths.PathChain
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import dev.nextftc.core.commands.delays.Delay
+import dev.nextftc.core.commands.groups.ParallelGroup
 import dev.nextftc.core.commands.groups.SequentialGroup
 import dev.nextftc.core.commands.utility.InstantCommand
 import dev.nextftc.extensions.pedro.FollowPath
@@ -21,7 +23,7 @@ import org.firstinspires.ftc.teamcode.Util.includePedro
 import kotlin.math.PI
 
 
-@Autonomous(name = "Path Tester", group = "Red 12 autos")
+@Autonomous(name = "Tester", group = "Tests")
 class PathTester: NextFTCOpMode() {
     init {
         addSubsystems(ShooterSystem, PassiveSystem)
@@ -34,7 +36,7 @@ class PathTester: NextFTCOpMode() {
     }
 
     override fun onStartButtonPressed() {
-        follower.setStartingPose(Pose(70.500, 70.500, PI/2))
+        follower.setStartingPose(Pose(87.000, 9.700, PI/2))
         buildPaths()
         val main = SequentialGroup(
             InstantCommand {
@@ -42,6 +44,16 @@ class PathTester: NextFTCOpMode() {
                 TransferSubsystem.transfer(0.35)
             },
             FollowPath(paths[0]),
+            ParallelGroup(
+                FollowPath(paths[1]),
+                SequentialGroup(
+                    Delay(1.0),
+                    InstantCommand {
+                        IntakeSubsystem.intake(0.0)
+                        TransferSubsystem.transfer(0.0)
+                    }
+                )
+            ),
             PassiveSystem.shootTripleCommand
         )
         main.schedule()
@@ -54,14 +66,24 @@ class PathTester: NextFTCOpMode() {
 
     fun buildPaths() {
         val Path1 = follower.pathBuilder().addPath(
-            BezierLine(
-                Pose(70.500, 70.500),
-
-                Pose(70.500, 117.500)
+            BezierCurve(
+                Pose(87.000, 9.700),
+                Pose(95.500, 33.000),
+                Pose(130.000, 35.000)
             )
-        ).setConstantHeadingInterpolation(Math.toRadians(90.0))
+        ).setLinearHeadingInterpolation(Math.toRadians(90.0), Math.toRadians(0.0))
+
+            .build()
+        val Path2 = follower.pathBuilder().addPath(
+            BezierCurve(
+                Pose(130.000, 35.000),
+                Pose(98.500, 36.000),
+                Pose(81.100, 14.500)
+            )
+        ).setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(45.0))
 
             .build()
         paths += Path1
+        paths += Path2
     }
 }
