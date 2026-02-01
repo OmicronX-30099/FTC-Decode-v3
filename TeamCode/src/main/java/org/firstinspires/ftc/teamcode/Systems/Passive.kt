@@ -20,7 +20,7 @@ object PassiveSystem: SubsystemGroup(
 ) {
     val shootTripleCommand: Command
         get() = IfElseCommand(
-            { follower.pose.distanceFrom(currAlliance.goalPose) > 101.0 },
+            { follower.pose.distanceFrom(currAlliance.goalPose) > 110.0 },
             shootTripleCommandFar,
             shootTripleCommandClose
         )
@@ -41,8 +41,8 @@ object PassiveSystem: SubsystemGroup(
     val shootTripleCommandFar: Command
         get() = SequentialGroup(
             InstantCommand {
-                IntakeSubsystem.intake(1.0)
-                TransferSubsystem.transfer(0.6)
+                IntakeSubsystem.intake(0.8)
+                TransferSubsystem.transfer(0.45)
                 ShooterGateSubsystem.open()
             },
             Delay(1.3),

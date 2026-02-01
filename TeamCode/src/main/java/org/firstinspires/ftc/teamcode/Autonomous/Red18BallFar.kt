@@ -49,10 +49,8 @@ class Red18BallFar: NextFTCOpMode() {
                 IntakeSubsystem.intake(1.0)
                 TransferSubsystem.transfer(0.35)
             },
-            FollowPath(paths[2]),
-            WaitUntil { !BreakBeamSubsystem.prevIntakeState && BreakBeamSubsystem.currIntakeState },
-            WaitUntil { !BreakBeamSubsystem.prevIntakeState && BreakBeamSubsystem.currIntakeState },
-            WaitUntil { !BreakBeamSubsystem.prevIntakeState && BreakBeamSubsystem.currIntakeState },
+            FollowPath(paths[2],holdEnd = true),
+            Delay(2.0),
             ParallelGroup(
                 FollowPath(paths[3]),
                 SequentialGroup(
@@ -66,6 +64,7 @@ class Red18BallFar: NextFTCOpMode() {
             PassiveSystem.shootTripleCommand
         )
         val main = SequentialGroup(
+            PassiveSystem.shootTripleCommand,
             InstantCommand {
                 IntakeSubsystem.intake(1.0)
                 TransferSubsystem.transfer(0.35)
@@ -120,19 +119,19 @@ class Red18BallFar: NextFTCOpMode() {
         val intakeCyclePath = follower.pathBuilder().addPath(
             BezierLine(
                 Pose(58.750, 18.500).mirror(141.5),
-                Pose(12.750, 59.200).mirror(141.5)
+                Pose(128.8, 60.1)
             )
         )
-        .setLinearHeadingInterpolation(Math.toRadians(20.0), Math.toRadians(35.0))
+        .setLinearHeadingInterpolation(Math.toRadians(20.0), 0.635)
         .build()
 
         val shootCyclePath = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(12.750, 59.200).mirror(141.5),
+                Pose(128.8, 60.1),
                 Pose(58.750, 18.500).mirror(141.5)
             )
         )
-            .setLinearHeadingInterpolation(Math.toRadians(35.0), Math.toRadians(20.0))
+            .setLinearHeadingInterpolation(0.635, Math.toRadians(20.0))
         .build()
         val leavePath = follower.pathBuilder().addPath(
             BezierLine(

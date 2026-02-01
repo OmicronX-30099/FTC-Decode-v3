@@ -21,4 +21,4 @@ fun NextFTCOpMode.includePedro(followerFactory: (HardwareMap) -> Follower) {
 }
 
 var currAlliance: Alliance = Alliance.BLUE
-var currStartPose: Pose = Pose(72.0,72.0, PI/2.0)
+var currStartPose: Pose = Pose(87.5,8.0, Math.toRadians(0.0))
