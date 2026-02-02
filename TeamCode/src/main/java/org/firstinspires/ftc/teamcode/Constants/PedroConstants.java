@@ -49,7 +49,7 @@ public class PedroConstants {
             .useBrakeModeInTeleOp(true);
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1.5, 1.2);
-
+    public static double fieldWidth  = 141.5;
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .pinpointLocalizer(localizerConstants)
