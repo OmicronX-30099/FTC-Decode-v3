@@ -40,7 +40,17 @@ class IndexTester: NextFTCOpMode() {
     override fun onStartButtonPressed() {
         buildPaths()
         follower.setStartingPose(Pose(72.000, 72.000, Math.toRadians(90.0)))
-
+            /*ParallelGroup(
+                FollowPath(paths[0],true,0.467),
+                SequentialGroup(
+                    InstantCommand { IntakeSubsystem.intake(1.0)
+                        TransferSubsystem.transfer(0.1)},
+                    Delay(0.5),
+                    InstantCommand { BIMSubsystem.loadRight() },
+                    Delay(1.5),
+                    InstantCommand { IntakeSubsystem.intake(0.0) }
+                )
+            )*/
         /*val main = SequentialGroup(
                 InstantCommand { BIMSubsystem.opengate() },
                 InstantCommand {
