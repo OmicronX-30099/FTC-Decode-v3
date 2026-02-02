@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.Constants.PedroConstants
 import org.firstinspires.ftc.teamcode.Enums.Alliance
 import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.BIMSubsystem
 import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.IntakeSubsystem
+import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.ShooterGateSubsystem
 import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.TransferSubsystem
 import org.firstinspires.ftc.teamcode.Systems.PassiveSystem
 import org.firstinspires.ftc.teamcode.Systems.ShooterSystem
@@ -39,19 +40,69 @@ class IndexTester: NextFTCOpMode() {
     override fun onStartButtonPressed() {
         buildPaths()
         follower.setStartingPose(Pose(72.000, 72.000, Math.toRadians(90.0)))
+
+        /*val main = SequentialGroup(
+                InstantCommand { BIMSubsystem.opengate() },
+                InstantCommand {
+                    TransferSubsystem.transfer(1.0)
+                    ShooterGateSubsystem.open()
+                },
+                Delay(0.3),
+                InstantCommand { BIMSubsystem.loadLeft() },
+                Delay(0.4),
+                InstantCommand { IntakeSubsystem.intake(1.0) },
+                Delay(0.5),
+                InstantCommand {
+                    IntakeSubsystem.intake(0.0)
+                    TransferSubsystem.transfer(0.0)
+                    ShooterGateSubsystem.block()
+                    BIMSubsystem.closeGate()
+                }
+        )*/
+        /*val main = SequentialGroup(
+            InstantCommand { BIMSubsystem.opengate() },
+            InstantCommand {
+                TransferSubsystem.transfer(1.0)
+                ShooterGateSubsystem.open()
+            },
+            Delay(0.3),
+            InstantCommand { BIMSubsystem.loadRight() },
+            Delay(0.4),
+            InstantCommand { IntakeSubsystem.intake(1.0) },
+            Delay(0.5),
+            InstantCommand {
+                IntakeSubsystem.intake(0.0)
+                TransferSubsystem.transfer(0.0)
+                ShooterGateSubsystem.block()
+                BIMSubsystem.closeGate()
+            }
+        )*/
         val main = SequentialGroup(
-            ParallelGroup(
-                FollowPath(paths[0],true,0.467),
-                SequentialGroup(
-                    InstantCommand { IntakeSubsystem.intake(1.0)
-                        TransferSubsystem.transfer(0.1)},
-                    Delay(0.5),
-                    InstantCommand { BIMSubsystem.loadRight() },
-                    Delay(1.5),
-                    InstantCommand { IntakeSubsystem.intake(0.0) }
-                )
+            InstantCommand {
+                BIMSubsystem.opengate()
+                BIMSubsystem.loadMiddle()
+            },
+            InstantCommand {
+                TransferSubsystem.transfer(1.0)
+                IntakeSubsystem.intake(1.0)
+                ShooterGateSubsystem.open()
+            },
+            Delay(0.5),
+            InstantCommand {
+                BIMSubsystem.loadLeft() },
+            Delay(0.4),
+            InstantCommand {
+                BIMSubsystem.loadRight() },
+            Delay(0.5),
+            InstantCommand {
+                IntakeSubsystem.intake(0.0)
+                TransferSubsystem.transfer(0.0)
+                ShooterGateSubsystem.block()
+                BIMSubsystem.closeGate()
+            }
+
+
             )
-        )
         main.schedule()
     }
 
