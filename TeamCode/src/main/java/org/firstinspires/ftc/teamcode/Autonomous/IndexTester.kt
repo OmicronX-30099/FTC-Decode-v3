@@ -38,7 +38,7 @@ class IndexTester: NextFTCOpMode() {
 
     override fun onStartButtonPressed() {
         buildPaths()
-        follower.setStartingPose(Pose(72.000, 72.000, Math.toRadians(90.0)))
+        follower.setStartingPose(Pose(78.5,8.0,Math.toRadians(90.0)))
             /*ParallelGroup(
                 FollowPath(paths[0],true,0.467),
                 SequentialGroup(
@@ -138,8 +138,8 @@ class IndexTester: NextFTCOpMode() {
     }
 
     fun buildPaths() {
-        val startPose = Pose(78.5,8.0,Math.toRadians(PI/2))
-        val pushPose = Pose(90.0,8.0,Math.toRadians(PI/2))
+        val startPose = Pose(78.5,8.0,Math.toRadians(90.0))
+        val pushPose = Pose(90.0,8.0,Math.toRadians(90.0))
         val preloadPose = Pose(90.0,80.0, Math.toRadians(0.0))
 
         val firstIntakeControl = Pose(99.25, 49.75)
