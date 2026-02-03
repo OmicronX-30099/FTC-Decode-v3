@@ -1,0 +1,28 @@
+package org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems
+
+import dev.nextftc.core.subsystems.Subsystem
+import dev.nextftc.hardware.impl.ServoEx
+import dev.nextftc.hardware.positionable.ServoGroup
+
+object TurretSubsystem: Subsystem {
+    private val axonTurretServo: ServoEx = ServoEx("lt",-0.1)
+    private val torctexTurretServo: ServoEx = ServoEx("ft",-0.1)
+    private val turretServos: ServoGroup = ServoGroup(axonTurretServo, torctexTurretServo)
+
+    private const val GEAR_RATIO: Double = 15.0 / 16.0
+    internal var targetTurretAngle: Double = 0.0
+
+    internal fun updateTurret() { turretServos.position = (normalizeAngle(targetTurretAngle) * (GEAR_RATIO / 355.0) + 0.5) }
+}
+
+internal enum TurretState {
+    AUTO_AIM,
+    MANUAL;
+}
+
+internal fun normalizeAngle(angDeg: Double): Double {
+    var a = angDeg
+    if (a < 0.0) { a += 360.0 }
+    if (a > 180.0) { a -= 360.0 }
+    return a
+}
