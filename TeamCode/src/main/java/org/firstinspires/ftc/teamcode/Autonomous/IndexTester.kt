@@ -38,7 +38,7 @@ class IndexTester: NextFTCOpMode() {
 
     override fun onStartButtonPressed() {
         buildPaths()
-        follower.setStartingPose(Pose(78.5,8.0,Math.toRadians(90.0)))
+        follower.setStartingPose(Pose(70.5,8.0,PI/2))
             /*ParallelGroup(
                 FollowPath(paths[0],true,0.467),
                 SequentialGroup(
@@ -114,20 +114,6 @@ class IndexTester: NextFTCOpMode() {
             )*/
         val main = SequentialGroup(
             FollowPath(paths[0]),
-            Delay(0.75),
-            FollowPath(paths[1]),
-            Delay(0.75),
-            FollowPath(paths[2]),
-            Delay(0.75),
-            FollowPath(paths[3]),
-            Delay(0.75),
-            FollowPath(paths[4]),
-            Delay(0.75),
-            FollowPath(paths[5]),
-            Delay(0.75),
-            FollowPath(paths[6]),
-            Delay(0.75),
-            FollowPath(paths[7])
         )
         main.schedule()
     }
@@ -137,7 +123,7 @@ class IndexTester: NextFTCOpMode() {
         telemetry.update()
     }
 
-    fun buildPaths() {
+    /*fun buildPaths() {
         val startPose = Pose(78.5,8.0,Math.toRadians(90.0))
         val pushPose = Pose(90.0,8.0,Math.toRadians(90.0))
         val preloadPose = Pose(90.0,80.0, Math.toRadians(0.0))
@@ -174,7 +160,7 @@ class IndexTester: NextFTCOpMode() {
             .setLinearHeadingInterpolation(preloadPose.heading, firstIntakePose.heading)
             .addParametricCallback(
                 0.5,
-                {follower.setMaxPower(0.45)}
+                { follower.setMaxPower(0.45) }
             )
             .addParametricCallback(
                 1.0,
@@ -251,5 +237,14 @@ class IndexTester: NextFTCOpMode() {
         paths += thirdIntake
         paths += thirdShoot
         paths += leavePath
+    }*/
+    fun buildPaths() {
+        val test = follower.pathBuilder()
+            .addPath(BezierLine(Pose(70.5,8.0),Pose(70.5,100.0)))
+            .setConstantHeadingInterpolation(PI/2)
+            .addParametricCallback(0.5,
+                { follower.setMaxPower(0.4) }
+            )
+            .build()
     }
 }
