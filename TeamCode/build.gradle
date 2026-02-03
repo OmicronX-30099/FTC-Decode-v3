@@ -58,7 +58,7 @@ dependencies {
 
     // NextControl v1/v2
     implementation 'dev.nextftc:control:1.0.0'
-    implementation 'dev.nextftc.control2:control:0.0.1-alpha.3'
+    implementation 'dev.nextftc.control2:control:0.0.1-alpha.4'
 
     // NextPedro
     implementation 'dev.nextftc.extensions:pedro:1.0.0'
