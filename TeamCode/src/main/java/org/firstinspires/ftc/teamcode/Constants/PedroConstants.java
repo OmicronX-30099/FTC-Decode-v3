@@ -48,7 +48,7 @@ public class PedroConstants {
             .yVelocity(47.75)
             .useBrakeModeInTeleOp(true);
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1.5, 1.2);
+    public static PathConstraints pathConstraints = new PathConstraints(1.0, 100, 1.5, 1.2);
     public static double fieldWidth  = 141.5;
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)

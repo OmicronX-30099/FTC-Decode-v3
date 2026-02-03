@@ -6,7 +6,6 @@ import com.pedropathing.geometry.Pose
 import com.pedropathing.paths.PathChain
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import dev.nextftc.core.commands.delays.Delay
-import dev.nextftc.core.commands.groups.ParallelGroup
 import dev.nextftc.core.commands.groups.SequentialGroup
 import dev.nextftc.core.commands.utility.InstantCommand
 import dev.nextftc.extensions.pedro.FollowPath
@@ -87,7 +86,7 @@ class IndexTester: NextFTCOpMode() {
                 BIMSubsystem.closeGate()
             }
         )*/
-        val main = SequentialGroup(
+        /*val main = SequentialGroup(
             InstantCommand {
                 BIMSubsystem.opengate()
                 BIMSubsystem.loadMiddle()
@@ -112,7 +111,24 @@ class IndexTester: NextFTCOpMode() {
             }
 
 
-            )
+            )*/
+        val main = SequentialGroup(
+            FollowPath(paths[0]),
+            Delay(0.75),
+            FollowPath(paths[1]),
+            Delay(0.75),
+            FollowPath(paths[2]),
+            Delay(0.75),
+            FollowPath(paths[3]),
+            Delay(0.75),
+            FollowPath(paths[4]),
+            Delay(0.75),
+            FollowPath(paths[5]),
+            Delay(0.75),
+            FollowPath(paths[6]),
+            Delay(0.75),
+            FollowPath(paths[7])
+        )
         main.schedule()
     }
 
@@ -122,11 +138,118 @@ class IndexTester: NextFTCOpMode() {
     }
 
     fun buildPaths() {
-        val path: PathChain = follower.pathBuilder()
-            .addPath(BezierLine(Pose(72.0,72.0), Pose(72.0,87.0)))
-            .setConstantHeadingInterpolation(PI/2)
+        val startPose = Pose(78.5,8.0,Math.toRadians(PI/2))
+        val pushPose = Pose(90.0,8.0,Math.toRadians(PI/2))
+        val preloadPose = Pose(90.0,80.0, Math.toRadians(0.0))
+
+        val firstIntakeControl = Pose(99.25, 49.75)
+        val firstIntakePose = Pose(131.5,80.0,Math.toRadians(30.0))
+
+        val firstShootControl = Pose(101.0,62.75)
+        val firstShootPose = Pose(85.0,82.25,Math.toRadians(0.0))
+
+        val secondIntakePose = Pose(127.5,82.25,Math.toRadians(0.0))
+
+        val secondShootPose = Pose(81.5,82.25,Math.toRadians(0.0))
+
+        val thirdIntakeControl = Pose(81.5,35.25)
+        val thirdIntakePose = Pose(129.25,35.25,Math.toRadians(0.0))
+
+        val stopPose = Pose(81.5,60.0,Math.toRadians(-90.0))
+
+        val pushPath = follower.pathBuilder()
+            .addPath(BezierLine(startPose, pushPose))
+            .setConstantHeadingInterpolation(startPose.heading)
+            .addPath(BezierLine(
+                pushPose,
+                preloadPose))
+            .setLinearHeadingInterpolation(pushPose.heading, preloadPose.heading)
+            .build()
+        val firstIntake = follower.pathBuilder()
+            .addPath(BezierCurve(
+                preloadPose,
+                firstIntakeControl,
+                firstIntakePose
+            ))
+            .setLinearHeadingInterpolation(preloadPose.heading, firstIntakePose.heading)
+            .addParametricCallback(
+                0.5,
+                {follower.setMaxPower(0.45)}
+            )
+            .addParametricCallback(
+                1.0,
+                { follower.setMaxPower(1.0) }
+            )
+            .build()
+        val firstShoot = follower.pathBuilder()
+            .addPath(BezierCurve(
+                firstIntakePose,
+                firstShootControl,
+                firstShootPose
+            ))
+            .setLinearHeadingInterpolation(firstIntakePose.heading, firstShootPose.heading)
+            .build()
+        val secondIntake = follower.pathBuilder()
+            .addPath(BezierLine(
+                firstShootPose,
+                secondIntakePose
+            ))
+            .setConstantHeadingInterpolation(secondIntakePose.heading)
+            .addParametricCallback(
+                0.5,
+                { follower.setMaxPower(0.45) }
+            )
+            .addParametricCallback(
+                1.0,
+                { follower.setMaxPower(1.0) }
+            )
+            .build()
+        val secondShoot = follower.pathBuilder()
+            .addPath(BezierLine(
+                secondIntakePose,
+                secondShootPose
+            ))
+            .setConstantHeadingInterpolation(secondShootPose.heading)
+            .build()
+        val thirdIntake = follower.pathBuilder()
+            .addPath(BezierCurve(
+                secondShootPose,
+                thirdIntakeControl,
+                thirdIntakePose
+            ))
+            .setConstantHeadingInterpolation(thirdIntakePose.heading)
+            .addParametricCallback(
+                0.675,
+                { follower.setMaxPower(0.45) }
+            )
+            .addParametricCallback(
+                1.0,
+                { follower.setMaxPower(1.0) }
+            )
+            .build()
+        val thirdShoot = follower.pathBuilder()
+            .addPath(BezierCurve(
+                thirdIntakePose,
+                thirdIntakeControl,
+                secondShootPose
+            ))
+            .setLinearHeadingInterpolation(thirdIntakePose.heading, Math.toRadians(-90.0))
+            .build()
+        val leavePath = follower.pathBuilder()
+            .addPath(BezierLine(
+                secondShootPose,
+                stopPose
+            ))
+            .setConstantHeadingInterpolation(stopPose.heading)
             .build()
 
-        paths += path
+        paths += pushPath
+        paths += firstIntake
+        paths += firstShoot
+        paths += secondIntake
+        paths += secondShoot
+        paths += thirdIntake
+        paths += thirdShoot
+        paths += leavePath
     }
 }
