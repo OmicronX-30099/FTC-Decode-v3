@@ -9,8 +9,11 @@ import dev.nextftc.hardware.driving.DriverControlledCommand
 import org.firstinspires.ftc.teamcode.Constants.PedroConstants
 import org.firstinspires.ftc.teamcode.Enums.Alliance
 import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.IntakeSubsystem
+import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.Transfer
 import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.TransferSubsystem
+import org.firstinspires.ftc.teamcode.Systems.Load
 import org.firstinspires.ftc.teamcode.Systems.PassiveSystem
+import org.firstinspires.ftc.teamcode.Systems.Shooter
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.FlywheelState
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.TurretState
 import org.firstinspires.ftc.teamcode.Systems.ShooterSystem
@@ -41,29 +44,29 @@ class DPTeleOpBlue: NextFTCOpMode() {
         follower.setStartingPose(currStartPose)
         Gamepads.gamepad1.rightTrigger.greaterThan(0.0)
             .whenBecomesTrue {
-                IntakeSubsystem.intake(1.0)
-                TransferSubsystem.transfer(0.35)
+                Transfer.intake(1.0)
+                Transfer.transfer(0.35)
             }
             .whenBecomesFalse {
-                IntakeSubsystem.intake(0.0)
-                TransferSubsystem.transfer(0.0)
+                Transfer.intake(0.0)
+                Transfer.transfer(0.0)
             }
         Gamepads.gamepad1.leftTrigger.greaterThan(0.0).and(Gamepads.gamepad1.rightTrigger.inRange(0.0..0.0))
             .whenBecomesTrue {
-                IntakeSubsystem.intake(-1.0)
-                TransferSubsystem.transfer(-1.0)
+                Transfer.intake(-1.0)
+                Transfer.transfer(-1.0)
             }
             .whenBecomesFalse {
-                IntakeSubsystem.intake(0.0)
-                TransferSubsystem.transfer(0.0)
+                Transfer.intake(0.0)
+                Transfer.transfer(0.0)
             }
         Gamepads.gamepad1.rightBumper
-            .whenBecomesTrue(PassiveSystem.shootTripleCommand)
+            .whenBecomesTrue(Load.shootTripleCommand)
         Gamepads.gamepad1.leftBumper
-            .whenBecomesTrue(PassiveSystem.shootSingular)
+            .whenBecomesTrue(Load.shootSingular)
         Gamepads.gamepad1.cross
             .whenBecomesTrue {
-                ShooterSystem.currTurretState = TurretState.MANUAL
+                Shooter.currTurretState = TurretState.MANUAL
                 ShooterSystem.currFlywheelState = FlywheelState.MANUAL
             }
         Gamepads.gamepad1.triangle

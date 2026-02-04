@@ -1,42 +1,41 @@
 package org.firstinspires.ftc.teamcode.Systems
 
 import com.pedropathing.geometry.Pose
-import com.pedropathing.math.Vector
 import dev.nextftc.core.subsystems.SubsystemGroup
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
+import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.Flywheel
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.FlywheelState
-import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.FlywheelSubsystem
+import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.Turret
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.TurretState
-import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.TurretSubsystem
 import org.firstinspires.ftc.teamcode.Util.currAlliance
 import kotlin.math.atan2
 
-object ShooterSystem: SubsystemGroup(TurretSubsystem, FlywheelSubsystem) {
-    internal var currTurretState: TurretState = TurretState.AUTO_AIM
-    internal var currFlywheelState: FlywheelState = FlywheelState.AUTO_AIM
+// Shooter Object
+object Shooter: SubsystemGroup(Turret, Flywheel) {
+    // States to track turret and flywheel
+    internal var turretState: TurretState = TurretState.AUTO_AIM
+    internal var flywheelState: FlywheelState = FlywheelState.AUTO_AIM
 
-    internal fun updateShooter() {
-        if (currTurretState == TurretState.AUTO_AIM) { TurretSubsystem.targetAngle = calculateTurretAngle(getCorrectedBotPose(TurretState.AUTO_AIM)) }
-        if (currFlywheelState == FlywheelState.AUTO_AIM) { FlywheelSubsystem.flywheelTargetVel = calculateFlywheelVelocity(getCorrectedBotPose(FlywheelState.AUTO_AIM)) }
-        TurretSubsystem.updateTurret()
-        FlywheelSubsystem.updateFlywheel()
+    // Function to calculate and set Turret/Flywheel targets if states are at AUTO_AIM
+    internal fun update() {
+        val currPose: Pose = follower.pose
+        // Calculate and set target for Turret
+        if (turretState == TurretState.AUTO_AIM) { Turret.targetTurretAngle = calculateTurretAngle(currPose) }
+        Turret.update()
+        // Calculate and set target for Flywheel, if idle-ing set to 1140 TPS
+        if (flywheelState == FlywheelState.AUTO_AIM) { Flywheel.flywheelTarget = calculateFlywheelVel(currPose) }
+        else { Flywheel.flywheelTarget = Flywheel.IDLE_VELOCITY }
+        Flywheel.update()
     }
+
+    // Function to calculate turret angle(Deg)
     private fun calculateTurretAngle(botPose: Pose): Double {
         return Math.toDegrees(atan2(botPose.y - currAlliance.turretTargetPose().y, botPose.x - currAlliance.turretTargetPose().x) - botPose.heading)
     }
-    private fun calculateFlywheelVelocity(botPose: Pose): Double {
+
+    // Function to calculate flywheel velocity(TPS)
+    private fun calculateFlywheelVel(botPose: Pose): Double {
         val d: Double = botPose.distanceFrom(currAlliance.goalPose)
         return 0.0142645 * d * d + 1.26161 * d + 748.88095
     }
-    private fun getCorrectedBotPose(state: State): Pose {
-        val velocity: Vector = follower.velocity.times(state.linVelScalar)
-        return follower.pose + Pose(velocity.xComponent, velocity.yComponent, follower.angularVelocity * state.angVelScalar)
-    }
-    internal fun moveTurretBy(deg: Double) { if (currTurretState == TurretState.MANUAL) { TurretSubsystem.targetAngle += deg } }
-    internal fun increaseFlywheelVelocityBy(vel: Double) { if (currFlywheelState == FlywheelState.MANUAL) { FlywheelSubsystem.flywheelTargetVel += vel } }
-}
-
-internal interface State {
-    val angVelScalar: Double
-    val linVelScalar: Double
 }
