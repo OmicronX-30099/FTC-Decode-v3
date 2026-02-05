@@ -14,11 +14,11 @@ import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.ftc.components.BulkReadComponent
 import dev.nextftc.ftc.components.LoopTimeComponent
+import org.firstinspires.ftc.teamcode.Constants.PedroConstants
 import org.firstinspires.ftc.teamcode.Enums.Alliance
 import org.firstinspires.ftc.teamcode.Systems.PassiveSystem
 import org.firstinspires.ftc.teamcode.Systems.ShooterSystem
 import org.firstinspires.ftc.teamcode.Util.currAlliance
-import org.firstinspires.ftc.teamcode.Constants.PedroConstants
 import org.firstinspires.ftc.teamcode.Util.currStartPose
 
 

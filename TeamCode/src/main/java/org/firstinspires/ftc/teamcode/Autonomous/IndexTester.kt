@@ -1,22 +1,15 @@
 package org.firstinspires.ftc.teamcode.Autonomous
 
-import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
 import com.pedropathing.paths.PathChain
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import dev.nextftc.core.commands.delays.Delay
 import dev.nextftc.core.commands.groups.SequentialGroup
-import dev.nextftc.core.commands.utility.InstantCommand
 import dev.nextftc.extensions.pedro.FollowPath
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.ftc.NextFTCOpMode
 import org.firstinspires.ftc.teamcode.Constants.PedroConstants
 import org.firstinspires.ftc.teamcode.Enums.Alliance
-import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.BIMSubsystem
-import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.IntakeSubsystem
-import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.ShooterGateSubsystem
-import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.TransferSubsystem
 import org.firstinspires.ftc.teamcode.Systems.PassiveSystem
 import org.firstinspires.ftc.teamcode.Systems.ShooterSystem
 import org.firstinspires.ftc.teamcode.Util.addSubsystems

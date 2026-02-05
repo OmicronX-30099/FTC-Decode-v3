@@ -29,9 +29,9 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
     }
 
     // Function to calculate turret angle(Deg)
-    private fun calculateTurretAngle(botPose: Pose): Double {
-        return Math.toDegrees(atan2(botPose.y - currAlliance.turretTargetPose().y, botPose.x - currAlliance.turretTargetPose().x) - botPose.heading)
-    }
+    private fun calculateTurretAngle(botPose: Pose): Double = Math.toDegrees(atan2(botPose.y - currAlliance.turretTargetPose().y, botPose.x - currAlliance.turretTargetPose().x) - botPose.heading)
+
+    internal fun moveTurretBy(deg: Double) { Turret.targetTurretAngle += deg }
 
     // Function to calculate flywheel velocity(TPS)
     private fun calculateFlywheelVel(botPose: Pose): Double {

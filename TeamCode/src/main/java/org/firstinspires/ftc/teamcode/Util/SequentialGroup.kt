@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.Util
 
-import dev.nextftc.core.commands.groups.CommandGroup
 import dev.nextftc.core.commands.Command
+import dev.nextftc.core.commands.groups.CommandGroup
 
 /**
  * A [CommandGroup] that runs its children one at a time.

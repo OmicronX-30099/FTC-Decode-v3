@@ -11,7 +11,6 @@ import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.ftc.components.BulkReadComponent
 import dev.nextftc.ftc.components.LoopTimeComponent
 import org.firstinspires.ftc.teamcode.Enums.Alliance
-import kotlin.math.PI
 
 fun NextFTCOpMode.addSubsystems(vararg subsystems: Subsystem) {
     addComponents(BindingsComponent, BulkReadComponent, LoopTimeComponent(), SubsystemComponent(*subsystems))
