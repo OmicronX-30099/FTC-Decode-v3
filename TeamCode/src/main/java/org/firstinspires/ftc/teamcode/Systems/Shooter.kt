@@ -2,40 +2,50 @@ package org.firstinspires.ftc.teamcode.Systems
 
 import com.pedropathing.geometry.Pose
 import dev.nextftc.core.subsystems.SubsystemGroup
-import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.Flywheel
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.FlywheelState
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.Turret
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.TurretState
-import org.firstinspires.ftc.teamcode.Util.currAlliance
-import kotlin.math.atan2
+import org.firstinspires.ftc.teamcode.Util.ROBOT
 
-// Shooter Object
 object Shooter: SubsystemGroup(Turret, Flywheel) {
-    // States to track turret and flywheel
-    internal var turretState: TurretState = TurretState.AUTO_AIM
-    internal var flywheelState: FlywheelState = FlywheelState.AUTO_AIM
+    private var turretState: TurretState = TurretState.AUTO_AIM
+    private var flywheelState: FlywheelState = FlywheelState.AUTO_AIM
 
-    // Function to calculate and set Turret/Flywheel targets if states are at AUTO_AIM
-    internal fun update() {
-        val currPose: Pose = follower.pose
-        // Calculate and set target for Turret
-        if (turretState == TurretState.AUTO_AIM) { Turret.targetTurretAngle = calculateTurretAngle(currPose) }
+    fun update() {
+        when (turretState) {
+            TurretState.AUTO_AIM -> { updateTurret() }
+            TurretState.MANUAL -> {  }
+        }
+        when (flywheelState) {
+            FlywheelState.AUTO_AIM -> { updateFlywheel() }
+            FlywheelState.IDLE -> { Flywheel.flywheelTarget = Flywheel.IDLE_VELOCITY }
+        }
         Turret.update()
-        // Calculate and set target for Flywheel, if idle-ing set to 1140 TPS
-        if (flywheelState == FlywheelState.AUTO_AIM) { Flywheel.flywheelTarget = calculateFlywheelVel(currPose) }
-        else { Flywheel.flywheelTarget = Flywheel.IDLE_VELOCITY }
         Flywheel.update()
     }
 
-    // Function to calculate turret angle(Deg)
-    private fun calculateTurretAngle(botPose: Pose): Double = Math.toDegrees(atan2(botPose.y - currAlliance.turretTargetPose().y, botPose.x - currAlliance.turretTargetPose().x) - botPose.heading)
-
-    internal fun moveTurretBy(deg: Double) { Turret.targetTurretAngle += deg }
-
-    // Function to calculate flywheel velocity(TPS)
-    private fun calculateFlywheelVel(botPose: Pose): Double {
-        val d: Double = botPose.distanceFrom(currAlliance.goalPose)
-        return 0.0142645 * d * d + 1.26161 * d + 748.88095
+    private fun updateFlywheel() {
+        val d: Double = ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.goalPoses.flywheelGoalPose)
+        Flywheel.flywheelTarget =  0.0142645 * d * d + 1.26161 * d + 748.88095
+    }
+    private fun updateTurret() {
+        Turret.targetTurretAngle =
+            if (ROBOT.inBlueFarZone()) {
+                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseBlueFar)
+            } else if (ROBOT.inRedFarZone()) {
+                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseRedFar)
+            } else if (ROBOT.inCloseZone()) {
+                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseClose)
+            } else {
+                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose)
+            }
+    }
+    private fun calculateTurretAngle(botPose: Pose, targetPose: Pose): Double =
+        Math.toDegrees(Math.atan2(botPose.y - targetPose.y, botPose.x - targetPose.x) - botPose.heading)
+    internal fun moveTurretBy(deg: Double) {
+        if (turretState == TurretState.MANUAL) {
+            Turret.targetTurretAngle += deg
+        }
     }
 }
