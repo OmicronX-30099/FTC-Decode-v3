@@ -3,10 +3,11 @@ package org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems
 import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.hardware.impl.ServoEx
 import dev.nextftc.hardware.positionable.ServoGroup
+import org.firstinspires.ftc.teamcode.Constants.ConfigConstants
 
 object Turret: Subsystem {
-    private val axonTurretServo: ServoEx = ServoEx("lt",-0.1)
-    private val torctexTurretServo: ServoEx = ServoEx("ft",-0.1)
+    private val axonTurretServo: ServoEx = ServoEx(ConfigConstants.axonTurretServo,-0.1)
+    private val torctexTurretServo: ServoEx = ServoEx(ConfigConstants.torctexTurretServo,-0.1)
     private val turretServos: ServoGroup = ServoGroup(axonTurretServo, torctexTurretServo)
 
     private const val GEAR_RATIO: Double = 15.0 / 16.0

@@ -6,10 +6,11 @@ import dev.nextftc.control2.feedforward.SimpleFeedforward
 import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.hardware.controllable.MotorGroup
 import dev.nextftc.hardware.impl.MotorEx
+import org.firstinspires.ftc.teamcode.Constants.ConfigConstants
 
 object Flywheel: Subsystem {
-    private val topFlywheelMotor: MotorEx = MotorEx("fwt")
-    private val bottomFlywheelMotor: MotorEx = MotorEx("fwb")
+    private val topFlywheelMotor: MotorEx = MotorEx(ConfigConstants.topFlywheelMotor)
+    private val bottomFlywheelMotor: MotorEx = MotorEx(ConfigConstants.bottomFlywheelMotor)
     private val flywheelMotors: MotorGroup = MotorGroup(topFlywheelMotor, bottomFlywheelMotor)
 
     private val flywheelPIDController: PIDController = PIDController(0.0075,0.0,0.0)

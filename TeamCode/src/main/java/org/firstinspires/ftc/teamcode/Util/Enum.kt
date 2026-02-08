@@ -6,7 +6,7 @@ import dev.nextftc.extensions.pedro.PedroComponent
 data object ROBOT {
     private val fieldWidth: Double = 141.5
     private val fieldLength: Double = 141.5
-    private val turretYOffset: Double = 0.0
+    private val turretYOffset: Double = -1.774
     private val farZoneBuffer: Double = 2.0
     private val closeZoneBuffer: Double = 2.0
 
