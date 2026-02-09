@@ -53,14 +53,12 @@ enum class Alliance {
     BLUE {
         override val resetPoses: ResetPoses
             get() = TODO("Not yet implemented")
-        override val goalPoses: GoalPoses
-            get() = TODO("Not yet implemented")
+        override val goalPoses: GoalPoses = GoalPoses(Pose(),Pose(),Pose(130.0,133.5),Pose(141.5,141.5))
     },
     RED{
         override val resetPoses: ResetPoses
             get() = TODO("Not yet implemented")
-        override val goalPoses: GoalPoses
-            get() = TODO("Not yet implemented")
+        override val goalPoses: GoalPoses = GoalPoses(Pose(),Pose(),Pose(11.5,133.5),Pose(141.5,141.5))
     };
     abstract val resetPoses: ResetPoses
     abstract val goalPoses: GoalPoses
