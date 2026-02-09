@@ -38,7 +38,7 @@ class TeleOpBlue: NextFTCOpMode() {
     override fun onStartButtonPressed() {
         ROBOT.currAlliance = Alliance.BLUE
         ROBOT.currStage = Stage.TELEOP
-        follower.setStartingPose(Pose(72.0,72.0,PI/2))
+        follower.setStartingPose(Pose(70.5,70.5,PI/2))
         drivetrain.schedule()
 
         Gamepads.gamepad1.rightTrigger.greaterThan(0.0)
