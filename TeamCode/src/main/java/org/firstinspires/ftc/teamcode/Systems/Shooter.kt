@@ -44,8 +44,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
     private fun calculateTurretAngle(botPose: Pose, targetPose: Pose): Double =
         Math.toDegrees(Math.atan2(botPose.y - targetPose.y, botPose.x - targetPose.x) - botPose.heading)
     internal fun moveTurretBy(deg: Double) {
-        if (turretState == TurretState.MANUAL) {
-            Turret.targetTurretAngle += deg
-        }
+        turretState = TurretState.MANUAL
+        Turret.targetTurretAngle += deg
     }
 }
