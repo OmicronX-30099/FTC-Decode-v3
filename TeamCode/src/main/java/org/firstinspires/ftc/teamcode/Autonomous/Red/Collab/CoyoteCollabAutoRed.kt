@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.Util.includePedro
 @Autonomous(name = "Red Coyote Collab Auto", group = "Coyote Collab Auto", preselectTeleOp = "Red TeleOp")
 class CoyoteCollabAutoRed: NextFTCOpMode() {
     init {
-        addSubsystems(ShooterSystem, PassiveSystem)
+        addSubsystems(Shooter, Load, Miscellaneous)
         includePedro(PedroConstants::createFollower)
     }
     private var paths: Array<PathChain> = arrayOf()
