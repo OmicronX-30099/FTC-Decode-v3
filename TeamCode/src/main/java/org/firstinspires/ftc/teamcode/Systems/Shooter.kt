@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.TurretState
 import org.firstinspires.ftc.teamcode.Util.ROBOT
 
 object Shooter: SubsystemGroup(Turret, Flywheel) {
-    private var turretState: TurretState = TurretState.AUTO_AIM
-    private var flywheelState: FlywheelState = FlywheelState.AUTO_AIM
+    internal var turretState: TurretState = TurretState.AUTO_AIM
+    internal var flywheelState: FlywheelState = FlywheelState.AUTO_AIM
 
     fun update() {
         when (turretState) {

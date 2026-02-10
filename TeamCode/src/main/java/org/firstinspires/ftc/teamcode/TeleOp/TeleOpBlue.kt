@@ -8,9 +8,9 @@ import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.hardware.driving.DriverControlledCommand
 import org.firstinspires.ftc.teamcode.Constants.PedroConstants
-import org.firstinspires.ftc.teamcode.ShooterSubsystems.FlywheelState
+import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.FlywheelState
 import org.firstinspires.ftc.teamcode.Systems.Load
-import org.firstinspires.ftc.teamcode.Systems.Rollers
+import org.firstinspires.ftc.teamcode.Systems.LoadSubsystems.Rollers
 import org.firstinspires.ftc.teamcode.Systems.Shooter
 import org.firstinspires.ftc.teamcode.Util.Alliance
 import org.firstinspires.ftc.teamcode.Util.ROBOT
@@ -54,13 +54,13 @@ class TeleOpBlue: NextFTCOpMode() {
                 if (Shooter.flywheelState == FlywheelState.AUTO_AIM) { Shooter.flywheelState = FlywheelState.IDLE }
                 else { Shooter.flywheelState = FlywheelState.AUTO_AIM }
             }
-        Gamepads.gamepad1.dPadUp.or(Gamepads.gamepad2.dPadUp)
+        Gamepads.gamepad1.dpadUp.or(Gamepads.gamepad2.dpadUp)
             .whenBecomesTrue {  }
-        Gamepads.gamepad1.dpadDown.or(Gamepads.gamepad2.dPadDown)
+        Gamepads.gamepad1.dpadDown.or(Gamepads.gamepad2.dpadDown)
             .whenBecomesTrue {  }
-        Gamepads.gamepad2.dPadLeft
+        Gamepads.gamepad2.dpadLeft
             .whenBecomesTrue { Shooter.moveTurretBy(5.0) }
-        Gamepads.gamepad2.dPadRight
+        Gamepads.gamepad2.dpadRight
             .whenBecomesTrue { Shooter.moveTurretBy(-5.0) }
         Gamepads.gamepad2.square
             .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose2 }

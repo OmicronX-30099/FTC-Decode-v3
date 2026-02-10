@@ -4,11 +4,11 @@ import com.pedropathing.geometry.Pose
 import dev.nextftc.extensions.pedro.PedroComponent
 
 data object ROBOT {
-    private val fieldWidth: Double = 141.5
-    private val fieldLength: Double = 141.5
-    private val turretYOffset: Double = -1.774
-    private val farZoneBuffer: Double = 2.0
-    private val closeZoneBuffer: Double = 2.0
+    private const val FIELD_WIDTH: Double = 141.5
+    private const val FIELD_LENGTH: Double = 141.5
+    private const val TURRET_Y_OFFSET: Double = -1.774
+    private const val FAR_ZONE_BUFFER: Double = 2.0
+    private const val CLOSE_ZONE_BUFFER: Double = 2.0
 
     internal var currAlliance: Alliance = Alliance.BLUE
     internal var currStage: Stage = Stage.TELEOP
@@ -16,36 +16,23 @@ data object ROBOT {
     internal fun shooterPose(): Pose {
         val a: Double = PedroComponent.Companion.follower.heading
         return PedroComponent.Companion.follower.pose + Pose(
-            turretYOffset * Math.cos(a),
-            turretYOffset * Math.sin(a)
+            TURRET_Y_OFFSET * Math.cos(a),
+            TURRET_Y_OFFSET * Math.sin(a)
         )
     }
 
     internal fun getDistanceFromGoal(): Double = shooterPose().distanceFrom(currAlliance.goalPoses.flywheelGoalPose)
     internal fun inBlueFarZone(): Boolean {
         val p: Pose = shooterPose()
-        if ((p.y >= 0.0) && (p.x < (fieldWidth / 2.0)) && (p.y < (p.x - fieldLength / 3.0 + farZoneBuffer))) {
-            return true
-        } else {
-            return false
-        }
+        return ((p.y >= 0.0) && (p.x < (FIELD_WIDTH / 2.0)) && (p.y < (p.x - FIELD_LENGTH / 3.0 + FAR_ZONE_BUFFER)))
     }
     internal fun inRedFarZone(): Boolean {
         val p: Pose = shooterPose()
-        if ((p.y >= 0.0) && (p.x >= (fieldWidth / 2.0)) && (p.y < (-p.x + (fieldLength * (2 / 3.0)) + farZoneBuffer))) {
-            return true
-        }
-        else {
-            return false
-        }
+        return ((p.y >= 0.0) && (p.x >= (FIELD_WIDTH / 2.0)) && (p.y < (-p.x + (FIELD_LENGTH * (2 / 3.0)) + FAR_ZONE_BUFFER)))
     }
     internal fun inCloseZone(): Boolean {
         val p: Pose = shooterPose()
-        if ((p.y <= fieldLength) && (p.y > (-p.x + fieldLength - closeZoneBuffer)) && (p.y > (p.x - closeZoneBuffer))) {
-            return true
-        } else {
-            return false
-        }
+        return ((p.y <= FIELD_LENGTH) && (p.y > (-p.x + FIELD_LENGTH - CLOSE_ZONE_BUFFER)) && (p.y > (p.x - CLOSE_ZONE_BUFFER)))
     }
 }
 
@@ -53,12 +40,12 @@ enum class Alliance {
     BLUE {
         override val resetPoses: ResetPoses
             get() = TODO("Not yet implemented")
-        override val goalPoses: GoalPoses = GoalPoses(Pose(),Pose(),Pose(130.0,133.5),Pose(141.5,141.5))
+        override val goalPoses: GoalPoses = GoalPoses(Pose(9.75,126.0),Pose(14.5,130.75),Pose(11.5,133.5),Pose(141.5,141.5))
     },
     RED{
         override val resetPoses: ResetPoses
             get() = TODO("Not yet implemented")
-        override val goalPoses: GoalPoses = GoalPoses(Pose(),Pose(),Pose(11.5,133.5),Pose(141.5,141.5))
+        override val goalPoses: GoalPoses = GoalPoses(Pose(131.75,126.0),Pose(127.0,130.75),Pose(130.0,133.5),Pose(141.5,141.5))
     };
     abstract val resetPoses: ResetPoses
     abstract val goalPoses: GoalPoses

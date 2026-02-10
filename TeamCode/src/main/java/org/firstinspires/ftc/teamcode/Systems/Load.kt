@@ -20,7 +20,7 @@ object Load: SubsystemGroup(BilinearIndexMachine, Rollers) {
     fun shootCommand(waitTime: Double, tPow: Double, iPow: Double): Command =
         SequentialGroup(
             InstantCommand {
-                Rollers.run(tPow,1.0)
+                Rollers.run(tPow,iPow)
                 Rollers.unlockShooter()
             },
             Delay(waitTime),
