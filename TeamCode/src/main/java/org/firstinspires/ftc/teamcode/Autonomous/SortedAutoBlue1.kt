@@ -4,6 +4,7 @@ import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
 import com.pedropathing.paths.PathChain
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import dev.nextftc.core.commands.delays.Delay
 import dev.nextftc.core.commands.groups.ParallelGroup
 import dev.nextftc.core.commands.groups.SequentialGroup
@@ -25,6 +26,7 @@ import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.includePedro
 import kotlin.math.PI
 
+@Autonomous(name = "Sorted Blue Auto", group = "Sorted Autos", preselectTeleOp = "Blue TeleOp")
 class SortedAutoBlue: NextFTCOpMode() {
     init {
         addSubsystems(Shooter, Load, Miscellaneous)
