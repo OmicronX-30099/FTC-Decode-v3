@@ -18,7 +18,9 @@ import org.firstinspires.ftc.teamcode.Systems.LoadSubsystems.Rollers
 import org.firstinspires.ftc.teamcode.Systems.Miscellaneous
 import org.firstinspires.ftc.teamcode.Systems.Shooter
 import org.firstinspires.ftc.teamcode.Util.Alliance
+import org.firstinspires.ftc.teamcode.Util.Motif
 import org.firstinspires.ftc.teamcode.Util.ROBOT
+import org.firstinspires.ftc.teamcode.Util.Stage
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.includePedro
 import kotlin.math.PI
@@ -31,12 +33,22 @@ class SortedAutoBlue: NextFTCOpMode() {
 
     private var paths: Array<PathChain> = arrayOf()
 
-    override fun onInit() { ROBOT.currAlliance = Alliance.RED.also { Miscellaneous.startLimelight() } }
+    override fun onInit() {
+        ROBOT.currAlliance = Alliance.RED
+        ROBOT.currStage = Stage.AUTONOMOUS
+        Miscellaneous.startLimelight()
+    }
 
     override fun onWaitForStart() { Miscellaneous.checkForMotif() }
 
     override fun onStartButtonPressed() {
-
+        Miscellaneous.shutDownLimelight()
+        when (ROBOT.currStage.currMotif) {
+            Motif.PPG -> { PPG() }
+            Motif.PGP -> { PGP() }
+            Motif.GPP -> { GPP() }
+            Motif.UNKNOWN -> { PGP() }
+        }
     }
 
     fun GPP() {
