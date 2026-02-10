@@ -61,8 +61,9 @@ enum class Motif {
 
 enum class Stage {
     TELEOP,
-    AUTONOMOUS { override var currMotif: Motif = Motif.PGP };
+    AUTONOMOUS;
     open var currMotif: Motif = Motif.UNKNOWN
+    open var useFlywheelVel: Boolean = false
 }
 
 data class GoalPoses(val turretGoalPoseBlueFar: Pose, val turretGoalPoseRedFar: Pose, val turretGoalPoseClose: Pose, val flywheelGoalPose: Pose)
