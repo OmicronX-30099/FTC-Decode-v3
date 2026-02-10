@@ -21,8 +21,8 @@ import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.currAlliance
 import org.firstinspires.ftc.teamcode.Util.includePedro
 
-@Autonomous(name = "Red Coyote Collab Auto", group = "Coyote Collab Auto", preselectTeleOp = "Red TeleOp")
-class CoyoteCollabAutoRed: NextFTCOpMode() {
+@Autonomous(name = "Blue Coyote Collab Auto", group = "Coyote Collab Auto", preselectTeleOp = "Blue TeleOp")
+class CoyoteCollabAutoBlue: NextFTCOpMode() {
     init {
         addSubsystems(Shooter, Load, Miscellaneous)
         includePedro(PedroConstants::createFollower)
@@ -30,7 +30,8 @@ class CoyoteCollabAutoRed: NextFTCOpMode() {
     private var paths: Array<PathChain> = arrayOf()
 
     override fun onInit() {
-        ROBOT.currAlliance = Alliance.RED
+        ROBOT.currAlliance = Alliance.BLUE
+        ROBOT.currStage = Stage.AUTONOMOUS
     }
 
     override fun onStartButtonPressed() {
