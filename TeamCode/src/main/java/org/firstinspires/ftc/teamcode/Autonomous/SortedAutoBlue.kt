@@ -36,7 +36,7 @@ class SortedAutoBlue: NextFTCOpMode() {
     private var paths: Array<PathChain> = arrayOf()
 
     override fun onInit() {
-        ROBOT.currAlliance = Alliance.RED
+        ROBOT.currAlliance = Alliance.BLUE
         ROBOT.currStage = Stage.AUTONOMOUS
         ROBOT.currStage.useFlywheelVel = true
         Miscellaneous.startLimelight()
