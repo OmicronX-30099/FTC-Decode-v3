@@ -29,7 +29,11 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
 
     private fun updateFlywheel() {
         val d: Double = ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.goalPoses.flywheelGoalPose)
-        Flywheel.flywheelTarget =  0.0142645 * d * d + 1.26161 * d + 748.88095
+        Flywheel.flywheelTarget = if (ROBOT.currStage.useFlywheelVel) {
+                0.0142645 * d * d + 1.26161 * d + 748.88095
+            } else {
+                0.97 * (0.0142645 * d * d + 1.26161 * d + 748.88095)
+            }
     }
     private fun updateTurret() {
         Turret.targetTurretAngle =
