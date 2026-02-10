@@ -31,6 +31,7 @@ class CoyoteCollabAutoRed: NextFTCOpMode() {
 
     override fun onInit() {
         ROBOT.currAlliance = Alliance.RED
+        ROBOT.currStage = Stage.AUTONOMOUS
     }
 
     override fun onStartButtonPressed() {
