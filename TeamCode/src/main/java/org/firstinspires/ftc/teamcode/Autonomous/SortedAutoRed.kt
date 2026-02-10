@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.includePedro
 import kotlin.math.PI
 
-@Autonomous(name = "Sorted Blue Auto", group = "Sorted Autos", preselectTeleOp = "TeleOp")
+@Autonomous(name = "Sorted Red Auto", group = "Sorted Autos", preselectTeleOp = "Red TeleOp")
 class SortedAutoBlue: NextFTCOpMode() {
     init {
         addSubsystems(Shooter, Load, Miscellaneous)
