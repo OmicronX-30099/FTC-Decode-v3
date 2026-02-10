@@ -39,6 +39,7 @@ class TeleOpBlue: NextFTCOpMode() {
     override fun onStartButtonPressed() {
         ROBOT.currAlliance = Alliance.BLUE
         ROBOT.currStage = Stage.TELEOP
+        ROBOT.currStage.useFlywheelVel = false
         follower.setStartingPose(Pose(70.5,70.5,PI/2))
         drivetrain.schedule()
 
