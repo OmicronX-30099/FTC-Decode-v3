@@ -9,8 +9,8 @@ import dev.nextftc.hardware.impl.MotorEx
 import org.firstinspires.ftc.teamcode.Constants.ConfigConstants
 
 object Flywheel: Subsystem {
-    private val topFlywheelMotor: MotorEx = MotorEx(ConfigConstants.topFlywheelMotor)
-    private val bottomFlywheelMotor: MotorEx = MotorEx(ConfigConstants.bottomFlywheelMotor)
+    private val topFlywheelMotor: MotorEx = MotorEx(ConfigConstants.TOP_FLYWHEEL_MOTOR)
+    private val bottomFlywheelMotor: MotorEx = MotorEx(ConfigConstants.BOTTOM_FLYWHEEL_MOTOR)
     private val flywheelMotors: MotorGroup = MotorGroup(topFlywheelMotor, bottomFlywheelMotor)
 
     private val flywheelPIDController: PIDController = PIDController(0.0075,0.0,0.0)

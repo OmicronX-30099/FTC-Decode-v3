@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.Systems
 
 import com.pedropathing.geometry.Pose
+import com.pedropathing.math.Vector
 import dev.nextftc.core.subsystems.SubsystemGroup
+import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.Flywheel
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.FlywheelState
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.Turret
@@ -47,4 +49,23 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
         turretState = TurretState.MANUAL
         Turret.targetTurretAngle += deg
     }
+
+    // region SOTM_CODE
+    private fun getCorrectedVec(botPose: Pose, targetPose: Pose): Vector {
+        val r: Vector = Vector(targetPose.x - botPose.x, targetPose.y - botPose.y)
+        val d: Double = r.magnitude
+        val T: Double = -4.64e-5 * d * d + 1.51e-2 * d - 3.48e-1
+        val v: Vector = follower.velocity
+        return (r.minus(v.times(T)))
+    }
+    private fun calculateTurretAngle(botPose: Pose, targetPose: Pose, useVel: Boolean): Double {
+        val finalVec: Vector = getCorrectedVec(botPose, targetPose)
+        return Math.toDegrees(Math.atan2(finalVec.yComponent, finalVec.xComponent) - botPose.heading)
+    }
+    private fun updateFlywheel(useVel: Boolean) {
+        val finalVec: Vector = getCorrectedVec(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose)
+        val d: Double = finalVec.magnitude
+        Flywheel.flywheelTarget =  0.0142645 * d * d + 1.26161 * d + 748.88095
+    }
+    // endregion
 }

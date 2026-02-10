@@ -1,39 +1,36 @@
 package org.firstinspires.ftc.teamcode.Constants
 
 object ConfigConstants {
-    @get:JvmName("frontLeft")
-    val frontLeft: String = "fl"
+    @get:JvmName("FRONT_LEFT")
+    val FRONT_LEFT: String = "fl"
 
-    @get:JvmName("frontRight")
-    val frontRight: String = "fr"
+    @get:JvmName("FRONT_RIGHT")
+    val FRONT_RIGHT: String = "fr"
 
-    @get:JvmName("backLeft")
-    val backLeft: String = "bl"
+    @get:JvmName("BACK_LEFT")
+    val BACK_LEFT: String = "bl"
 
-    @get:JvmName("backRight")
-    val backRight: String = "br"
+    @get:JvmName("BACK_RIGHT")
+    val BACK_RIGHT: String = "br"
 
-    @get:JvmName("pinpoint")
-    val pinpoint: String = "pp"
+    @get:JvmName("PINPOINT")
+    val PINPOINT: String = "pp"
 
-    @get:JvmName("topFlywheelMotor")
-    val topFlywheelMotor: String = "fwt"
-    @get:JvmName("bottomFlywheelMotor")
-    val bottomFlywheelMotor: String = "fwb"
+    const val TOP_FLYWHEEL_MOTOR: String = "fwt"
+    const val BOTTOM_FLYWHEEL_MOTOR: String = "fwb"
 
-    @get:JvmName("axonTurretServo")
-    val axonTurretServo: String = "lt"
-    @get:JvmName("torctexTurretServo")
-    val torctexTurretServo: String = "ft"
+    const val AXON_TURRET_SERVO: String = "lt"
+    const val TORCTEX_TURRET_SERVO: String = "ft"
 
-    @get:JvmName("transferMotor")
-    val transferMotor: String = "t"
-    @get:JvmName("intakeMotor")
-    val intakeMotor: String = "i"
-    @get:JvmName("shooterGateServo")
-    val shooterGateServo: String = "sg"
+    const val TRANSFER_MOTOR: String = "t"
+    const val INTAKE_MOTOR: String = "i"
+    const val SHOOTER_GATE_SERVO: String = "sg"
 
-    val transferGateServo: String = "transfer_gate"
-    val leftModuleServo: String = "lm"
-    val rightModuleServo: String = "rm"
+    const val TRANSFER_GATE_SERVO: String = "transfer_gate"
+    const val LEFT_MODULE_SERVO: String = "lm"
+    const val RIGHT_MODULE_SERVO: String = "rm"
+
+    const val LEFT_TILT_SERVO: String = ""
+    const val RIGHT_TILT_SERVO: String = ""
+    const val LIMELIGHT: String = "ll"
 }

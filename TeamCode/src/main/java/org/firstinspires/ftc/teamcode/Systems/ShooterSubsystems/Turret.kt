@@ -6,8 +6,8 @@ import dev.nextftc.hardware.positionable.ServoGroup
 import org.firstinspires.ftc.teamcode.Constants.ConfigConstants
 
 object Turret: Subsystem {
-    private val axonTurretServo: ServoEx = ServoEx(ConfigConstants.axonTurretServo,-0.1)
-    private val torctexTurretServo: ServoEx = ServoEx(ConfigConstants.torctexTurretServo,-0.1)
+    private val axonTurretServo: ServoEx = ServoEx(ConfigConstants.AXON_TURRET_SERVO,-0.1)
+    private val torctexTurretServo: ServoEx = ServoEx(ConfigConstants.TORCTEX_TURRET_SERVO,-0.1)
     private val turretServos: ServoGroup = ServoGroup(axonTurretServo, torctexTurretServo)
 
     private const val GEAR_RATIO: Double = 15.0 / 16.0

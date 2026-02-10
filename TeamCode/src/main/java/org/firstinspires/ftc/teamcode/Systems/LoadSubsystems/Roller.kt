@@ -6,9 +6,9 @@ import dev.nextftc.hardware.impl.ServoEx
 import org.firstinspires.ftc.teamcode.Constants.ConfigConstants
 
 object Rollers: Subsystem {
-    private val transferMotor: MotorEx = MotorEx(ConfigConstants.transferMotor)
-    private val intakeMotor: MotorEx = MotorEx(ConfigConstants.intakeMotor)
-    private val shooterGateServo: ServoEx = ServoEx(ConfigConstants.shooterGateServo)
+    private val transferMotor: MotorEx = MotorEx(ConfigConstants.TRANSFER_MOTOR)
+    private val intakeMotor: MotorEx = MotorEx(ConfigConstants.INTAKE_MOTOR)
+    private val shooterGateServo: ServoEx = ServoEx(ConfigConstants.SHOOTER_GATE_SERVO)
 
     internal fun run(tPow: Double, iPow: Double) {
         transferMotor.power = -tPow

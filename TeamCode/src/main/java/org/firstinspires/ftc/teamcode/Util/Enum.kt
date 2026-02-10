@@ -51,9 +51,18 @@ enum class Alliance {
     abstract val goalPoses: GoalPoses
 }
 
+enum class Motif {
+    UNKNOWN { override val tagID: Int = 0 },
+    PPG { override val tagID: Int = 23 },
+    PGP { override val tagID: Int = 22 },
+    GPP { override val tagID: Int = 21 };
+    abstract val tagID: Int
+}
+
 enum class Stage {
     TELEOP,
-    AUTONOMOUS
+    AUTONOMOUS { override var currMotif: Motif = Motif.PGP };
+    open var currMotif: Motif = Motif.UNKNOWN
 }
 
 data class GoalPoses(val turretGoalPoseBlueFar: Pose, val turretGoalPoseRedFar: Pose, val turretGoalPoseClose: Pose, val flywheelGoalPose: Pose)
