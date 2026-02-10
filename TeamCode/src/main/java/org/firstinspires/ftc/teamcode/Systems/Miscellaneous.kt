@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Systems
 
-import com.qualcomm.hardware.limelightvision.LLResult
 import com.qualcomm.hardware.limelightvision.Limelight3A
 import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.ftc.ActiveOpMode
@@ -24,7 +23,7 @@ object Miscellaneous: Subsystem {
         limelight.start()
     }
     internal fun checkForMotif() {
-        val result: LLResult = limelight.latestResult
+        val result = limelight.latestResult
         if ((result != null) && result.isValid) {
             val tagID = result.fiducialResults[0].fiducialId
             Motif.entries.forEach {

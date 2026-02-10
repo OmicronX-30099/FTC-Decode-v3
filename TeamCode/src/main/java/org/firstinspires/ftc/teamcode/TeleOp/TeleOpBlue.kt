@@ -8,10 +8,11 @@ import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.hardware.driving.DriverControlledCommand
 import org.firstinspires.ftc.teamcode.Constants.PedroConstants
-import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.FlywheelState
 import org.firstinspires.ftc.teamcode.Systems.Load
 import org.firstinspires.ftc.teamcode.Systems.LoadSubsystems.Rollers
+import org.firstinspires.ftc.teamcode.Systems.Miscellaneous
 import org.firstinspires.ftc.teamcode.Systems.Shooter
+import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.FlywheelState
 import org.firstinspires.ftc.teamcode.Util.Alliance
 import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.Stage
@@ -22,7 +23,7 @@ import kotlin.math.PI
 @TeleOp(name = "Blue TeleOp", group = "TeleOp")
 class TeleOpBlue: NextFTCOpMode() {
     init {
-        addSubsystems(Shooter, Load)
+        addSubsystems(Shooter, Load, Miscellaneous)
         includePedro(PedroConstants::createFollower)
     }
 
@@ -55,9 +56,9 @@ class TeleOpBlue: NextFTCOpMode() {
                 else { Shooter.flywheelState = FlywheelState.AUTO_AIM }
             }
         Gamepads.gamepad1.dpadUp.or(Gamepads.gamepad2.dpadUp)
-            .whenBecomesTrue {  }
+            .whenBecomesTrue { Miscellaneous.raiseBot() }
         Gamepads.gamepad1.dpadDown.or(Gamepads.gamepad2.dpadDown)
-            .whenBecomesTrue {  }
+            .whenBecomesTrue { Miscellaneous.lowerBot() }
         Gamepads.gamepad2.dpadLeft
             .whenBecomesTrue { Shooter.moveTurretBy(5.0) }
         Gamepads.gamepad2.dpadRight
