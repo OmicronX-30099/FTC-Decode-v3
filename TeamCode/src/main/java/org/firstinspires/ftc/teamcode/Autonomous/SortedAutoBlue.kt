@@ -5,7 +5,10 @@ import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
 import com.pedropathing.paths.PathChain
 import dev.nextftc.core.commands.delays.Delay
+import dev.nextftc.core.commands.groups.ParallelGroup
+import dev.nextftc.core.commands.groups.SequentialGroup
 import dev.nextftc.core.commands.utility.InstantCommand
+import dev.nextftc.extensions.pedro.FollowPath
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.ftc.NextFTCOpMode
 import org.firstinspires.ftc.teamcode.Constants.PedroConstants
@@ -31,7 +34,11 @@ class SortedAutoBlue: NextFTCOpMode() {
     override fun onInit() { ROBOT.currAlliance = Alliance.RED.also { Miscellaneous.startLimelight() } }
 
     override fun onWaitForStart() { Miscellaneous.checkForMotif() }
-    /*
+
+    override fun onStartButtonPressed() {
+
+    }
+
     fun GPP() {
         buildGPPPaths()
         val GPP = SequentialGroup(
@@ -39,15 +46,13 @@ class SortedAutoBlue: NextFTCOpMode() {
             Delay(0.6),
             SequentialGroup(
                 InstantCommand {
-                    ShooterGateSubsystem.open()
-                    IntakeSubsystem.intake(0.8)
-                    TransferSubsystem.transfer(0.5)
+                    Rollers.unlockShooter()
+                    Rollers.run(0.5,0.8)
                 },
                 Delay(1.6),
                 InstantCommand {
-                    IntakeSubsystem.intake(0.0)
-                    TransferSubsystem.transfer(0.0)
-                    ShooterGateSubsystem.block()
+                    Rollers.run(0.0,0.0)
+                    Rollers.lockShooter()
                 }
 
             ),
@@ -55,18 +60,16 @@ class SortedAutoBlue: NextFTCOpMode() {
                 FollowPath(paths[1]),
                 SequentialGroup(
                     InstantCommand {
-                        IntakeSubsystem.intake(1.0)
-                        TransferSubsystem.transfer(0.2)
-                        BIMSubsystem.closeGate()
+                        Rollers.run(0.2,1.0)
+                        BilinearIndexMachine.lockTransfer()
                         Delay(0.5)
-                        BIMSubsystem.loadLeft()
+                        BilinearIndexMachine.transferLeft()
                     },
                     Delay(1.7),
-                    InstantCommand { BIMSubsystem.loadRight() },
+                    InstantCommand { BilinearIndexMachine.transferRight() },
                     Delay(0.7),
                     InstantCommand {
-                        IntakeSubsystem.intake(0.0)
-                        TransferSubsystem.transfer(0.0)
+                        Rollers.run(0.0,0.0)
                     }
                 )
             ),
@@ -75,23 +78,22 @@ class SortedAutoBlue: NextFTCOpMode() {
             Delay(0.4),
             SequentialGroup(
                 InstantCommand {
-                    BIMSubsystem.opengate()
-                    BIMSubsystem.loadRight()
+                    BilinearIndexMachine.unlockTransfer()
+                    BilinearIndexMachine.transferRight()
                 },
                 InstantCommand {
-                    TransferSubsystem.transfer(1.0)
-                    ShooterGateSubsystem.open()
+                    Rollers.run(1.0,0.0)
+                    Rollers.unlockShooter()
                 },
                 Delay(0.3),
-                InstantCommand { BIMSubsystem.loadLeft() },
+                InstantCommand { BilinearIndexMachine.transferLeft() },
                 Delay(0.4),
-                InstantCommand { IntakeSubsystem.intake(1.0) },
+                InstantCommand { Rollers.run(1.0,1.0) },
                 Delay(0.5),
                 InstantCommand {
-                    IntakeSubsystem.intake(0.0)
-                    TransferSubsystem.transfer(0.0)
-                    ShooterGateSubsystem.block()
-                    BIMSubsystem.closeGate()
+                    Rollers.run(0.0,0.0)
+                    Rollers.lockShooter()
+                    BilinearIndexMachine.lockTransfer()
                 }
             ),
             Delay(0.2),
@@ -99,18 +101,16 @@ class SortedAutoBlue: NextFTCOpMode() {
                 FollowPath(paths[3],true,0.35),
                 SequentialGroup(
                     InstantCommand {
-                        IntakeSubsystem.intake(1.0)
-                        TransferSubsystem.transfer(0.2)
-                        BIMSubsystem.closeGate()
+                        Rollers.run(0.2,1.0)
+                        BilinearIndexMachine.lockTransfer()
                         Delay(0.5)
-                        BIMSubsystem.loadLeft()
+                        BilinearIndexMachine.transferLeft()
                     },
                     Delay(1.7),
-                    InstantCommand { BIMSubsystem.loadRight() },
+                    InstantCommand { BilinearIndexMachine.transferRight() },
                     Delay(0.7),
                     InstantCommand {
-                        IntakeSubsystem.intake(0.0)
-                        TransferSubsystem.transfer(0.0)
+                        Rollers.run(0.0,0.0)
                     }
                 )
             ),
@@ -119,27 +119,25 @@ class SortedAutoBlue: NextFTCOpMode() {
             Delay(0.2),
             SequentialGroup(
                 InstantCommand {
-                    BIMSubsystem.opengate()
-                    BIMSubsystem.loadMiddle()
+                    BilinearIndexMachine.unlockTransfer()
+                    BilinearIndexMachine.transferMiddle()
                 },
                 Delay(0.3),
                 InstantCommand {
-                    TransferSubsystem.transfer(1.0)
-                    IntakeSubsystem.intake(1.0)
-                    ShooterGateSubsystem.open()
+                    Rollers.run(1.0,1.0)
+                    Rollers.unlockShooter()
                 },
                 Delay(0.8),
                 InstantCommand {
-                    BIMSubsystem.loadLeft() },
+                    BilinearIndexMachine.transferLeft() },
                 Delay(0.4),
                 InstantCommand {
-                    BIMSubsystem.loadRight() },
+                    BilinearIndexMachine.transferRight() },
                 Delay(0.5),
                 InstantCommand {
-                    IntakeSubsystem.intake(0.0)
-                    TransferSubsystem.transfer(0.0)
-                    ShooterGateSubsystem.block()
-                    BIMSubsystem.closeGate()
+                    Rollers.run(0.0,0.0)
+                    Rollers.lockShooter()
+                    BilinearIndexMachine.lockTransfer()
                 }
 
             ),
@@ -147,33 +145,29 @@ class SortedAutoBlue: NextFTCOpMode() {
                 FollowPath(paths[5],true,1.0),
                 SequentialGroup(
                     InstantCommand {
-                        IntakeSubsystem.intake(1.0)
-                        TransferSubsystem.transfer(0.3)
-                        ShooterGateSubsystem.block()
-                        BIMSubsystem.opengate()
-                        BIMSubsystem.loadMiddle()
+                        Rollers.run(0.3,1.0)
+                        Rollers.lockShooter()
+                        BilinearIndexMachine.unlockTransfer()
+                        BilinearIndexMachine.transferMiddle()
                     }
 
                 )
             ),
             InstantCommand {
-                IntakeSubsystem.intake(0.0)
-                TransferSubsystem.transfer(0.0)
+                Rollers.run(0.0,0.0)
             },
             Delay(0.15),
             FollowPath(paths[6]),
             Delay(0.2),
             SequentialGroup(
                 InstantCommand {
-                    ShooterGateSubsystem.open()
-                    IntakeSubsystem.intake(0.8)
-                    TransferSubsystem.transfer(0.5)
+                    Rollers.unlockShooter()
+                    Rollers.run(0.5,0.8)
                 },
                 Delay(1.5),
                 InstantCommand {
-                    IntakeSubsystem.intake(0.0)
-                    TransferSubsystem.transfer(0.0)
-                    ShooterGateSubsystem.block()
+                    Rollers.run(0.0,0.0)
+                    Rollers.lockShooter()
                 }
 
             )
@@ -186,97 +180,84 @@ class SortedAutoBlue: NextFTCOpMode() {
             FollowPath(paths[0]),
             Delay(0.6),SequentialGroup(
                 InstantCommand {
-                    ShooterGateSubsystem.open()
-                    IntakeSubsystem.intake(0.8)
-                    TransferSubsystem.transfer(0.5)
+                    Rollers.unlockShooter()
+                    Rollers.run(0.5,0.8)
                 },
                 Delay(1.6),
                 InstantCommand {
-                    IntakeSubsystem.intake(0.0)
-                    TransferSubsystem.transfer(0.0)
-                    ShooterGateSubsystem.block()
+                    Rollers.run(0.0,0.0)
+                    Rollers.lockShooter()
                 }
 
             ),
-            InstantCommand {
-                ShooterSystem.currFlywheelState = FlywheelState.AUTO_AIM
-            },
             ParallelGroup(
                 FollowPath(paths[1],true,0.75),
                 SequentialGroup(
                     InstantCommand {
-                        IntakeSubsystem.intake(1.0)
-                        TransferSubsystem.transfer(0.3)
-                        ShooterGateSubsystem.block()
-                        BIMSubsystem.opengate()
-                        BIMSubsystem.loadMiddle()
+                        Rollers.run(0.3,1.0)
+                        Rollers.lockShooter()
+                        BilinearIndexMachine.unlockTransfer()
+                        BilinearIndexMachine.transferMiddle()
                     }
 
                 )
             ),
             Delay(0.5),
             InstantCommand {
-                IntakeSubsystem.intake(0.0)
-                TransferSubsystem.transfer(0.0)
+                Rollers.run(0.0,0.0)
             },
             Delay(0.6),
             FollowPath(paths[2]),
             Delay(0.4),
             SequentialGroup(
                 InstantCommand {
-                    ShooterGateSubsystem.open()
-                    IntakeSubsystem.intake(0.8)
-                    TransferSubsystem.transfer(0.5)
+                    Rollers.unlockShooter()
+                    Rollers.run(0.5,0.8)
                 },
                 Delay(1.5),
                 InstantCommand {
-                    IntakeSubsystem.intake(0.0)
-                    TransferSubsystem.transfer(0.0)
-                    ShooterGateSubsystem.block()
+                    Rollers.run(0.0,0.0)
+                    Rollers.lockShooter()
                 }
             ),
             ParallelGroup(
                 FollowPath(paths[3],true,0.35),
                 SequentialGroup(
                     InstantCommand {
-                        IntakeSubsystem.intake(1.0)
-                        TransferSubsystem.transfer(0.2)
-                        BIMSubsystem.closeGate()
+                        Rollers.run(0.2,1.0)
+                        BilinearIndexMachine.lockTransfer()
                     },
                     Delay(0.3),
                     InstantCommand {
-                        BIMSubsystem.loadLeft() },
+                        BilinearIndexMachine.transferLeft() },
                     Delay(1.0),
-                    InstantCommand { BIMSubsystem.loadRight() },
+                    InstantCommand { BilinearIndexMachine.transferRight() },
                 )
             ),
             Delay(0.2),
             InstantCommand {
-                IntakeSubsystem.intake(0.0)
-                TransferSubsystem.transfer(0.0)
+                Rollers.run(0.0,0.0)
             },
             FollowPath(paths[4],true,1.0),
             Delay(0.2),
             SequentialGroup(
                 InstantCommand {
-                    BIMSubsystem.opengate()
-                    BIMSubsystem.loadRight()
+                    BilinearIndexMachine.unlockTransfer()
+                    BilinearIndexMachine.transferRight()
                 },
                 Delay(0.2),
                 InstantCommand {
-                    TransferSubsystem.transfer(0.5)
-                    IntakeSubsystem.intake(1.0)
-                    ShooterGateSubsystem.open()
+                    Rollers.run(0.5,1.0)
+                    Rollers.unlockShooter()
                 },
                 Delay(1.0),
                 InstantCommand {
-                    BIMSubsystem.loadLeft() },
+                    BilinearIndexMachine.transferLeft() },
                 Delay(0.8),
                 InstantCommand {
-                    IntakeSubsystem.intake(0.0)
-                    TransferSubsystem.transfer(0.0)
-                    ShooterGateSubsystem.block()
-                    BIMSubsystem.closeGate()
+                    Rollers.run(0.0,0.0)
+                    Rollers.lockShooter()
+                    BilinearIndexMachine.lockTransfer()
                 }
             ),
             ParallelGroup(
@@ -284,7 +265,7 @@ class SortedAutoBlue: NextFTCOpMode() {
                 SequentialGroup(
                     Delay(0.2),
                     InstantCommand {
-                        BIMSubsystem.loadLeft()
+                        BilinearIndexMachine.transferLeft()
                     }
                 )
             ),
@@ -292,20 +273,18 @@ class SortedAutoBlue: NextFTCOpMode() {
                 FollowPath(paths[6],true,0.35),
                 SequentialGroup(
                     InstantCommand {
-                        IntakeSubsystem.intake(1.0)
-                        TransferSubsystem.transfer(0.2)
-                        BIMSubsystem.closeGate()
+                        Rollers.run(0.2,1.0)
+                        BilinearIndexMachine.lockTransfer()
                     },
                     Delay(0.3),
                     InstantCommand {
-                        BIMSubsystem.loadLeft()
+                        BilinearIndexMachine.transferLeft()
                     },
                     Delay(1.3),
-                    InstantCommand { BIMSubsystem.loadRight() },
+                    InstantCommand { BilinearIndexMachine.transferRight() },
                     Delay(0.7),
                     InstantCommand {
-                        IntakeSubsystem.intake(0.0)
-                        TransferSubsystem.transfer(0.0)
+                        Rollers.run(0.0,0.0)
                     }
                 )
             ),
@@ -314,26 +293,25 @@ class SortedAutoBlue: NextFTCOpMode() {
             Delay(0.6),
             SequentialGroup(
                 InstantCommand {
-                    BIMSubsystem.opengate()
-                    BIMSubsystem.loadRight()
+                    BilinearIndexMachine.unlockTransfer()
+                    BilinearIndexMachine.transferRight()
                 },
                 Delay(0.2),
                 InstantCommand {
-                    TransferSubsystem.transfer(1.0)
-                    ShooterGateSubsystem.open()
+                    Rollers.run(1.0,0.0)
+                    Rollers.unlockShooter()
                 },
                 Delay(0.4),
                 InstantCommand {
-                    BIMSubsystem.loadLeft()
+                    BilinearIndexMachine.transferLeft()
                 },
                 Delay(0.5),
-                InstantCommand { IntakeSubsystem.intake(1.0) },
+                InstantCommand { Rollers.run(1.0,1.0) },
                 Delay(0.7),
                 InstantCommand {
-                    IntakeSubsystem.intake(0.0)
-                    TransferSubsystem.transfer(0.0)
-                    ShooterGateSubsystem.block()
-                    BIMSubsystem.closeGate()
+                    Rollers.run(0.0,0.0)
+                    Rollers.lockShooter()
+                    BilinearIndexMachine.lockTransfer()
                 }
             )
         )
@@ -345,38 +323,31 @@ class SortedAutoBlue: NextFTCOpMode() {
             FollowPath(paths[0]),
             Delay(0.6),SequentialGroup(
                 InstantCommand {
-                    ShooterGateSubsystem.open()
-                    IntakeSubsystem.intake(0.8)
-                    TransferSubsystem.transfer(0.5)
+                    Rollers.unlockShooter()
+                    Rollers.run(0.5,0.8)
                 },
                 Delay(1.6),
                 InstantCommand {
-                    IntakeSubsystem.intake(0.0)
-                    TransferSubsystem.transfer(0.0)
-                    ShooterGateSubsystem.block()
+                    Rollers.run(0.0,0.0)
+                    Rollers.lockShooter()
                 }
 
             ),
-            InstantCommand {
-                ShooterSystem.currFlywheelState = FlywheelState.AUTO_AIM
-            },
             ParallelGroup(
                 FollowPath(paths[1]),
                 SequentialGroup(
                     InstantCommand {
-                        IntakeSubsystem.intake(1.0)
-                        TransferSubsystem.transfer(0.2)
-                        BIMSubsystem.closeGate()
+                        Rollers.run(0.2,1.0)
+                        BilinearIndexMachine.lockTransfer()
                         Delay(0.5)
-                        BIMSubsystem.loadLeft()
+                        BilinearIndexMachine.transferLeft()
                     },
                     Delay(1.6),
-                    InstantCommand { BIMSubsystem.loadRight() },
+                    InstantCommand { BilinearIndexMachine.transferRight() },
                     Delay(0.7),
                     InstantCommand {
-                        IntakeSubsystem.intake(0.0)
-                        TransferSubsystem.transfer(0.0)
-                        BIMSubsystem.loadLeft()
+                        Rollers.run(0.0,0.0)
+                        BilinearIndexMachine.transferLeft()
                     }
                 )
             ),
@@ -385,101 +356,87 @@ class SortedAutoBlue: NextFTCOpMode() {
             Delay(0.4),
             SequentialGroup(
                 InstantCommand {
-                    BIMSubsystem.opengate()
-                    BIMSubsystem.loadLeft()
+                    BilinearIndexMachine.unlockTransfer()
+                    BilinearIndexMachine.transferLeft()
                 },
                 InstantCommand {
-                    TransferSubsystem.transfer(1.0)
-                    ShooterGateSubsystem.open()
+                    Rollers.run(1.0,0.0)
+                    Rollers.unlockShooter()
                 },
                 Delay(0.3),
-                InstantCommand { IntakeSubsystem.intake(1.0) },
+                InstantCommand { Rollers.run(1.0,1.0) },
                 Delay(0.5),
-                InstantCommand { BIMSubsystem.loadRight() },
+                InstantCommand { BilinearIndexMachine.transferRight() },
                 Delay(0.5),
                 InstantCommand {
-                    IntakeSubsystem.intake(0.0)
-                    TransferSubsystem.transfer(0.0)
-                    ShooterGateSubsystem.block()
-                    BIMSubsystem.opengate()
+                    Rollers.run(0.0,0.0)
+                    Rollers.lockShooter()
+                    BilinearIndexMachine.unlockTransfer()
                 }
             ),
             ParallelGroup(
                 FollowPath(paths[3],true,1.0),
                 SequentialGroup(
                     InstantCommand {
-                        IntakeSubsystem.intake(1.0)
-                        TransferSubsystem.transfer(0.2)
+                        Rollers.run(0.2,1.0)
                     },
                 )
             ),
             Delay(0.2),
             InstantCommand {
-                IntakeSubsystem.intake(0.0)
-                TransferSubsystem.transfer(0.0)
+                Rollers.run(0.0,0.0)
             },
             FollowPath(paths[4],true,1.0),
             Delay(0.4),
             SequentialGroup(
                 InstantCommand{
-                    ShooterGateSubsystem.open()
-                    TransferSubsystem.transfer(0.5)
-                    IntakeSubsystem.intake(0.8)
+                    Rollers.unlockShooter()
+                    Rollers.run(0.5,0.8)
                 },
                 Delay(1.6),
                 InstantCommand {
-                    IntakeSubsystem.intake(0.0)
-                    TransferSubsystem.transfer(0.0)
-                    ShooterGateSubsystem.block()
-                    BIMSubsystem.closeGate()
+                    Rollers.run(0.0,0.0)
+                    Rollers.lockShooter()
+                    BilinearIndexMachine.lockTransfer()
                 }
             ),
             ParallelGroup(
                 FollowPath(paths[5]),
                 SequentialGroup(
                     Delay(0.2),
-                    InstantCommand {
-                        BIMSubsystem.loadLeft()
-                    }
+                    InstantCommand { BilinearIndexMachine.transferLeft() }
                 )
             ),
             ParallelGroup(
-                FollowPath(paths[6],true,0.35),
+                FollowPath(paths[6], true, 0.35),
                 SequentialGroup(
                     InstantCommand {
-                        IntakeSubsystem.intake(1.0)
-                        TransferSubsystem.transfer(0.2)
-                        BIMSubsystem.closeGate()
+                        Rollers.run(0.2, 1.0)
+                        BilinearIndexMachine.lockTransfer()
                     },
                     Delay(0.3),
-                    InstantCommand {
-                        BIMSubsystem.loadLeft()
-                    },
+                    InstantCommand { BilinearIndexMachine.transferLeft() },
                     Delay(1.3),
-                    InstantCommand { BIMSubsystem.loadRight() },
+                    InstantCommand { BilinearIndexMachine.transferRight() },
                     Delay(1.0),
-                    InstantCommand {
-                        IntakeSubsystem.intake(0.0)
-                        TransferSubsystem.transfer(0.0)
-                    }
+                    InstantCommand { Rollers.run(0.0, 0.0) }
                 )
             ),
-            InstantCommand{ ShooterSystem.currFlywheelState = FlywheelState.AUTONOMOUS },
-            FollowPath(paths[7],true,1.0),
+            FollowPath(paths[7], true, 1.0),
             Delay(0.6),
             SequentialGroup(
                 InstantCommand {
-                    BIMSubsystem.opengate()
-                    BIMSubsystem.loadRight()
+                    BilinearIndexMachine.unlockTransfer()
+                    BilinearIndexMachine.transferRight()
                 },
                 Delay(0.2),
                 InstantCommand {
-                    Rollers.run(1.0,0.0)
+                    Rollers.run(1.0, 0.0)
                     Rollers.unlockShooter()
                 },
                 Delay(0.3),
                 InstantCommand {
-                    Rollers.run(1.0,1.0)
+                    Rollers.run(1.0, 1.0)
                 },
                 Delay(0.5),
                 InstantCommand { BilinearIndexMachine.transferLeft() },
@@ -625,5 +582,4 @@ class SortedAutoBlue: NextFTCOpMode() {
         paths += test7 //intake third spike
         paths += test8 //shoot third spike
     }
-*/
 }
