@@ -1,7 +1,11 @@
+@file:Suppress("PackageName")
+
 package org.firstinspires.ftc.teamcode.Util
 
 import com.pedropathing.geometry.Pose
 import dev.nextftc.extensions.pedro.PedroComponent
+import kotlin.math.cos
+import kotlin.math.sin
 
 data object ROBOT {
     private const val FIELD_WIDTH: Double = 141.5
@@ -16,8 +20,8 @@ data object ROBOT {
     internal fun shooterPose(): Pose {
         val a: Double = PedroComponent.Companion.follower.heading
         return PedroComponent.Companion.follower.pose + Pose(
-            TURRET_Y_OFFSET * Math.cos(a),
-            TURRET_Y_OFFSET * Math.sin(a)
+            TURRET_Y_OFFSET * cos(a),
+            TURRET_Y_OFFSET * sin(a)
         )
     }
 

@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.Autonomous
+@file:Suppress("PackageName", "unused")
+
+package org.firstinspires.ftc.teamcode.Autonomous.Red.Collab
 
 import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.BezierLine

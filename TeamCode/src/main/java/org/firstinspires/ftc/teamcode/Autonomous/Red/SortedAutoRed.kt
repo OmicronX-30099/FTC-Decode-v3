@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.Autonomous
+@file:Suppress("PackageName", "unused")
+
+package org.firstinspires.ftc.teamcode.Autonomous.Red
 
 import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.BezierLine
@@ -47,28 +49,22 @@ class SortedAutoRed: NextFTCOpMode() {
     override fun onStartButtonPressed() {
         Miscellaneous.shutDownLimelight()
         when (ROBOT.currStage.currMotif) {
-            Motif.PPG -> { PPG() }
-            Motif.PGP -> { PGP() }
-            Motif.GPP -> { GPP() }
-            Motif.UNKNOWN -> { PGP() }
+            Motif.PPG -> { ppg() }
+            Motif.PGP -> { pgp() }
+            Motif.GPP -> { gpp() }
+            Motif.UNKNOWN -> { pgp() }
         }
     }
 
-    fun GPP() {
+    fun gpp() {
         buildGPPPaths()
-        val GPP = SequentialGroup(
+        val gpp = SequentialGroup(
             FollowPath(paths[0]),
             Delay(0.6),
             SequentialGroup(
-                InstantCommand {
-                    Rollers.unlockShooter()
-                    Rollers.run(0.5,0.8)
-                },
+                InstantCommand { Rollers.unlockShooter() .also { Rollers.run(0.5,0.8) } },
                 Delay(1.6),
-                InstantCommand {
-                    Rollers.run(0.0,0.0)
-                    Rollers.lockShooter()
-                }
+                InstantCommand { Rollers.stop() .also { Rollers.lockShooter() } }
 
             ),
             ParallelGroup(
@@ -83,30 +79,22 @@ class SortedAutoRed: NextFTCOpMode() {
                     Delay(1.7),
                     InstantCommand { BilinearIndexMachine.transferRight() },
                     Delay(0.7),
-                    InstantCommand {
-                        Rollers.run(0.0,0.0)
-                    }
+                    InstantCommand { Rollers.stop() }
                 )
             ),
             Delay(0.25),
             FollowPath(paths[2],true,1.0),
             Delay(0.4),
             SequentialGroup(
-                InstantCommand {
-                    BilinearIndexMachine.unlockTransfer()
-                    BilinearIndexMachine.transferRight()
-                },
-                InstantCommand {
-                    Rollers.run(1.0,0.0)
-                    Rollers.unlockShooter()
-                },
+                InstantCommand { BilinearIndexMachine.unlockTransfer() .also { BilinearIndexMachine.transferRight() } },
+                InstantCommand { Rollers.run(1.0,0.0) .also{ Rollers.unlockShooter() } },
                 Delay(0.3),
                 InstantCommand { BilinearIndexMachine.transferLeft() },
                 Delay(0.4),
                 InstantCommand { Rollers.run(1.0,1.0) },
                 Delay(0.5),
                 InstantCommand {
-                    Rollers.run(0.0,0.0)
+                    Rollers.stop()
                     Rollers.lockShooter()
                     BilinearIndexMachine.lockTransfer()
                 }
@@ -124,33 +112,23 @@ class SortedAutoRed: NextFTCOpMode() {
                     Delay(1.7),
                     InstantCommand { BilinearIndexMachine.transferRight() },
                     Delay(0.7),
-                    InstantCommand {
-                        Rollers.run(0.0,0.0)
-                    }
+                    InstantCommand { Rollers.stop() }
                 )
             ),
             Delay(0.1),
             FollowPath(paths[4],true,1.0),
             Delay(0.2),
             SequentialGroup(
-                InstantCommand {
-                    BilinearIndexMachine.unlockTransfer()
-                    BilinearIndexMachine.transferMiddle()
-                },
+                InstantCommand { BilinearIndexMachine.unlockTransfer() .also{ BilinearIndexMachine.transferMiddle() } },
                 Delay(0.3),
-                InstantCommand {
-                    Rollers.run(1.0,1.0)
-                    Rollers.unlockShooter()
-                },
+                InstantCommand { Rollers.run(1.0,1.0) .also{ Rollers.unlockShooter() } },
                 Delay(0.8),
-                InstantCommand {
-                    BilinearIndexMachine.transferLeft() },
+                InstantCommand { BilinearIndexMachine.transferLeft() },
                 Delay(0.4),
-                InstantCommand {
-                    BilinearIndexMachine.transferRight() },
+                InstantCommand { BilinearIndexMachine.transferRight() },
                 Delay(0.5),
                 InstantCommand {
-                    Rollers.run(0.0,0.0)
+                    Rollers.stop()
                     Rollers.lockShooter()
                     BilinearIndexMachine.lockTransfer()
                 }
@@ -168,42 +146,27 @@ class SortedAutoRed: NextFTCOpMode() {
 
                 )
             ),
-            InstantCommand {
-                Rollers.run(0.0,0.0)
-            },
+            InstantCommand { Rollers.stop() },
             Delay(0.15),
             FollowPath(paths[6]),
             Delay(0.2),
             SequentialGroup(
-                InstantCommand {
-                    Rollers.unlockShooter()
-                    Rollers.run(0.5,0.8)
-                },
+                InstantCommand { Rollers.unlockShooter() .also{ Rollers.run(0.5,0.8) } },
                 Delay(1.5),
-                InstantCommand {
-                    Rollers.run(0.0,0.0)
-                    Rollers.lockShooter()
-                }
+                InstantCommand { Rollers.stop() .also { Rollers.lockShooter() } }
 
             )
         )
-        GPP.schedule()
+        gpp.schedule()
     }
-    fun PGP() {
+    fun pgp() {
         buildPGPPaths()
-        val PGP = SequentialGroup(
+        val pgp = SequentialGroup(
             FollowPath(paths[0]),
             Delay(0.6),SequentialGroup(
-                InstantCommand {
-                    Rollers.unlockShooter()
-                    Rollers.run(0.5,0.8)
-                },
+                InstantCommand { Rollers.unlockShooter() .also { Rollers.run(0.5,0.8) } },
                 Delay(1.6),
-                InstantCommand {
-                    Rollers.run(0.0,0.0)
-                    Rollers.lockShooter()
-                }
-
+                InstantCommand { Rollers.stop() .also { Rollers.lockShooter() } }
             ),
             ParallelGroup(
                 FollowPath(paths[1],true,0.75),
@@ -214,63 +177,41 @@ class SortedAutoRed: NextFTCOpMode() {
                         BilinearIndexMachine.unlockTransfer()
                         BilinearIndexMachine.transferMiddle()
                     }
-
                 )
             ),
             Delay(0.5),
-            InstantCommand {
-                Rollers.run(0.0,0.0)
-            },
+            InstantCommand { Rollers.stop() },
             Delay(0.6),
             FollowPath(paths[2]),
             Delay(0.4),
             SequentialGroup(
-                InstantCommand {
-                    Rollers.unlockShooter()
-                    Rollers.run(0.5,0.8)
-                },
+                InstantCommand { Rollers.unlockShooter() .also{ Rollers.run(0.5,0.8) } },
                 Delay(1.5),
-                InstantCommand {
-                    Rollers.run(0.0,0.0)
-                    Rollers.lockShooter()
-                }
+                InstantCommand { Rollers.stop() .also{ Rollers.lockShooter() } }
             ),
             ParallelGroup(
                 FollowPath(paths[3],true,0.35),
                 SequentialGroup(
-                    InstantCommand {
-                        Rollers.run(0.2,1.0)
-                        BilinearIndexMachine.lockTransfer()
-                    },
+                    InstantCommand { Rollers.run(0.2,1.0) .also { BilinearIndexMachine.lockTransfer() } },
                     Delay(0.3),
-                    InstantCommand {
-                        BilinearIndexMachine.transferLeft() },
+                    InstantCommand { BilinearIndexMachine.transferLeft() },
                     Delay(1.0),
                     InstantCommand { BilinearIndexMachine.transferRight() },
                 )
             ),
             Delay(0.2),
-            InstantCommand {
-                Rollers.run(0.0,0.0)
-            },
+            InstantCommand { Rollers.stop() },
             FollowPath(paths[4],true,1.0),
             Delay(0.2),
             SequentialGroup(
-                InstantCommand {
-                    BilinearIndexMachine.unlockTransfer()
-                    BilinearIndexMachine.transferRight()
-                },
+                InstantCommand { BilinearIndexMachine.unlockTransfer() .also{ BilinearIndexMachine.transferRight() } },
                 Delay(0.2),
-                InstantCommand {
-                    Rollers.run(0.5,1.0)
-                    Rollers.unlockShooter()
-                },
+                InstantCommand { Rollers.run(0.5,1.0) .also{ Rollers.unlockShooter() } },
                 Delay(1.0),
-                InstantCommand {
-                    BilinearIndexMachine.transferLeft() },
+                InstantCommand { BilinearIndexMachine.transferLeft() },
                 Delay(0.8),
                 InstantCommand {
-                    Rollers.run(0.0,0.0)
+                    Rollers.stop()
                     Rollers.lockShooter()
                     BilinearIndexMachine.lockTransfer()
                 }
@@ -279,74 +220,51 @@ class SortedAutoRed: NextFTCOpMode() {
                 FollowPath(paths[5]),
                 SequentialGroup(
                     Delay(0.2),
-                    InstantCommand {
-                        BilinearIndexMachine.transferLeft()
-                    }
+                    InstantCommand { BilinearIndexMachine.transferLeft() }
                 )
             ),
             ParallelGroup(
                 FollowPath(paths[6],true,0.35),
                 SequentialGroup(
-                    InstantCommand {
-                        Rollers.run(0.2,1.0)
-                        BilinearIndexMachine.lockTransfer()
-                    },
+                    InstantCommand { Rollers.run(0.2,1.0) .also{ BilinearIndexMachine.lockTransfer() } },
                     Delay(0.3),
-                    InstantCommand {
-                        BilinearIndexMachine.transferLeft()
-                    },
+                    InstantCommand { BilinearIndexMachine.transferLeft() },
                     Delay(1.3),
                     InstantCommand { BilinearIndexMachine.transferRight() },
                     Delay(0.7),
-                    InstantCommand {
-                        Rollers.run(0.0,0.0)
-                    }
+                    InstantCommand { Rollers.stop() }
                 )
             ),
             Delay(0.4),
             FollowPath(paths[7],true,1.0),
             Delay(0.6),
             SequentialGroup(
-                InstantCommand {
-                    BilinearIndexMachine.unlockTransfer()
-                    BilinearIndexMachine.transferRight()
-                },
+                InstantCommand { BilinearIndexMachine.unlockTransfer() .also{ BilinearIndexMachine.transferRight() } },
                 Delay(0.2),
-                InstantCommand {
-                    Rollers.run(1.0,0.0)
-                    Rollers.unlockShooter()
-                },
+                InstantCommand { Rollers.run(1.0,0.0) .also { Rollers.unlockShooter() } },
                 Delay(0.4),
-                InstantCommand {
-                    BilinearIndexMachine.transferLeft()
-                },
+                InstantCommand { BilinearIndexMachine.transferLeft() },
                 Delay(0.5),
                 InstantCommand { Rollers.run(1.0,1.0) },
                 Delay(0.7),
                 InstantCommand {
-                    Rollers.run(0.0,0.0)
+                    Rollers.stop()
                     Rollers.lockShooter()
                     BilinearIndexMachine.lockTransfer()
                 }
             )
         )
-        PGP.schedule()
+        pgp.schedule()
     }
-    fun PPG() {
+    fun ppg() {
         buildPPGPaths()
-        val PPG = SequentialGroup(
+        val ppg = SequentialGroup(
             FollowPath(paths[0]),
-            Delay(0.6),SequentialGroup(
-                InstantCommand {
-                    Rollers.unlockShooter()
-                    Rollers.run(0.5,0.8)
-                },
+            Delay(0.6),
+            SequentialGroup(
+                InstantCommand { Rollers.unlockShooter() .also{ Rollers.run(0.5,0.8) } },
                 Delay(1.6),
-                InstantCommand {
-                    Rollers.run(0.0,0.0)
-                    Rollers.lockShooter()
-                }
-
+                InstantCommand { Rollers.stop() .also { Rollers.lockShooter() } }
             ),
             ParallelGroup(
                 FollowPath(paths[1]),
@@ -360,31 +278,22 @@ class SortedAutoRed: NextFTCOpMode() {
                     Delay(1.6),
                     InstantCommand { BilinearIndexMachine.transferRight() },
                     Delay(0.7),
-                    InstantCommand {
-                        Rollers.run(0.0,0.0)
-                        BilinearIndexMachine.transferLeft()
-                    }
+                    InstantCommand { Rollers.stop() .also { BilinearIndexMachine.transferLeft() } }
                 )
             ),
             Delay(1.0),
             FollowPath(paths[2]),
             Delay(0.4),
             SequentialGroup(
-                InstantCommand {
-                    BilinearIndexMachine.unlockTransfer()
-                    BilinearIndexMachine.transferLeft()
-                },
-                InstantCommand {
-                    Rollers.run(1.0,0.0)
-                    Rollers.unlockShooter()
-                },
+                InstantCommand { BilinearIndexMachine.unlockTransfer() .also{ BilinearIndexMachine.transferLeft() } },
+                InstantCommand { Rollers.run(1.0,0.0) .also { Rollers.unlockShooter() } },
                 Delay(0.3),
                 InstantCommand { Rollers.run(1.0,1.0) },
                 Delay(0.5),
                 InstantCommand { BilinearIndexMachine.transferRight() },
                 Delay(0.5),
                 InstantCommand {
-                    Rollers.run(0.0,0.0)
+                    Rollers.stop()
                     Rollers.lockShooter()
                     BilinearIndexMachine.unlockTransfer()
                 }
@@ -392,25 +301,18 @@ class SortedAutoRed: NextFTCOpMode() {
             ParallelGroup(
                 FollowPath(paths[3],true,1.0),
                 SequentialGroup(
-                    InstantCommand {
-                        Rollers.run(0.2,1.0)
-                    },
+                    InstantCommand { Rollers.run(0.2,1.0) },
                 )
             ),
             Delay(0.2),
-            InstantCommand {
-                Rollers.run(0.0,0.0)
-            },
+            InstantCommand { Rollers.stop() },
             FollowPath(paths[4],true,1.0),
             Delay(0.4),
             SequentialGroup(
-                InstantCommand{
-                    Rollers.unlockShooter()
-                    Rollers.run(0.5,0.8)
-                },
+                InstantCommand{ Rollers.unlockShooter() .also { Rollers.run(0.5,0.8) } },
                 Delay(1.6),
                 InstantCommand {
-                    Rollers.run(0.0,0.0)
+                    Rollers.stop()
                     Rollers.lockShooter()
                     BilinearIndexMachine.lockTransfer()
                 }
@@ -425,10 +327,7 @@ class SortedAutoRed: NextFTCOpMode() {
             ParallelGroup(
                 FollowPath(paths[6], true, 0.35),
                 SequentialGroup(
-                    InstantCommand {
-                        Rollers.run(0.2, 1.0)
-                        BilinearIndexMachine.lockTransfer()
-                    },
+                    InstantCommand { Rollers.run(0.2, 1.0) .also { BilinearIndexMachine.lockTransfer() } },
                     Delay(0.3),
                     InstantCommand { BilinearIndexMachine.transferLeft() },
                     Delay(1.3),
@@ -440,28 +339,18 @@ class SortedAutoRed: NextFTCOpMode() {
             FollowPath(paths[7], true, 1.0),
             Delay(0.6),
             SequentialGroup(
-                InstantCommand {
-                    BilinearIndexMachine.unlockTransfer()
-                    BilinearIndexMachine.transferRight()
-                },
+                InstantCommand { BilinearIndexMachine.unlockTransfer() .also { BilinearIndexMachine.transferRight() } },
                 Delay(0.2),
-                InstantCommand {
-                    Rollers.run(1.0, 0.0)
-                    Rollers.unlockShooter()
-                },
+                InstantCommand { Rollers.run(1.0, 0.0) .also { Rollers.unlockShooter() } },
                 Delay(0.3),
-                InstantCommand {
-                    Rollers.run(1.0, 1.0)
-                },
+                InstantCommand { Rollers.run(1.0, 1.0) },
                 Delay(0.5),
                 InstantCommand { BilinearIndexMachine.transferLeft() },
                 Delay(0.7),
-                InstantCommand {
-                    Rollers.run(0.0, 0.0)
-                }
+                InstantCommand { Rollers.run(0.0, 0.0) }
             )
         )
-        PPG.schedule()
+        ppg.schedule()
     }
     fun buildGPPPaths() {
         paths = arrayOf()
@@ -474,8 +363,8 @@ class SortedAutoRed: NextFTCOpMode() {
         val test2 = follower.pathBuilder()
             .addPath(BezierCurve(Pose(89.0,77.5),Pose(94.5,55.0),Pose(125.0,65.25)))
             .setLinearHeadingInterpolation(Math.toRadians(-20.0),0.0)
-            .addParametricCallback(0.17,  { follower.setMaxPower(0.35) })
-            .addParametricCallback(0.94, { follower.setMaxPower(1.0) })
+            .addParametricCallback(0.17) { follower.setMaxPower(0.35) }
+            .addParametricCallback(0.94) { follower.setMaxPower(1.0) }
             .build()
         val test3 = follower.pathBuilder()
             .addPath(BezierCurve(Pose(125.0,65.25),Pose(103.0,66.5),Pose(90.0,85.5)))
@@ -561,8 +450,8 @@ class SortedAutoRed: NextFTCOpMode() {
         val test2 = follower.pathBuilder()
             .addPath(BezierCurve(Pose(89.0,77.5),Pose(94.5,55.0),Pose(125.0,65.25)))
             .setLinearHeadingInterpolation(Math.toRadians(-20.0),0.0)
-            .addParametricCallback(0.17,  { follower.setMaxPower(0.35) })
-            .addParametricCallback(0.94, { follower.setMaxPower(1.0) })
+            .addParametricCallback(0.17) { follower.setMaxPower(0.35) }
+            .addParametricCallback(0.94) { follower.setMaxPower(1.0) }
             .build()
         val test3 = follower.pathBuilder()
             .addPath(BezierCurve(Pose(125.0, 65.25), Pose(100.0, 65.0), Pose(90.0, 83.5)))
