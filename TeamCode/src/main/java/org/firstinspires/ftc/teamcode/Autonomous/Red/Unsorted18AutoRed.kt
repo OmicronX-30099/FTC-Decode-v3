@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Autonomoous.Red
 
+@Autonomous(name = "Unsorted 18-ball Red", group = "Unsorted Auto", preselectTeleop = "Red TeleOp")
 class Unsorted18AutoRed(): NextFTCOpMode() {
     init {
         addSubsystems(Load, Shooter, Miscellaneous)
