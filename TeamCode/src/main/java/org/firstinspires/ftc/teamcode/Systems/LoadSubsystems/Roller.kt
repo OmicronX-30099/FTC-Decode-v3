@@ -12,6 +12,8 @@ object Rollers: Subsystem {
     private val intakeMotor: MotorEx = MotorEx(ConfigConstants.INTAKE_MOTOR)
     private val shooterGateServo: ServoEx = ServoEx(ConfigConstants.SHOOTER_GATE_SERVO,-0.1)
 
+    override fun initialize() { lockShooter() }
+
     internal fun run(tPow: Double, iPow: Double) {
         transferMotor.power = -tPow
         intakeMotor.power = iPow
