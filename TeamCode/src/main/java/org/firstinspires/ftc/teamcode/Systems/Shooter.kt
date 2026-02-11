@@ -43,12 +43,16 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
     private fun updateTurret() {
         Turret.targetTurretAngle =
             if (ROBOT.inBlueFarZone()) {
+                ActiveOpMode.telemetry.addLine("Blue far")
                 calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseBlueFar,true)
             } else if (ROBOT.inRedFarZone()) {
+                ActiveOpMode.telemetry.addLine("Red far")
                 calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseRedFar,true)
             } else if (ROBOT.inCloseZone()) {
+                ActiveOpMode.telemetry.addLine("Close")
                 calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseClose,true)
             } else {
+                ActiveOpMode.telemetry.addLine("No zone")
                 calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose,true)
             }
     }
