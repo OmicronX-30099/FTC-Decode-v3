@@ -12,13 +12,14 @@ import dev.nextftc.extensions.pedro.FollowPath
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.ftc.NextFTCOpMode
 import org.firstinspires.ftc.teamcode.Constants.PedroConstants
-import org.firstinspires.ftc.teamcode.Enums.Alliance
-import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.IntakeSubsystem
-import org.firstinspires.ftc.teamcode.Systems.IntakeSubsystems.TransferSubsystem
-import org.firstinspires.ftc.teamcode.Systems.PassiveSystem
-import org.firstinspires.ftc.teamcode.Systems.ShooterSystem
+import org.firstinspires.ftc.teamcode.Systems.Load
+import org.firstinspires.ftc.teamcode.Systems.LoadSubsystems.Rollers
+import org.firstinspires.ftc.teamcode.Systems.Miscellaneous
+import org.firstinspires.ftc.teamcode.Systems.Shooter
+import org.firstinspires.ftc.teamcode.Util.Alliance
+import org.firstinspires.ftc.teamcode.Util.ROBOT
+import org.firstinspires.ftc.teamcode.Util.Stage
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
-import org.firstinspires.ftc.teamcode.Util.currAlliance
 import org.firstinspires.ftc.teamcode.Util.includePedro
 
 @Autonomous(name = "Red Coyote Collab Auto", group = "Coyote Collab Auto", preselectTeleOp = "Red TeleOp")
@@ -32,6 +33,7 @@ class CoyoteCollabAutoRed: NextFTCOpMode() {
     override fun onInit() {
         ROBOT.currAlliance = Alliance.RED
         ROBOT.currStage = Stage.AUTONOMOUS
+        ROBOT.currStage.useFlywheelVel = false
     }
 
     override fun onStartButtonPressed() {

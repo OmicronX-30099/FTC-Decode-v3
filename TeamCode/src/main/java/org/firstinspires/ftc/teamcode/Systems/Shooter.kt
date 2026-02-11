@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.FlywheelState
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.Turret
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.TurretState
 import org.firstinspires.ftc.teamcode.Util.ROBOT
+import kotlin.math.atan2
 
 object Shooter: SubsystemGroup(Turret, Flywheel) {
     internal var turretState: TurretState = TurretState.AUTO_AIM
@@ -30,9 +31,9 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
     private fun updateFlywheel() {
         val d: Double = ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.goalPoses.flywheelGoalPose)
         Flywheel.flywheelTarget = if (ROBOT.currStage.useFlywheelVel) {
-                0.0142645 * d * d + 1.26161 * d + 748.88095
-            } else {
                 0.97 * (0.0142645 * d * d + 1.26161 * d + 748.88095)
+            } else {
+                (0.0142645 * d * d + 1.26161 * d + 748.88095)
             }
     }
     private fun updateTurret() {
@@ -48,7 +49,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
             }
     }
     private fun calculateTurretAngle(botPose: Pose, targetPose: Pose): Double =
-        Math.toDegrees(Math.atan2(botPose.y - targetPose.y, botPose.x - targetPose.x) - botPose.heading)
+        Math.toDegrees(atan2(botPose.y - targetPose.y, botPose.x - targetPose.x) - botPose.heading)
     internal fun moveTurretBy(deg: Double) {
         turretState = TurretState.MANUAL
         Turret.targetTurretAngle += deg
@@ -56,15 +57,15 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
 
     // region SOTM_CODE
     private fun getCorrectedVec(botPose: Pose, targetPose: Pose): Vector {
-        val r: Vector = Vector(targetPose.x - botPose.x, targetPose.y - botPose.y)
+        val r = Vector(targetPose.x - botPose.x, targetPose.y - botPose.y)
         val d: Double = r.magnitude
-        val T: Double = -4.64e-5 * d * d + 1.51e-2 * d - 3.48e-1
+        val t: Double = -4.64e-5 * d * d + 1.51e-2 * d - 3.48e-1
         val v: Vector = follower.velocity
-        return (r.minus(v.times(T)))
+        return (r.minus(v.times(t)))
     }
     private fun calculateTurretAngle(botPose: Pose, targetPose: Pose, useVel: Boolean): Double {
         val finalVec: Vector = getCorrectedVec(botPose, targetPose)
-        return Math.toDegrees(Math.atan2(finalVec.yComponent, finalVec.xComponent) - botPose.heading)
+        return Math.toDegrees(atan2(finalVec.yComponent, finalVec.xComponent) - botPose.heading)
     }
     private fun updateFlywheel(useVel: Boolean) {
         val finalVec: Vector = getCorrectedVec(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose)

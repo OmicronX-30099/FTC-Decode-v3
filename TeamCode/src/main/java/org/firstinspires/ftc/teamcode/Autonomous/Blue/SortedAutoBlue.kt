@@ -494,7 +494,7 @@ class SortedAutoBlue: NextFTCOpMode() {
             .setLinearHeadingInterpolation(Math.toRadians(-90.0),Math.toRadians(-170.0))
             .build()
         val test7 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(125.0,33.0).mirror(), Pose(87.5,104.0)).mirror())
+            .addPath(BezierLine(Pose(125.0,33.0).mirror(), Pose(87.5,104.0).mirror()))
             .setConstantHeadingInterpolation(Math.toRadians(-125.0))
             .build()
         paths += test1
