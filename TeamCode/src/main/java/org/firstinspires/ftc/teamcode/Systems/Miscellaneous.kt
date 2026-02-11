@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.Util.Motif
 import org.firstinspires.ftc.teamcode.Util.ROBOT
 
 object Miscellaneous: Subsystem {
-    private val leftTiltServo: ServoEx = ServoEx(ConfigConstants.LEFT_TILT_SERVO)
-    private val rightTiltServo: ServoEx = ServoEx(ConfigConstants.RIGHT_TILT_SERVO)
+    private val leftTiltServo: ServoEx = ServoEx(ConfigConstants.LEFT_TILT_SERVO,-0.1)
+    private val rightTiltServo: ServoEx = ServoEx(ConfigConstants.RIGHT_TILT_SERVO,-0.1)
 
     private lateinit var limelight: Limelight3A
 
