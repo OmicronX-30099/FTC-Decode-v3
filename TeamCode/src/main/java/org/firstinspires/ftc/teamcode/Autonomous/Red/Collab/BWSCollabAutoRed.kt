@@ -87,6 +87,7 @@ class BWSCollabAutoRed(): NextFTCOpMode() {
         telemetry.update()
     }
     fun buildPaths() {
+        paths = arrayof()
         val intakespike3 = follower.pathBuilder().addPath(
             BezierCurve(
                 Pose(86.750, 7.500),
