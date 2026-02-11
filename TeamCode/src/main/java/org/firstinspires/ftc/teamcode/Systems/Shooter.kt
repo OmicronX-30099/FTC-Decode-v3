@@ -6,6 +6,7 @@ import com.pedropathing.geometry.Pose
 import com.pedropathing.math.Vector
 import dev.nextftc.core.subsystems.SubsystemGroup
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
+import dev.nextftc.ftc.ActiveOpMode
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.Flywheel
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.FlywheelState
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.Turret
@@ -71,6 +72,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
             return calculateTurretAngle(botPose, targetPose)
         }
         val finalVec: Vector = getCorrectedVec(botPose, targetPose)
+        ActiveOpMode.telemetry.addData("TurretAngle",Math.toDegrees(atan2(finalVec.yComponent, finalVec.xComponent) - botPose.heading))
         return Math.toDegrees(atan2(finalVec.yComponent, finalVec.xComponent) - botPose.heading)
     }
     private fun updateFlywheel(useVel: Boolean) {
