@@ -13,7 +13,7 @@ class servo_tester: NextFTCOpMode() {
     }
     companion object {
         @JvmField
-        var pos1 = 0.5
+        var pos1 = 0.4
         @JvmField
         var pos2 = 0.5
     }

@@ -41,6 +41,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
             }
     }
     private fun updateTurret() {
+        ActiveOpMode.telemetry.addData("TurretAngle", calculateTurretAngle(ROBOT.shooterPose(),ROBOT.currAlliance.goalPoses.turretGoalPoseRedFar))
         Turret.targetTurretAngle =
             if (ROBOT.inBlueFarZone()) {
                 ActiveOpMode.telemetry.addLine("Blue far")
@@ -58,6 +59,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
     }
     private fun calculateTurretAngle(botPose: Pose, targetPose: Pose): Double =
         Math.toDegrees(atan2(botPose.y - targetPose.y, botPose.x - targetPose.x) - botPose.heading)
+
     internal fun moveTurretBy(deg: Double) {
         turretState = TurretState.MANUAL
         Turret.targetTurretAngle += deg

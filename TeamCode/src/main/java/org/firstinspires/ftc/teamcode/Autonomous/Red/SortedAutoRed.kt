@@ -2,6 +2,7 @@
 
 package org.firstinspires.ftc.teamcode.Autonomous.Red
 
+import com.pedropathing.follower.Follower
 import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
@@ -48,12 +49,18 @@ class SortedAutoRed: NextFTCOpMode() {
 
     override fun onStartButtonPressed() {
         Miscellaneous.shutDownLimelight()
+        follower.setStartingPose(Pose(79.0,7.5,Math.toRadians(90.0)))
         when (ROBOT.currStage.currMotif) {
             Motif.PPG -> { ppg() }
             Motif.PGP -> { pgp() }
             Motif.GPP -> { gpp() }
             Motif.UNKNOWN -> { pgp() }
         }
+    }
+
+    override fun onUpdate() {
+        Shooter.update()
+        telemetry.update()
     }
 
     fun gpp() {

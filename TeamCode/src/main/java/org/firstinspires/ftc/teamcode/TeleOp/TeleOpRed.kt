@@ -59,7 +59,7 @@ class TeleOpRed: NextFTCOpMode() {
                 else { Shooter.flywheelState = FlywheelState.AUTO_AIM }
             }
         Gamepads.gamepad1.dpadUp.or(Gamepads.gamepad2.dpadUp)
-            .whenBecomesTrue { Miscellaneous.raiseBot() }
+            .whenBecomesTrue   { Miscellaneous.raiseBot() }
         Gamepads.gamepad1.dpadDown.or(Gamepads.gamepad2.dpadDown)
             .whenBecomesTrue { Miscellaneous.lowerBot() }
         Gamepads.gamepad2.dpadLeft

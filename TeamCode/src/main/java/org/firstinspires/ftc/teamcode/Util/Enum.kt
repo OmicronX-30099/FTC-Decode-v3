@@ -11,8 +11,8 @@ data object ROBOT {
     private const val FIELD_WIDTH: Double = 141.5
     private const val FIELD_LENGTH: Double = 141.5
     private const val TURRET_Y_OFFSET: Double = -1.774
-    private const val FAR_ZONE_BUFFER: Double = 2.0
-    private const val CLOSE_ZONE_BUFFER: Double = 2.0
+    private const val FAR_ZONE_BUFFER: Double = 12.0
+    private const val CLOSE_ZONE_BUFFER: Double = 11.0
 
     internal var currAlliance: Alliance = Alliance.BLUE
     internal var currStage: Stage = Stage.TELEOP
@@ -49,7 +49,7 @@ enum class Alliance {
     RED{
         override val resetPoses: ResetPoses
             get() = TODO("Not yet implemented")
-        override val goalPoses: GoalPoses = GoalPoses(Pose(131.75,126.0),Pose(127.0,130.75),Pose(130.0,133.5),Pose(141.5,141.5))
+        override val goalPoses: GoalPoses = GoalPoses(Pose(130.0,140.0),Pose(130.0,140.0),Pose(135.0,140.0),Pose(140.0,140.0))
     };
     abstract val resetPoses: ResetPoses
     abstract val goalPoses: GoalPoses
