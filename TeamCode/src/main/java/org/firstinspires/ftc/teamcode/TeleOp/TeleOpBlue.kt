@@ -53,7 +53,7 @@ class TeleOpBlue: NextFTCOpMode() {
             .whenBecomesFalse { Rollers.run(0.0,0.0) }
         Gamepads.gamepad1.rightBumper
             .whenBecomesTrue ( Load.shootTripleCommand )
-        Gamepads.gamepad1.cross.or(Gamepads.gamepad1.rightBumper)
+        Gamepads.gamepad1.cross.or(Gamepads.gamepad2.rightBumper)
             .whenBecomesTrue {
                 if (Shooter.flywheelState == FlywheelState.AUTO_AIM) { Shooter.flywheelState = FlywheelState.IDLE }
                 else { Shooter.flywheelState = FlywheelState.AUTO_AIM }
