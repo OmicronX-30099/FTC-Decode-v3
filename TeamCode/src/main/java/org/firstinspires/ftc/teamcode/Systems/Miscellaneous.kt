@@ -16,8 +16,8 @@ object Miscellaneous: Subsystem {
 
     private lateinit var limelight: Limelight3A
 
-    internal fun raiseBot() { leftTiltServo.position = 0.0 .also { rightTiltServo.position = 0.0 } }
-    internal fun lowerBot() { leftTiltServo.position = 0.0 .also { rightTiltServo.position = 0.0 } }
+    internal fun raiseBot() { leftTiltServo.position = 0.28 .also { rightTiltServo.position = 0.62 } }
+    internal fun lowerBot() { leftTiltServo.position = 0.54 .also { rightTiltServo.position = 0.46 } }
 
     internal fun startLimelight() {
         limelight = ActiveOpMode.hardwareMap.get(Limelight3A::class.java, ConfigConstants.LIMELIGHT)

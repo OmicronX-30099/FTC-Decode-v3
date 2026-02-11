@@ -32,7 +32,7 @@ object ConfigConstants {
     const val LEFT_MODULE_SERVO: String = "lm"
     const val RIGHT_MODULE_SERVO: String = "rm"
 
-    const val LEFT_TILT_SERVO: String = ""
-    const val RIGHT_TILT_SERVO: String = ""
+    const val LEFT_TILT_SERVO: String = "left_tilt"
+    const val RIGHT_TILT_SERVO: String = "right_tilt"
     const val LIMELIGHT: String = "ll"
 }
