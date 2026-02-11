@@ -23,7 +23,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
             TurretState.MANUAL -> {  }
         }
         when (flywheelState) {
-            FlywheelState.AUTO_AIM -> { updateFlywheel() }
+            FlywheelState.AUTO_AIM -> { updateFlywheel(true) }
             FlywheelState.IDLE -> { Flywheel.flywheelTarget = Flywheel.IDLE_VELOCITY }
         }
         Turret.update()
@@ -41,13 +41,13 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
     private fun updateTurret() {
         Turret.targetTurretAngle =
             if (ROBOT.inBlueFarZone()) {
-                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseBlueFar)
+                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseBlueFar,true)
             } else if (ROBOT.inRedFarZone()) {
-                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseRedFar)
+                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseRedFar,true)
             } else if (ROBOT.inCloseZone()) {
-                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseClose)
+                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseClose,true)
             } else {
-                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose)
+                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose,true)
             }
     }
     private fun calculateTurretAngle(botPose: Pose, targetPose: Pose): Double =
