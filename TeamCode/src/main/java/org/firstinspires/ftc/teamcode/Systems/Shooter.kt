@@ -1,4 +1,4 @@
-@file:Suppress("PackageName", "unused")
+@file:Suppress("PackageName", "unused", "SameParameterValue")
 
 package org.firstinspires.ftc.teamcode.Systems
 
@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.FlywheelState
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.Turret
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.TurretState
 import org.firstinspires.ftc.teamcode.Util.ROBOT
+import org.firstinspires.ftc.teamcode.Util.Stage
 import kotlin.math.atan2
 
 object Shooter: SubsystemGroup(Turret, Flywheel) {
@@ -66,10 +67,17 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
         return (r.minus(v.times(t)))
     }
     private fun calculateTurretAngle(botPose: Pose, targetPose: Pose, useVel: Boolean): Double {
+        if (ROBOT.currStage == Stage.AUTONOMOUS) {
+            return calculateTurretAngle(botPose, targetPose)
+        }
         val finalVec: Vector = getCorrectedVec(botPose, targetPose)
         return Math.toDegrees(atan2(finalVec.yComponent, finalVec.xComponent) - botPose.heading)
     }
     private fun updateFlywheel(useVel: Boolean) {
+        if (ROBOT.currStage == Stage.AUTONOMOUS) {
+            updateFlywheel()
+            return
+        }
         val finalVec: Vector = getCorrectedVec(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose)
         val d: Double = finalVec.magnitude
         Flywheel.flywheelTarget =  0.0142645 * d * d + 1.26161 * d + 748.88095
