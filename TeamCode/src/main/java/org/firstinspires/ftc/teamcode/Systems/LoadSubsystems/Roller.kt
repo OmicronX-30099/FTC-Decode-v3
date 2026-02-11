@@ -19,6 +19,6 @@ object Rollers: Subsystem {
         intakeMotor.power = iPow
     }
     internal fun stop() = run(0.0,0.0)
-    internal fun lockShooter() { shooterGateServo.position = 0.1 }
-    internal fun unlockShooter() { shooterGateServo.position = 0.48 }
+    internal fun lockShooter() { shooterGateServo.position = 0.5 }
+    internal fun unlockShooter() { shooterGateServo.position = 0.2 }
 }
