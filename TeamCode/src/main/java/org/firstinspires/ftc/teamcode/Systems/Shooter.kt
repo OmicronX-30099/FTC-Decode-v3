@@ -25,7 +25,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
             TurretState.MANUAL -> {  }
         }
         when (flywheelState) {
-            FlywheelState.AUTO_AIM -> { updateFlywheel(true) }
+            FlywheelState.AUTO_AIM -> { updateFlywheel() }
             FlywheelState.IDLE -> { Flywheel.flywheelTarget = Flywheel.IDLE_VELOCITY }
         }
         Turret.update()
@@ -44,16 +44,16 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
         Turret.targetTurretAngle =
             if (ROBOT.inBlueFarZone()) {
                 ActiveOpMode.telemetry.addLine("Blue far")
-                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseBlueFar,true)
+                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseBlueFar)
             } else if (ROBOT.inRedFarZone()) {
                 ActiveOpMode.telemetry.addLine("Red far")
-                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseRedFar,true)
+                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseRedFar)
             } else if (ROBOT.inCloseZone()) {
                 ActiveOpMode.telemetry.addLine("Close")
-                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseClose,true)
+                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseClose)
             } else {
                 ActiveOpMode.telemetry.addLine("No zone")
-                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose,true)
+                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose)
             }
     }
     private fun calculateTurretAngle(botPose: Pose, targetPose: Pose): Double =
