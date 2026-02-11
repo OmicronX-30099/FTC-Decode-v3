@@ -15,7 +15,7 @@ class Unsorted18AutoRed(): NextFTCOpMode() {
         ROBOT.currStage.useFlywheelVel = true
     }
     override fun onStartButtonPressed() {
-        follower.setStartingPose(Pose(0,0,0).mirror())
+        follower.setStartingPose(Pose(0.0,0.0,0.0).mirror())
         buildPaths()
         val main = SequentialGroup(
             FollowPath(paths[0]),
