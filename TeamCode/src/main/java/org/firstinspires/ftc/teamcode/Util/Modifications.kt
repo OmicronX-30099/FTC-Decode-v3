@@ -3,6 +3,8 @@
 package org.firstinspires.ftc.teamcode.Util
 
 import com.pedropathing.follower.Follower
+import com.pedropathing.geometry.Pose
+import com.pedropathing.math.Vector
 import com.qualcomm.robotcore.hardware.HardwareMap
 import dev.nextftc.core.components.BindingsComponent
 import dev.nextftc.core.components.SubsystemComponent
@@ -17,4 +19,7 @@ fun NextFTCOpMode.addSubsystems(vararg subsystems: Subsystem) {
 }
 fun NextFTCOpMode.includePedro(followerFactory: (HardwareMap) -> Follower) {
     addComponents(PedroComponent(followerFactory))
+}
+fun Vector.toPose(): Pose {
+    return Pose(this.xComponent,this.yComponent)
 }
