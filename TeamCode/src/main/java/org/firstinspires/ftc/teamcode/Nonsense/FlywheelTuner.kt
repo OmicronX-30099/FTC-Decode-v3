@@ -19,7 +19,7 @@ class FlywheelTuner: NextFTCOpMode() {
     }
 
     companion object {
-        var startPose: Pose = Pose(0.0,0.0)
+        var startPose: Pose = Pose(0.0,0.0,0.0)
         @JvmField
         var flywheelVel: Double = 0.0
     }
