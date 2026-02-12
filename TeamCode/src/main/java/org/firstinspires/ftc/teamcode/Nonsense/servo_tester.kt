@@ -13,15 +13,17 @@ class servo_tester: NextFTCOpMode() {
     }
     companion object {
         @JvmField
-        var pos1 = 0.4
+        var pos1 = 1-0.96875
         @JvmField
         var pos2 = 0.5
     }
-    private val left_tilt: ServoEx = ServoEx("sg", -0.1)
+    private val left_tilt: ServoEx = ServoEx("lt", -0.1)
+    private val right_t: ServoEx = ServoEx("ft",-0.1)
 
 
     override fun onUpdate() {
         left_tilt.position = pos1
+        right_t.position = pos1
     }
 
 }

@@ -90,7 +90,7 @@ class CoyoteCollabAutoBlue: NextFTCOpMode() {
     }
 
     fun buildPaths() {
-        paths = arrayof()
+        paths = arrayOf()
         val shootpreload = follower //path0
             .pathBuilder()
             .addPath(

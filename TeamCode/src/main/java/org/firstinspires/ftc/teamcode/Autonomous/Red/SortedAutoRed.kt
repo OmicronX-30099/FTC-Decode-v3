@@ -478,11 +478,11 @@ class SortedAutoRed: NextFTCOpMode() {
             .build()
         val test7 = follower.pathBuilder()
             .addPath((BezierLine(Pose(90.0,37.0),Pose(125.0,37.0))))
-            .setConstantHeadingInterpolation(0.0)
+            .setLinearHeadingInterpolation(Math.toRadians(0.0),Math.toRadians(0.0))
             .build()
         val test8 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(125.0, 37.0), Pose(84.5, 105.5)))
-            .setConstantHeadingInterpolation(Math.toRadians(-62.0))
+            .addPath(BezierCurve(Pose(125.0, 37.0), Pose(83.0,68.5),Pose(81.0, 101.0)))
+            .setLinearHeadingInterpolation(Math.toRadians(0.0),Math.toRadians(-90.0))
             .build()
         paths += test1 //push plus shoot first
         paths += test2 //intake second spike plus push gate

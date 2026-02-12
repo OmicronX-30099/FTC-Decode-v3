@@ -4,23 +4,19 @@ package org.firstinspires.ftc.teamcode.Systems
 
 import com.pedropathing.geometry.Pose
 import dev.nextftc.core.subsystems.SubsystemGroup
-import org.firstinspires.ftc.teamcode.Systems.Shooter.turretState
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.Flywheel
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.FlywheelState
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.Turret
-import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.TurretState
 import org.firstinspires.ftc.teamcode.Util.ROBOT
 import kotlin.math.atan2
 
 object Shooter: SubsystemGroup(Turret, Flywheel) {
-    internal var turretState: TurretState = TurretState.AUTO_AIM
     internal var flywheelState: FlywheelState = FlywheelState.AUTO_AIM
 
+    internal var turretOffset: Double = 0.0
+
     fun update() {
-        when (turretState) {
-            TurretState.AUTO_AIM -> { updateTurret() }
-            TurretState.MANUAL -> {  }
-        }
+        updateTurret()
         when (flywheelState) {
             FlywheelState.AUTO_AIM -> { updateFlywheel() }
             FlywheelState.IDLE -> { Flywheel.flywheelTarget = Flywheel.IDLE_VELOCITY }
@@ -31,29 +27,27 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
 
     private fun updateFlywheel() {
         val d: Double = ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.goalPoses.flywheelGoalPose)
-        Flywheel.flywheelTarget = if (ROBOT.currStage.useFlywheelVel) {
-                0.97 * (0.0142645 * d * d + 1.26161 * d + 748.88095)
-            } else {
-                (0.0142645 * d * d + 1.26161 * d + 748.88095)
-            }
+        Flywheel.flywheelTarget =
+                if (ROBOT.inCloseZone()) {
+                    (0.0142645 * d * d + 1.26161 * d + 748.88095)
+                } else {
+                    (0.0142645 * d * d + 1.26161 * d + 748.88095) + 20.0
+                }
     }
     private fun updateTurret() {
         Turret.targetTurretAngle =
             if (ROBOT.inBlueFarZone()) {
-                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseBlueFar)
+                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose)
             } else if (ROBOT.inRedFarZone()) {
-                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseRedFar)
+                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose)
             } else if (ROBOT.inCloseZone()) {
-                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseClose)
+                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose)
             } else {
                 calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose)
-            }
+            } + turretOffset
     }
     private fun calculateTurretAngle(botPose: Pose, targetPose: Pose): Double =
         Math.toDegrees(atan2(botPose.y - targetPose.y, botPose.x - targetPose.x) - botPose.heading)
 
-    internal fun moveTurretBy(deg: Double) {
-        turretState = TurretState.MANUAL
-        Turret.targetTurretAngle += deg
-    }
+    internal fun offSetTurretBy(deg: Double) { turretOffset += deg }
 }

@@ -1,6 +1,29 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Blue.Collab
 
-@Autonomous(name = "Blue BWS Collab Auto", group = "BWS Collab Auto", preselectTeleop = "Blue TeleOp")
+import com.pedropathing.geometry.BezierCurve
+import com.pedropathing.geometry.BezierLine
+import com.pedropathing.geometry.Pose
+import com.pedropathing.paths.PathChain
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import dev.nextftc.core.commands.delays.Delay
+import dev.nextftc.core.commands.groups.ParallelGroup
+import dev.nextftc.core.commands.groups.SequentialGroup
+import dev.nextftc.core.commands.utility.InstantCommand
+import dev.nextftc.extensions.pedro.FollowPath
+import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
+import dev.nextftc.ftc.NextFTCOpMode
+import org.firstinspires.ftc.teamcode.Constants.PedroConstants
+import org.firstinspires.ftc.teamcode.Systems.Load
+import org.firstinspires.ftc.teamcode.Systems.LoadSubsystems.Rollers
+import org.firstinspires.ftc.teamcode.Systems.Miscellaneous
+import org.firstinspires.ftc.teamcode.Systems.Shooter
+import org.firstinspires.ftc.teamcode.Util.Alliance
+import org.firstinspires.ftc.teamcode.Util.ROBOT
+import org.firstinspires.ftc.teamcode.Util.Stage
+import org.firstinspires.ftc.teamcode.Util.addSubsystems
+import org.firstinspires.ftc.teamcode.Util.includePedro
+
+@Autonomous(name = "Blue BWS Collab Auto", group = "BWS Collab Auto", preselectTeleOp = "Blue TeleOp")
 class BWSCollabAutoBlue(): NextFTCOpMode() {
     init {
         addSubsystems(Shooter, Load, Miscellaneous)
@@ -15,15 +38,15 @@ class BWSCollabAutoBlue(): NextFTCOpMode() {
     }
     override fun onStartButtonPressed() {
         buildPaths()
-        follower.setStartingPose(Pose(86.750,7.5,Math.toRadians(90.0)).mirror())
+        follower.setStartingPose(Pose(86.750, 7.5, Math.toRadians(90.0)).mirror())
 
         val main = SequentialGroup(
             Delay(1.3),
             Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[0], holdEnd = true, 1.0),
-                SequentialGroup (
-                    InstantCommand { Rollers.run(0.3,1.0) }
+                SequentialGroup(
+                    InstantCommand { Rollers.run(0.3, 1.0) }
                 )
             ),
             Delay(0.5),
@@ -34,7 +57,7 @@ class BWSCollabAutoBlue(): NextFTCOpMode() {
             ParallelGroup(
                 FollowPath(paths[2]),//intake corner p1
                 SequentialGroup(
-                    InstantCommand { Rollers.run(0.3,1.0) }
+                    InstantCommand { Rollers.run(0.3, 1.0) }
                 )
             ),
             FollowPath(paths[3]),//intake corner p2
@@ -46,7 +69,7 @@ class BWSCollabAutoBlue(): NextFTCOpMode() {
             ParallelGroup(
                 FollowPath(paths[6]),//intake tunnel
                 SequentialGroup(
-                    InstantCommand { Rollers.run(0.3,1.0) }
+                    InstantCommand { Rollers.run(0.3, 1.0) }
                 )
             ),
             Delay(0.15),
@@ -57,7 +80,7 @@ class BWSCollabAutoBlue(): NextFTCOpMode() {
             ParallelGroup(
                 FollowPath(paths[2]),//intake corner p1
                 SequentialGroup(
-                    InstantCommand { Rollers.run(0.3,1.0) }
+                    InstantCommand { Rollers.run(0.3, 1.0) }
                 )
             ),
             FollowPath(paths[3]),//intake corner p2
@@ -69,7 +92,7 @@ class BWSCollabAutoBlue(): NextFTCOpMode() {
             ParallelGroup(
                 FollowPath(paths[6]),//intake tunnel
                 SequentialGroup(
-                    InstantCommand { Rollers.run(0.3,1.0) }
+                    InstantCommand { Rollers.run(0.3, 1.0) }
                 )
             ),
             Delay(0.15),
@@ -77,13 +100,13 @@ class BWSCollabAutoBlue(): NextFTCOpMode() {
             FollowPath(paths[7]),//shoot tunnel
             Delay(0.5),
             Load.shootTripleCommand,
-            FollowPath(paths[8],true,0.5)//leave
+            FollowPath(paths[8], true, 0.5)//leave
         )
         main.schedule()
     }
 
     override fun onUpdate() {
-        Shooter.updateShooter()
+        Shooter.update()
         telemetry.update()
     }
     fun buildPaths() {

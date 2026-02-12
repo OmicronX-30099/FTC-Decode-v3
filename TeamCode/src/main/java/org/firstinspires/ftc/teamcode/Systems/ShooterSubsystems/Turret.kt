@@ -12,16 +12,11 @@ object Turret: Subsystem {
     private val torctexTurretServo: ServoEx = ServoEx(ConfigConstants.TORCTEX_TURRET_SERVO,-0.1)
     private val turretServos: ServoGroup = ServoGroup(axonTurretServo, torctexTurretServo)
 
-    private const val GEAR_RATIO: Double = 15.0 / 16.0
+    private const val GEAR_RATIO: Double = 0.9375
 
     internal var targetTurretAngle: Double = 0.0
 
-    internal fun update() { turretServos.position = (normalizeAngle(targetTurretAngle) * (GEAR_RATIO / 355.0) + 0.5) }
-}
-
-internal enum class TurretState {
-    AUTO_AIM,
-    MANUAL;
+    internal fun update() { turretServos.position = (normalizeAngle(targetTurretAngle) * (GEAR_RATIO / 360.0) + 0.5) }
 }
 
 internal fun normalizeAngle(angDeg: Double): Double {
