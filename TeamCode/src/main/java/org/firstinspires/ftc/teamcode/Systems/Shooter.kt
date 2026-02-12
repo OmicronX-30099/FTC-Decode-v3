@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.Flywheel
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.FlywheelState
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.Turret
 import org.firstinspires.ftc.teamcode.Util.ROBOT
+import org.firstinspires.ftc.teamcode.Util.Stage
 import kotlin.math.atan2
 
 object Shooter: SubsystemGroup(Turret, Flywheel) {
@@ -29,9 +30,12 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
         val d: Double = ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.goalPoses.flywheelGoalPose)
         Flywheel.flywheelTarget =
                 if (ROBOT.inCloseZone()) {
+                    if (ROBOT.currStage == Stage.AUTONOMOUS) {
+                        (0.0142645 * d * d + 1.26161 * d + 748.88095) - 20.0
+                    }
                     (0.0142645 * d * d + 1.26161 * d + 748.88095)
                 } else {
-                    (0.0142645 * d * d + 1.26161 * d + 748.88095) + 20.0
+                    (0.0142645 * d * d + 1.26161 * d + 748.88095) + 40.0
                 }
     }
     private fun updateTurret() {
