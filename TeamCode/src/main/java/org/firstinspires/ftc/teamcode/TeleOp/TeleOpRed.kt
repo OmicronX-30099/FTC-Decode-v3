@@ -66,15 +66,11 @@ class TeleOpRed: NextFTCOpMode() {
             .whenBecomesTrue { Miscellaneous.raiseBot() }
         Gamepads.gamepad1.dpadDown.or(Gamepads.gamepad2.dpadDown)
             .whenBecomesTrue { Miscellaneous.lowerBot() }
-        Gamepads.gamepad2.square
-            .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose2 }
         Gamepads.gamepad2.triangle
+            .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose2 }
+        Gamepads.gamepad2.square
             .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose3 }
-        Gamepads.gamepad2.circle
-            .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose4 }
-        Gamepads.gamepad2.cross
-            .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose5 }
-        Gamepads.gamepad1.square
+        Gamepads.gamepad1.cross
             .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose1 }
     }
 

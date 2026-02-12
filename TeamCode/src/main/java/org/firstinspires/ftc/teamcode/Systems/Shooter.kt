@@ -29,11 +29,11 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
         Flywheel.flywheelTarget =
                 if (ROBOT.inCloseZone()) {
                     if (ROBOT.currStage == Stage.AUTONOMOUS) {
-                        (0.0142645 * d * d + 1.26161 * d + 748.88095) - 20.0
+                        (0.0142645 * d * d + 1.26161 * d + 748.88095)
                     }
                     (0.0142645 * d * d + 1.26161 * d + 748.88095)
                 } else {
-                    (0.0142645 * d * d + 1.26161 * d + 748.88095) + 40.0
+                    (0.0142645 * d * d + 1.26161 * d + 748.88095)
                 }
     }
     private fun updateTurret() {

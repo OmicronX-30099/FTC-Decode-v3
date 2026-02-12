@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.Util
 
 import com.pedropathing.geometry.Pose
 import dev.nextftc.extensions.pedro.PedroComponent
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -38,14 +39,12 @@ data object ROBOT {
 
 enum class Alliance {
     BLUE {
-        override val resetPoses: ResetPoses
-            get() = TODO("Not yet implemented")
-        override val goalPoses: GoalPoses = GoalPoses(Pose(131.5,140.0).mirror(),Pose(135.0,140.0).mirror(),Pose(141.5,141.5).mirror())
+        override val resetPoses: ResetPoses  = ResetPoses(Pose(9.5,8.9,-PI).mirror(), Pose(117.0,129.0,-2.448).mirror(), Pose(116.0,130.0,-0.939).mirror())
+        override val goalPoses: GoalPoses = GoalPoses(Pose(130.0,140.0).mirror(),Pose(134.0,140.0).mirror(),Pose(132.0,140.0).mirror())
     },
     RED{
-        override val resetPoses: ResetPoses
-            get() = TODO("Not yet implemented")
-        override val goalPoses: GoalPoses = GoalPoses(Pose(130.0,140.0),Pose(130.0,140.0),Pose(134.0,140.0),Pose(131.0,140.0))
+        override val resetPoses: ResetPoses  = ResetPoses(Pose(9.5,8.9,-PI), Pose(117.0,129.0,-2.448), Pose(116.0,130.0,-0.939))
+        override val goalPoses: GoalPoses = GoalPoses(Pose(130.0,140.0),Pose(134.0,140.0),Pose(132.0,140.0))
     };
     abstract val resetPoses: ResetPoses
     abstract val goalPoses: GoalPoses
@@ -68,4 +67,4 @@ enum class Stage {
 
 data class GoalPoses(val turretGoalPoseFar: Pose, val turretGoalPoseClose: Pose, val flywheelGoalPose: Pose)
 
-data class ResetPoses(val resetPose1: Pose, val resetPose2: Pose, val resetPose3: Pose, val resetPose4: Pose, val resetPose5: Pose)
+data class ResetPoses(val resetPose1: Pose, val resetPose2: Pose, val resetPose3: Pose)
