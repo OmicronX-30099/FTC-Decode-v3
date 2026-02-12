@@ -23,5 +23,6 @@ class FlywheelTuner: NextFTCOpMode() {
         telemetry.addData("x",follower.pose.x)
         telemetry.addData("y",follower.pose.y)
         telemetry.addData("h",follower.pose.heading)
+        telemetry.update()
     }
 }
