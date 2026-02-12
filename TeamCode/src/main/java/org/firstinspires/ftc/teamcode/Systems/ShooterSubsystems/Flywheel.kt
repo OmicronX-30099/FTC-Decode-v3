@@ -19,18 +19,17 @@ object Flywheel: Subsystem {
     private val topFlywheelMotor: MotorEx = MotorEx(ConfigConstants.TOP_FLYWHEEL_MOTOR)
     private val bottomFlywheelMotor: MotorEx = MotorEx(ConfigConstants.BOTTOM_FLYWHEEL_MOTOR)
     private val flywheelMotors: MotorGroup = MotorGroup(topFlywheelMotor, bottomFlywheelMotor)
+    private val battery: VoltageSensor by lazy { ActiveOpMode.hardwareMap.get(VoltageSensor::class.java, "Control Hub") }
 
     private val flywheelPIDController: PIDController = PIDController(0.0075,0.0,0.0)
 
     private val flywheelFFCoefficients: SimpleFFCoefficients = SimpleFFCoefficients(0.064,0.00043,0.0)
     private val flywheelFFController: SimpleFeedforward = SimpleFeedforward(flywheelFFCoefficients)
 
-    internal const val IDLE_VELOCITY: Double = 1140.0
-
-    internal var flywheelTarget: Double = 0.0
-
     private const val V_NOMINAL = 12.0
-    private val battery: VoltageSensor by lazy { ActiveOpMode.hardwareMap.get(VoltageSensor::class.java, "Control Hub") }
+    internal const val IDLE_VELOCITY: Double = 1140.0
+    
+    internal var flywheelTarget: Double = 0.0
 
     internal fun update() {
         val pid = flywheelPIDController.calculate(error = flywheelTarget - flywheelMotors.velocity)
