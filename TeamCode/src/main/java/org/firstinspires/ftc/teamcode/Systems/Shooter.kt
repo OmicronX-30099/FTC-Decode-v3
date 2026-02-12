@@ -28,7 +28,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
     }
 
     private fun updateFlywheel() {
-        val d: Double = (ROBOT.shooterPose() + ROBOT.fullVel(VEL_SCALAR, ANG_SCALAR)).distanceFrom(ROBOT.currAlliance.goalPoses.flywheelGoalPose)
+        val d: Double = (ROBOT.correctedPose(VEL_SCALAR, ANG_SCALAR)).distanceFrom(ROBOT.currAlliance.goalPoses.flywheelGoalPose)
         Flywheel.flywheelTarget =
                 if (ROBOT.inCloseZone()) {
                     (0.0142645 * d * d + 1.26161 * d + 748.88095)
