@@ -40,7 +40,7 @@ class CoyoteCollabAutoRed: NextFTCOpMode() {
 
     override fun onStartButtonPressed() {
         buildPaths()
-        follower.setStartingPose(Pose(87.500, 8.000, Math.toRadians(0.0)))
+        follower.setStartingPose(Pose(87.500, 8.000, Math.toRadians(0.0)).mirror())
         val main = SequentialGroup(
             FollowPath(paths[0]), //go to first shoot
             Delay(0.5),

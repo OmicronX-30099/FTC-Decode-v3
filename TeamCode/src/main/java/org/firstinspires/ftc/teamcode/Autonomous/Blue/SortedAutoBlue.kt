@@ -48,6 +48,7 @@ class SortedAutoBlue: NextFTCOpMode() {
 
     override fun onStartButtonPressed() {
         Miscellaneous.shutDownLimelight()
+        follower.setStartingPose(Pose(79.0,7.5,Math.toRadians(90.0)).mirror())
         when (ROBOT.currStage.currMotif) {
             Motif.PPG -> { ppg() }
             Motif.PGP -> { pgp() }
