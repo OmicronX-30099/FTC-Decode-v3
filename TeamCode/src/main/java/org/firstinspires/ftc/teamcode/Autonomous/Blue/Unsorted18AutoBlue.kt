@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomoous.Red
 
 @Autonomous(name = "Unsorted 18-ball Blue", group = "Unsorted Auto", preselectTeleop = "Blue TeleOp")
-class Unsorted18AutoRed(): NextFTCOpMode() {
+class Unsorted18AutoBlue(): NextFTCOpMode() {
     init {
         addSubsystems(Load, Shooter, Miscellaneous)
         includePedro(PedroConstants::createFollower)

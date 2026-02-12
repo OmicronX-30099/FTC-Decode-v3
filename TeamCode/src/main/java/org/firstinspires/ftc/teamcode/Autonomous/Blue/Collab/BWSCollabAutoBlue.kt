@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Blue.Collab
 
 @Autonomous(name = "Blue BWS Collab Auto", group = "BWS Collab Auto", preselectTeleop = "Blue TeleOp")
-class BWSCollabAutoRed(): NextFTCOpMode() {
+class BWSCollabAutoBlue(): NextFTCOpMode() {
     init {
         addSubsystems(Shooter, Load, Miscellaneous)
         includePedro(PedroConstants::createFollower)
