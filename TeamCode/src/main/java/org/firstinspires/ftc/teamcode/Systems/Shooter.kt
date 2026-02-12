@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.Util.Stage
 import kotlin.math.atan2
 
 object Shooter: SubsystemGroup(Turret, Flywheel) {
+    private const val VEL_SCALAR: Double = 0.9
+    private const val ANG_SCALAR: Double = 0.0
     internal var flywheelState: FlywheelState = FlywheelState.AUTO_AIM
 
     fun update() {
@@ -19,18 +21,16 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
         when (flywheelState) {
             FlywheelState.AUTO_AIM -> { updateFlywheel() }
             FlywheelState.IDLE -> { Flywheel.flywheelTarget = Flywheel.IDLE_VELOCITY }
+            FlywheelState.STOPPED -> { Flywheel.flywheelTarget = 0.0 }
         }
         Turret.update()
         Flywheel.update()
     }
 
     private fun updateFlywheel() {
-        val d: Double = ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.goalPoses.flywheelGoalPose)
+        val d: Double = (ROBOT.shooterPose() + ROBOT.fullVel(VEL_SCALAR, ANG_SCALAR)).distanceFrom(ROBOT.currAlliance.goalPoses.flywheelGoalPose)
         Flywheel.flywheelTarget =
                 if (ROBOT.inCloseZone()) {
-                    if (ROBOT.currStage == Stage.AUTONOMOUS) {
-                        (0.0142645 * d * d + 1.26161 * d + 748.88095)
-                    }
                     (0.0142645 * d * d + 1.26161 * d + 748.88095)
                 } else {
                     (0.0142645 * d * d + 1.26161 * d + 748.88095)
