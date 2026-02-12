@@ -13,10 +13,11 @@ object Turret: Subsystem {
     private val turretServos: ServoGroup = ServoGroup(axonTurretServo, torctexTurretServo)
 
     private const val GEAR_RATIO: Double = 0.9375
+    private const val SERVO_RANGE: Double = 359.0
 
     internal var targetTurretAngle: Double = 0.0
 
-    internal fun update() { turretServos.position = (normalizeAngle(targetTurretAngle) * (GEAR_RATIO / 360.0) + 0.5) }
+    internal fun update() { turretServos.position = (normalizeAngle(targetTurretAngle) * (GEAR_RATIO / SERVO_RANGE) + 0.5) }
 }
 
 internal fun normalizeAngle(angDeg: Double): Double {
