@@ -35,4 +35,8 @@ object ConfigConstants {
     const val LEFT_TILT_SERVO: String = "left_tilt"
     const val RIGHT_TILT_SERVO: String = "right_tilt"
     const val LIMELIGHT: String = "ll"
+
+    const val FRONT_LIGHT: String = "front_light"
+    const val MIDDLE_LIGHT: String = "middle_light"
+    const val BACK_LIGHT: String = "back_light"
 }
