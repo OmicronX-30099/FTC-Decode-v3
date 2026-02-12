@@ -63,9 +63,9 @@ class TeleOpRed: NextFTCOpMode() {
                 else { Shooter.flywheelState = FlywheelState.AUTO_AIM }
             }
         Gamepads.gamepad1.dpadUp.or(Gamepads.gamepad2.dpadUp)
-            .whenBecomesTrue { Miscellaneous.raiseBot() }
+            .whenBecomesTrue { Miscellaneous.raiseBot() .also { Shooter.flywheelState == FlywheelState.STOPPED } }
         Gamepads.gamepad1.dpadDown.or(Gamepads.gamepad2.dpadDown)
-            .whenBecomesTrue { Miscellaneous.lowerBot() }
+            .whenBecomesTrue { Miscellaneous.lowerBot() .also { Shooter.flywheelState == FlywheelState.AUTO_AIM } }
         Gamepads.gamepad2.triangle
             .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose2 }
         Gamepads.gamepad2.square
