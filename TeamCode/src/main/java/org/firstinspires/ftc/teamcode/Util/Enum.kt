@@ -26,13 +26,9 @@ data object ROBOT {
     }
 
     internal fun getDistanceFromGoal(): Double = shooterPose().distanceFrom(currAlliance.goalPoses.flywheelGoalPose)
-    internal fun inBlueFarZone(): Boolean {
+    internal fun inFarZone(): Boolean {
         val p: Pose = shooterPose()
-        return ((p.y >= 0.0) && (p.x < (FIELD_WIDTH / 2.0)) && (p.y < (p.x - FIELD_LENGTH / 3.0 + FAR_ZONE_BUFFER)))
-    }
-    internal fun inRedFarZone(): Boolean {
-        val p: Pose = shooterPose()
-        return ((p.y >= 0.0) && (p.x >= (FIELD_WIDTH / 2.0)) && (p.y < (-p.x + (FIELD_LENGTH * (2 / 3.0)) + FAR_ZONE_BUFFER)))
+        return ((p.y >= 0.0) && (p.y < (-p.x + (FIELD_LENGTH * (2 / 3.0)) + FAR_ZONE_BUFFER)) && (p.y < (p.x - FIELD_LENGTH / 3.0 + FAR_ZONE_BUFFER)))
     }
     internal fun inCloseZone(): Boolean {
         val p: Pose = shooterPose()
@@ -44,12 +40,12 @@ enum class Alliance {
     BLUE {
         override val resetPoses: ResetPoses
             get() = TODO("Not yet implemented")
-        override val goalPoses: GoalPoses = GoalPoses(Pose(9.75,126.0),Pose(14.5,130.75),Pose(11.5,133.5),Pose(141.5,141.5))
+        override val goalPoses: GoalPoses = GoalPoses(Pose(131.5,140.0).mirror(),Pose(135.0,140.0).mirror(),Pose(141.5,141.5).mirror())
     },
     RED{
         override val resetPoses: ResetPoses
             get() = TODO("Not yet implemented")
-        override val goalPoses: GoalPoses = GoalPoses(Pose(131.5,140.0),Pose(131.5,140.0),Pose(135.0,140.0),Pose(141.5,141.5))
+        override val goalPoses: GoalPoses = GoalPoses(Pose(131.5,140.0),Pose(135.0,140.0),Pose(141.5,141.5))
     };
     abstract val resetPoses: ResetPoses
     abstract val goalPoses: GoalPoses
@@ -70,6 +66,6 @@ enum class Stage {
     open var useFlywheelVel: Boolean = false
 }
 
-data class GoalPoses(val turretGoalPoseBlueFar: Pose, val turretGoalPoseRedFar: Pose, val turretGoalPoseClose: Pose, val flywheelGoalPose: Pose)
+data class GoalPoses(val turretGoalPoseFar: Pose, val turretGoalPoseClose: Pose, val flywheelGoalPose: Pose)
 
 data class ResetPoses(val resetPose1: Pose, val resetPose2: Pose, val resetPose3: Pose, val resetPose4: Pose, val resetPose5: Pose)

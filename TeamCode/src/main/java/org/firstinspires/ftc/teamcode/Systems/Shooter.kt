@@ -13,8 +13,6 @@ import kotlin.math.atan2
 object Shooter: SubsystemGroup(Turret, Flywheel) {
     internal var flywheelState: FlywheelState = FlywheelState.AUTO_AIM
 
-    internal var turretOffset: Double = 0.0
-
     fun update() {
         updateTurret()
         when (flywheelState) {
@@ -36,18 +34,15 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
     }
     private fun updateTurret() {
         Turret.targetTurretAngle =
-            if (ROBOT.inBlueFarZone()) {
+            if (ROBOT.inCloseZone()) {
+                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseClose)
+            } else if (ROBOT.inFarZone()) {
+                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPoseFar)
+            }
+            else {
                 calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose)
-            } else if (ROBOT.inRedFarZone()) {
-                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose)
-            } else if (ROBOT.inCloseZone()) {
-                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose)
-            } else {
-                calculateTurretAngle(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose)
-            } + turretOffset
+            }
     }
     private fun calculateTurretAngle(botPose: Pose, targetPose: Pose): Double =
         Math.toDegrees(atan2(botPose.y - targetPose.y, botPose.x - targetPose.x) - botPose.heading)
-
-    internal fun offSetTurretBy(deg: Double) { turretOffset += deg }
 }
