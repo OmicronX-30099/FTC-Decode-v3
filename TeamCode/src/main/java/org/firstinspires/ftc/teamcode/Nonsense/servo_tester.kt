@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.Nonsense
 
 import com.bylazar.configurables.annotations.Configurable
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import com.qualcomm.robotcore.hardware.Servo
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.hardware.impl.ServoEx
+
 @Configurable
 @TeleOp
 class servo_tester: NextFTCOpMode() {

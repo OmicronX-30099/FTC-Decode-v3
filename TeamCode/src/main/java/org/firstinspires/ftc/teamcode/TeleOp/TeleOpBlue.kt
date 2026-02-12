@@ -62,10 +62,6 @@ class TeleOpBlue: NextFTCOpMode() {
             .whenBecomesTrue { Miscellaneous.raiseBot() }
         Gamepads.gamepad1.dpadDown.or(Gamepads.gamepad2.dpadDown)
             .whenBecomesTrue { Miscellaneous.lowerBot() }
-        Gamepads.gamepad2.dpadLeft
-            .whenBecomesTrue { Shooter.offSetTurretBy(-1.0) }
-        Gamepads.gamepad2.dpadRight
-            .whenBecomesTrue { Shooter.offSetTurretBy(1.0) }
         Gamepads.gamepad2.square
             .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose2 }
         Gamepads.gamepad2.triangle
