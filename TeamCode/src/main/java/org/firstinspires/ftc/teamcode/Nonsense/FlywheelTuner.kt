@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.Nonsense
 
+import com.bylazar.configurables.annotations.Configurable
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.ftc.NextFTCOpMode
 import org.firstinspires.ftc.teamcode.Systems.ShooterSubsystems.Flywheel
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
 
+@Configurable
 @TeleOp(name = "Flywheel Tuner")
 class FlywheelTuner: NextFTCOpMode() {
     init {
