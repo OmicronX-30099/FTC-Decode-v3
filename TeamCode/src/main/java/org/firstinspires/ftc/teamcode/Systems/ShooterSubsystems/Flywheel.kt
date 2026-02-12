@@ -29,40 +29,22 @@ object Flywheel: Subsystem {
 
     internal var flywheelTarget: Double = 0.0
 
-    private const val VNOM = 12.0
-    private var voltageSensor: VoltageSensor? = null
-
-    override fun initialize() {
-        // other subsystem init...
-        init(hardwareMap)   // <- add this
-    }
-
-
-    fun init(hwMap: HardwareMap) {
-        // Use the first sensor (or you can pick min valid if you want)
-        voltageSensor = hwMap.voltageSensor.firstOrNull()
-    }
-
-    private fun batteryVoltage(): Double {
-        val v = voltageSensor?.voltage ?: VNOM
-        return if (v > 0.0) v else VNOM
-    }
+    private const val V_NOMINAL = 12.0
+    private val battery: VoltageSensor by lazy { ActiveOpMode.hardwareMap.get(VoltageSensor::class.java, "Control Hub") }
 
     internal fun update() {
         val pid = flywheelPIDController.calculate(error = flywheelTarget - flywheelMotors.velocity)
         val ff  = flywheelFFController.calculate(flywheelTarget)
+        val volt = battery.voltage ?: V_NOMINAL.coerceAtleast(8.0)
+        val pow = ((pid + ff) * (V_NOMINAL / volt)).coerceIn(-1.0,1.0)
 
-        val u = pid + ff
-        val v = batteryVoltage().coerceAtLeast(8.0)     // safety clamp
-        val uComp = (u * (VNOM / v)).coerceIn(-1.0, 1.0)
-
-        flywheelMotors.power = uComp
-
-        ActiveOpMode.telemetry.addData("flywheel power:", uComp)
-        }
+        flywheelMotors.power = pow
+        ActiveOpMode.telemetry.addData("flywheel power:", pow)
+    }
 }
 
 internal enum class FlywheelState {
     AUTO_AIM,
-    IDLE;
+    IDLE,
+    STOPPED;
 }
