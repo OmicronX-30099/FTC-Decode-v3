@@ -13,6 +13,7 @@ import kotlin.math.atan2
 
 object Shooter: SubsystemGroup(Turret, Flywheel) {
     private val frontRGBLight: ServoEx = ServoEx(ConfigConstants.FRONT_LIGHT)
+    private val backRGBLight: ServoEx = ServoEx(ConfigConstants.BACK_LIGHT)
     
     private const val VEL_SCALAR: Double = 0.9
     private const val ANG_SCALAR: Double = 0.0
@@ -21,9 +22,9 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
     fun update() {
         updateTurret()
         when (flywheelState) {
-            FlywheelState.AUTO_AIM -> { updateFlywheel() }
-            FlywheelState.IDLE -> { Flywheel.flywheelTarget = Flywheel.IDLE_VELOCITY }
-            FlywheelState.STOPPED -> { Flywheel.flywheelTarget = 0.0 }
+            FlywheelState.AUTO_AIM -> { updateFlywheel() }.also { backRGBLight.position = 0.47 }
+            FlywheelState.IDLE -> { Flywheel.flywheelTarget = Flywheel.IDLE_VELOCITY } .also { backRGBLight.position = 0.28 }
+            FlywheelState.STOPPED -> { Flywheel.flywheelTarget = 0.0 } .also { backRGBLight.position = 0.28 }
         }
         Turret.update()
         Flywheel.update()
