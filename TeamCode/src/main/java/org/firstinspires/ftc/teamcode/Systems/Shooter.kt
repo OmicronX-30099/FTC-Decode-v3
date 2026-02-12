@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.Util.Stage
 import kotlin.math.atan2
 
 object Shooter: SubsystemGroup(Turret, Flywheel) {
+    private val frontRGBLight: ServoEx = ServoEx(ConfigConstants.FRONT_LIGHT)
+    
     private const val VEL_SCALAR: Double = 0.9
     private const val ANG_SCALAR: Double = 0.0
     internal var flywheelState: FlywheelState = FlywheelState.AUTO_AIM
@@ -25,6 +27,8 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
         }
         Turret.update()
         Flywheel.update()
+        if (Flywheel.isAtTarget()) { frontRGBLight.position = 0.47 }
+        else { frontRGBLight.position = 0.28 }
     }
 
     private fun updateFlywheel() {
