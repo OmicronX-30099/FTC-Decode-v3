@@ -33,11 +33,16 @@ object Flywheel: Subsystem {
 
     internal fun isAtTarget(): Boolean { return ((flywheelTarget - 20.0) < flywheelMotors.velocity) && ((flywheelTarget + 40.0) > flywheelMotors.velocity) }
     
-    internal fun update() {
+    internal fun update(voltageCompEnabled: Boolean) {
         val pid = flywheelPIDController.calculate(error = flywheelTarget - flywheelMotors.velocity)
         val ff  = flywheelFFController.calculate(flywheelTarget)
+        val base = (pid + ff).coerceIn(-1.0,1.0)
         val volt = battery.voltage.coerceAtLeast(8.0)
-        val pow = ((pid + ff) * (V_NOMINAL / volt)).coerceIn(-1.0,1.0)
+        val pow = if (voltageCompEnabled) {
+            base * (V_NOMINAL / volt).coerceIn(-1.0,1.0)
+        } else {
+            base
+        }
 
         flywheelMotors.power = pow
         ActiveOpMode.telemetry.addData("flywheel power:", pow)

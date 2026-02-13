@@ -36,7 +36,8 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
         }
 
         Turret.update()
-        Flywheel.update()
+        val voltageComp = (flywheelState == FlywheelState.AUTO_AIM)
+        Flywheel.update(voltageComp)
         if (Flywheel.isAtTarget()) { frontRGBLight.position = 0.47 }
         else { frontRGBLight.position = 0.28 }
     }
