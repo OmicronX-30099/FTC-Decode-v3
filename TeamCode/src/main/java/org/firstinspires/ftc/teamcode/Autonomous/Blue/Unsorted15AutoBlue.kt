@@ -35,7 +35,6 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
     private var paths: Array<PathChain> = arrayOf()
 
     override fun onInit() {
-        Shooter.flywheelState == FlywheelState.MANUAL
         ROBOT.currAlliance = Alliance.BLUE
         ROBOT.currStage = Stage.AUTONOMOUS
         ROBOT.currStage.useFlywheelVel = false
