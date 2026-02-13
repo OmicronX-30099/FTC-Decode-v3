@@ -35,7 +35,7 @@ class Unsorted15AutoRed(): NextFTCOpMode() {
     override fun onInit() {
         ROBOT.currAlliance = Alliance.RED
         ROBOT.currStage = Stage.AUTONOMOUS
-        ROBOT.currStage.useFlywheelVel = true
+        ROBOT.currStage.useFlywheelVel = false
     }
     override fun onStartButtonPressed() {
         follower.setStartingPose(Pose(0.0,0.0,Math.toRadians(-90.0)))
