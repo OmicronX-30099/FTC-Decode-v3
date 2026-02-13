@@ -30,7 +30,7 @@ class FlywheelTuner: NextFTCOpMode() {
 
     override fun onUpdate() {
         Flywheel.flywheelTarget = flywheelVel
-        Flywheel.update()
+        Flywheel.update(true)
         telemetry.addData("x",follower.pose.x)
         telemetry.addData("y",follower.pose.y)
         telemetry.addData("h",follower.pose.heading)

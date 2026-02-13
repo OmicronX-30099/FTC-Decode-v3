@@ -61,9 +61,11 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
                 InstantCommand { Rollers.run(0.3, 1.0) }
             ),
             Delay(1.0),
-            InstantCommand { Rollers.run(0.0,0.0)},
             InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(55.0,73.0)))},
-            FollowPath(paths[4]), //shoot gate
+            ParallelGroup(FollowPath(paths[4],true,1.0), //shoot gate
+                Delay(0.5),
+                InstantCommand { Rollers.run(0.0,0.0)},
+            ),
             Delay(0.4),
             Load . shootTripleCommand,
             ParallelGroup(
@@ -73,7 +75,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
             Delay(1.0),
             InstantCommand { Rollers.run(0.0,0.0)},
             InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(55.0,73.0)))},
-            FollowPath(paths[4]), //shoot gate
+            FollowPath(paths[4],true,1.0), //shoot gate
             Delay(0.4),
             Load . shootTripleCommand,
             ParallelGroup(
@@ -164,7 +166,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
             BezierLine(
                 Pose(55.000, 73.000),
 
-                Pose(22.000, 59.000)
+                Pose(15.400, 56.200)
             )
         ).setTangentHeadingInterpolation()
 
@@ -172,7 +174,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
 
         val shootsecondspike = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(22.000, 59.000),
+                Pose(15.400, 56.200),
 
                 Pose(55.000, 73.000)
             )
@@ -188,6 +190,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
             )
         ).setLinearHeadingInterpolation(Math.toRadians(-157.0), Math.toRadians(147.731))
             .addParametricCallback(0.8) {follower.setMaxPower(0.2)}
+            .addParametricCallback(0.95) {follower.setMaxPower(1.0)}
             .build()
 
         val shootgate1 = follower.pathBuilder().addPath(
