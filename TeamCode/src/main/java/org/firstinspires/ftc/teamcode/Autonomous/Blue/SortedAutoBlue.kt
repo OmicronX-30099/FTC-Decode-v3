@@ -29,7 +29,7 @@ import org.firstinspires.ftc.teamcode.Util.includePedro
 import kotlin.math.PI
 
 @Autonomous(name = "Sorted Blue Auto", group = "Sorted Autos", preselectTeleOp = "Blue TeleOp")
-class SortedAutoRed: NextFTCOpMode() {
+class SortedAutoBlue: NextFTCOpMode() {
     init {
         addSubsystems(Shooter, Load, Miscellaneous)
         includePedro(PedroConstants::createFollower)
