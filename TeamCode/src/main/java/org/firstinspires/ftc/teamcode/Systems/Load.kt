@@ -16,7 +16,7 @@ object Load: SubsystemGroup(BilinearIndexMachine, Rollers) {
     val shootTripleCommand: Command = IfElseCommand(
         { ROBOT.getDistanceFromGoal() > 110.0},
         shootCommand(1.2,0.55,0.55),
-        shootCommand(0.85, 1.0, 1.0)
+        shootCommand(0.6, 1.0, 1.0)
     )
 
     fun shootCommand(waitTime: Double, tPow: Double, iPow: Double): Command =

@@ -43,6 +43,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
         follower.setStartingPose(Pose(34.0,132.9,Math.toRadians(-180.0)))
         buildPaths()
         val main = SequentialGroup(
+            InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(55.0,73.0)))},
             FollowPath(paths[0]), //shoot preload
             Delay(0.4),
             Load.shootTripleCommand,
@@ -51,6 +52,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
                 InstantCommand { Rollers.run(0.3, 1.0) }
             ),
             InstantCommand { Rollers.run(0.0,0.0)},
+            InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(55.0,73.0)))},
             FollowPath(paths[2]), //shoot second spike mark
             Delay(0.4),
             Load . shootTripleCommand,
@@ -60,6 +62,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
             ),
             Delay(1.0),
             InstantCommand { Rollers.run(0.0,0.0)},
+            InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(55.0,73.0)))},
             FollowPath(paths[4]), //shoot gate
             Delay(0.4),
             Load . shootTripleCommand,
@@ -68,6 +71,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
                 InstantCommand { Rollers.run(0.3, 1.0) }
             ),
             InstantCommand { Rollers.run(0.0,0.0)},
+            InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(55.0,73.0)))},
             FollowPath(paths[6]), //shoot first spike
             Delay(0.4),
             Load . shootTripleCommand,
@@ -76,6 +80,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
                 InstantCommand { Rollers.run(0.3, 1.0) }
             ),
             InstantCommand { Rollers.run(0.0,0.0)},
+            InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(56.0,76.0)))},
             FollowPath(paths[8]), //shoot third spike
             Delay(0.4),
             Load . shootTripleCommand,

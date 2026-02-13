@@ -46,6 +46,7 @@ object Flywheel: Subsystem {
 
 internal enum class FlywheelState {
     AUTO_AIM,
+    MANUAL,
     IDLE,
     STOPPED;
 }
