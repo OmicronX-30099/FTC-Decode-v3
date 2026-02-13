@@ -75,6 +75,7 @@ class TeleOpBlue: NextFTCOpMode() {
     }
 
     override fun onUpdate() {
+        telemetry.addData("follower:", follower.pose)
         Shooter.update()
         telemetry.update()
     }

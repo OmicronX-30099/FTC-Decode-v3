@@ -18,7 +18,7 @@ data object ROBOT {
 
     internal var currAlliance: Alliance = Alliance.BLUE
     internal var currStage: Stage = Stage.TELEOP
-    internal var currTeleOpStartPose: Pose = Pose(72.0,72.0,PI/2)
+    internal var currTeleOpStartPose: Pose = Pose(79.0,7.5,PI/2)
 
     internal fun correctedPose(lVScalar: Double, angVScalar: Double): Pose {
         val v = follower.velocity.times(lVScalar)
@@ -47,7 +47,7 @@ data object ROBOT {
 enum class Alliance {
     BLUE {
         override val resetPoses: ResetPoses  = ResetPoses(Pose(9.5,8.9,-PI).mirror(), Pose(117.0,129.0,-2.448).mirror(), Pose(116.0,130.0,-0.939).mirror())
-        override val goalPoses: GoalPoses = GoalPoses(Pose(130.0,140.0).mirror(),Pose(136.0,140.0).mirror(),Pose(132.0,140.0).mirror())
+        override val goalPoses: GoalPoses = GoalPoses(Pose(141.0,140.0).mirror(),Pose(141.0,140.0).mirror(),Pose(140.0,140.0).mirror())
     },
     RED{
         override val resetPoses: ResetPoses  = ResetPoses(Pose(9.5,8.9,-PI), Pose(117.0,129.0,-2.448), Pose(116.0,130.0,-0.939))
