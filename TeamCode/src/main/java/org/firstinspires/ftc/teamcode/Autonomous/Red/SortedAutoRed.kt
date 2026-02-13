@@ -82,13 +82,13 @@ class SortedAutoRed: NextFTCOpMode() {
                         Delay(0.5)
                         BilinearIndexMachine.transferLeft()
                     },
-                    Delay(1.7),
+                    Delay(1.6),
                     InstantCommand { BilinearIndexMachine.transferRight() },
                     Delay(0.7),
                     InstantCommand { Rollers.stop() }
                 )
             ),
-            Delay(0.25),
+            Delay(1.1),
             FollowPath(paths[2],true,1.0),
             Delay(0.4),
             SequentialGroup(
@@ -115,7 +115,7 @@ class SortedAutoRed: NextFTCOpMode() {
                         Delay(0.5)
                         BilinearIndexMachine.transferLeft()
                     },
-                    Delay(1.7),
+                    Delay(1.2),
                     InstantCommand { BilinearIndexMachine.transferRight() },
                     Delay(0.7),
                     InstantCommand { Rollers.stop() }
@@ -155,7 +155,7 @@ class SortedAutoRed: NextFTCOpMode() {
             InstantCommand { Rollers.stop() },
             Delay(0.15),
             FollowPath(paths[6]),
-            Delay(0.2),
+            Delay(0.6),
             SequentialGroup(
                 InstantCommand { Rollers.unlockShooter() .also{ Rollers.run(0.5,0.8) } },
                 Delay(1.5),
@@ -201,7 +201,7 @@ class SortedAutoRed: NextFTCOpMode() {
                     InstantCommand { Rollers.run(0.2,1.0) .also { BilinearIndexMachine.lockTransfer() } },
                     Delay(0.3),
                     InstantCommand { BilinearIndexMachine.transferLeft() },
-                    Delay(1.0),
+                    Delay(0.9),
                     InstantCommand { BilinearIndexMachine.transferRight() },
                 )
             ),
@@ -256,7 +256,7 @@ class SortedAutoRed: NextFTCOpMode() {
                 InstantCommand {
                     Rollers.stop()
                     Rollers.lockShooter()
-                    BilinearIndexMachine.lockTransfer()
+                    InstantCommand { BilinearIndexMachine.transferMiddle()}
                 }
             )
         )
@@ -354,7 +354,7 @@ class SortedAutoRed: NextFTCOpMode() {
                 InstantCommand { BilinearIndexMachine.transferLeft() },
                 Delay(0.7),
                 InstantCommand { Rollers.run(0.0, 0.0) }
-            )
+            ),
         )
         ppg.schedule()
     }
@@ -373,7 +373,7 @@ class SortedAutoRed: NextFTCOpMode() {
             .addParametricCallback(0.94) { follower.setMaxPower(1.0) }
             .build()
         val test3 = follower.pathBuilder()
-            .addPath(BezierCurve(Pose(125.0,65.25),Pose(103.0,66.5),Pose(90.0,85.5)))
+            .addPath(BezierCurve(Pose(125.0,65.25),Pose(95.0,65.0),Pose(90.0,85.5)))
             .setConstantHeadingInterpolation(0.0)
             .build()
         val test4 = follower.pathBuilder()
@@ -389,8 +389,8 @@ class SortedAutoRed: NextFTCOpMode() {
             .setLinearHeadingInterpolation(Math.toRadians(-90.0),Math.toRadians(-10.0))
             .build()
         val test7 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(125.0,33.0), Pose(87.5,104.0)))
-            .setConstantHeadingInterpolation(Math.toRadians(-55.0))
+            .addPath(BezierCurve(Pose(125.0, 33.0), Pose(83.0,68.5),Pose(81.0, 101.0)))
+            .setLinearHeadingInterpolation(Math.toRadians(-10.0),Math.toRadians(-90.0))
             .build()
         paths += test1
         paths += test2
@@ -406,7 +406,7 @@ class SortedAutoRed: NextFTCOpMode() {
             .addPath(BezierLine(Pose(79.0,7.5),Pose(89.0,7.5)))
             .setConstantHeadingInterpolation(PI/2)
             .addPath(BezierLine(Pose(89.0,7.5),Pose(89.0,77.5)))
-            .setLinearHeadingInterpolation(PI/2, Math.toRadians(-25.0))
+            .setLinearHeadingInterpolation(PI/2, Math.toRadians(-20.0))
             .build()
         val test2 = follower.pathBuilder()
             .addPath(BezierCurve(Pose(89.0,77.5),Pose(94.5,55.0),Pose(125.0,65.25)))
@@ -430,11 +430,11 @@ class SortedAutoRed: NextFTCOpMode() {
             .build()
         val test7 = follower.pathBuilder()
             .addPath((BezierLine(Pose(90.0,37.0),Pose(125.0,37.0))))
-            .setConstantHeadingInterpolation(0.0)
+            .setLinearHeadingInterpolation(Math.toRadians(0.0),Math.toRadians(0.0))
             .build()
         val test8 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(125.0,37.0), Pose(84.5,108.0)))
-            .setConstantHeadingInterpolation(Math.toRadians(-62.0))
+            .addPath(BezierCurve(Pose(125.0, 37.0), Pose(83.0,68.5),Pose(81.0, 101.0)))
+            .setLinearHeadingInterpolation(Math.toRadians(0.0),Math.toRadians(-90.0))
             .build()
         paths += test1
         paths += test2

@@ -36,7 +36,7 @@ object Flywheel: Subsystem {
     internal fun update() {
         val pid = flywheelPIDController.calculate(error = flywheelTarget - flywheelMotors.velocity)
         val ff  = flywheelFFController.calculate(flywheelTarget)
-        val volt = battery.voltage ?: V_NOMINAL.coerceAtleast(8.0)
+        val volt = battery.voltage ?: V_NOMINAL.coerceAtLeast(10.0)
         val pow = ((pid + ff) * (V_NOMINAL / volt)).coerceIn(-1.0,1.0)
 
         flywheelMotors.power = pow

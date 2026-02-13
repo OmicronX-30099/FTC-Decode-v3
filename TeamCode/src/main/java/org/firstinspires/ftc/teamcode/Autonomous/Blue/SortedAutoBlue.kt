@@ -29,7 +29,7 @@ import org.firstinspires.ftc.teamcode.Util.includePedro
 import kotlin.math.PI
 
 @Autonomous(name = "Sorted Blue Auto", group = "Sorted Autos", preselectTeleOp = "Blue TeleOp")
-class SortedAutoBlue: NextFTCOpMode() {
+class SortedAutoRed: NextFTCOpMode() {
     init {
         addSubsystems(Shooter, Load, Miscellaneous)
         includePedro(PedroConstants::createFollower)
@@ -57,6 +57,11 @@ class SortedAutoBlue: NextFTCOpMode() {
         }
     }
 
+    override fun onUpdate() {
+        Shooter.update()
+        telemetry.update()
+    }
+
     fun gpp() {
         buildGPPPaths()
         val gpp = SequentialGroup(
@@ -77,13 +82,13 @@ class SortedAutoBlue: NextFTCOpMode() {
                         Delay(0.5)
                         BilinearIndexMachine.transferLeft()
                     },
-                    Delay(1.7),
+                    Delay(1.6),
                     InstantCommand { BilinearIndexMachine.transferRight() },
                     Delay(0.7),
                     InstantCommand { Rollers.stop() }
                 )
             ),
-            Delay(0.25),
+            Delay(1.1),
             FollowPath(paths[2],true,1.0),
             Delay(0.4),
             SequentialGroup(
@@ -110,7 +115,7 @@ class SortedAutoBlue: NextFTCOpMode() {
                         Delay(0.5)
                         BilinearIndexMachine.transferLeft()
                     },
-                    Delay(1.7),
+                    Delay(1.2),
                     InstantCommand { BilinearIndexMachine.transferRight() },
                     Delay(0.7),
                     InstantCommand { Rollers.stop() }
@@ -150,7 +155,7 @@ class SortedAutoBlue: NextFTCOpMode() {
             InstantCommand { Rollers.stop() },
             Delay(0.15),
             FollowPath(paths[6]),
-            Delay(0.2),
+            Delay(0.8),
             SequentialGroup(
                 InstantCommand { Rollers.unlockShooter() .also{ Rollers.run(0.5,0.8) } },
                 Delay(1.5),
@@ -180,9 +185,8 @@ class SortedAutoBlue: NextFTCOpMode() {
                     }
                 )
             ),
-            Delay(0.5),
+            Delay(0.3),
             InstantCommand { Rollers.stop() },
-            Delay(0.6),
             FollowPath(paths[2]),
             Delay(0.4),
             SequentialGroup(
@@ -196,11 +200,10 @@ class SortedAutoBlue: NextFTCOpMode() {
                     InstantCommand { Rollers.run(0.2,1.0) .also { BilinearIndexMachine.lockTransfer() } },
                     Delay(0.3),
                     InstantCommand { BilinearIndexMachine.transferLeft() },
-                    Delay(1.0),
+                    Delay(0.9),
                     InstantCommand { BilinearIndexMachine.transferRight() },
                 )
             ),
-            Delay(0.2),
             InstantCommand { Rollers.stop() },
             FollowPath(paths[4],true,1.0),
             Delay(0.2),
@@ -218,12 +221,13 @@ class SortedAutoBlue: NextFTCOpMode() {
                 }
             ),
             ParallelGroup(
-                FollowPath(paths[5]),
+                FollowPath(paths[5],true, 1.0),
                 SequentialGroup(
                     Delay(0.2),
                     InstantCommand { BilinearIndexMachine.transferLeft() }
                 )
             ),
+            Delay(0.5),
             ParallelGroup(
                 FollowPath(paths[6],true,0.35),
                 SequentialGroup(
@@ -232,11 +236,9 @@ class SortedAutoBlue: NextFTCOpMode() {
                     InstantCommand { BilinearIndexMachine.transferLeft() },
                     Delay(1.3),
                     InstantCommand { BilinearIndexMachine.transferRight() },
-                    Delay(0.7),
-                    InstantCommand { Rollers.stop() }
                 )
             ),
-            Delay(0.4),
+            InstantCommand { Rollers.stop() },
             FollowPath(paths[7],true,1.0),
             Delay(0.6),
             SequentialGroup(
@@ -251,7 +253,7 @@ class SortedAutoBlue: NextFTCOpMode() {
                 InstantCommand {
                     Rollers.stop()
                     Rollers.lockShooter()
-                    BilinearIndexMachine.lockTransfer()
+                    InstantCommand { BilinearIndexMachine.transferMiddle()}
                 }
             )
         )
@@ -261,10 +263,10 @@ class SortedAutoBlue: NextFTCOpMode() {
         buildPPGPaths()
         val ppg = SequentialGroup(
             FollowPath(paths[0]),
-            Delay(0.6),
+            Delay(0.8),
             SequentialGroup(
-                InstantCommand { Rollers.unlockShooter() .also{ Rollers.run(0.5,0.8) } },
-                Delay(1.6),
+                InstantCommand { Rollers.unlockShooter() .also{ Rollers.run(1.0,1.0) } },
+                Delay(0.85),
                 InstantCommand { Rollers.stop() .also { Rollers.lockShooter() } }
             ),
             ParallelGroup(
@@ -282,7 +284,7 @@ class SortedAutoBlue: NextFTCOpMode() {
                     InstantCommand { Rollers.stop() .also { BilinearIndexMachine.transferLeft() } }
                 )
             ),
-            Delay(1.0),
+            Delay(0.5),
             FollowPath(paths[2]),
             Delay(0.4),
             SequentialGroup(
@@ -325,18 +327,17 @@ class SortedAutoBlue: NextFTCOpMode() {
                     InstantCommand { BilinearIndexMachine.transferLeft() }
                 )
             ),
+            Delay(0.5),
             ParallelGroup(
                 FollowPath(paths[6], true, 0.35),
                 SequentialGroup(
                     InstantCommand { Rollers.run(0.2, 1.0) .also { BilinearIndexMachine.lockTransfer() } },
-                    Delay(0.3),
                     InstantCommand { BilinearIndexMachine.transferLeft() },
-                    Delay(1.3),
+                    Delay(1.4),
                     InstantCommand { BilinearIndexMachine.transferRight() },
-                    Delay(1.0),
-                    InstantCommand { Rollers.run(0.0, 0.0) }
                 )
             ),
+            InstantCommand { Rollers.run(0.0, 0.0) },
             FollowPath(paths[7], true, 1.0),
             Delay(0.6),
             SequentialGroup(
@@ -349,7 +350,7 @@ class SortedAutoBlue: NextFTCOpMode() {
                 InstantCommand { BilinearIndexMachine.transferLeft() },
                 Delay(0.7),
                 InstantCommand { Rollers.run(0.0, 0.0) }
-            )
+            ),
         )
         ppg.schedule()
     }
@@ -363,29 +364,29 @@ class SortedAutoBlue: NextFTCOpMode() {
             .build()
         val test2 = follower.pathBuilder()
             .addPath(BezierCurve(Pose(89.0,77.5).mirror(),Pose(94.5,55.0).mirror(),Pose(125.0,65.25).mirror()))
-            .setLinearHeadingInterpolation(Math.toRadians(-155.0),180.0)
+            .setLinearHeadingInterpolation(Math.toRadians(-160.0),PI)
             .addParametricCallback(0.17) { follower.setMaxPower(0.35) }
             .addParametricCallback(0.94) { follower.setMaxPower(1.0) }
             .build()
         val test3 = follower.pathBuilder()
-            .addPath(BezierCurve(Pose(125.0,65.25).mirror(),Pose(103.0,66.5).mirror(),Pose(90.0,85.5).mirror()))
-            .setConstantHeadingInterpolation(180.0)
+            .addPath(BezierCurve(Pose(125.0,65.25).mirror(),Pose(95.0,65.0).mirror(),Pose(90.0,85.5).mirror()))
+            .setConstantHeadingInterpolation(PI)
             .build()
         val test4 = follower.pathBuilder()
             .addPath((BezierLine(Pose(90.0, 85.5).mirror(), Pose(120.0, 85.5).mirror())))
-            .setConstantHeadingInterpolation(180.0)
+            .setConstantHeadingInterpolation(PI)
             .build()
         val test5 = follower.pathBuilder()
             .addPath(BezierLine(Pose(120.0, 85.5).mirror(), Pose(90.0, 85.5).mirror()))
-            .setLinearHeadingInterpolation(180.0,Math.toRadians(-90.0))
+            .setLinearHeadingInterpolation(PI,Math.toRadians(-90.0))
             .build()
         val test6 = follower.pathBuilder()
             .addPath(BezierCurve(Pose(90.0,85.5).mirror(), Pose(90.0,40.0).mirror(),Pose(125.0,33.0).mirror()))
             .setLinearHeadingInterpolation(Math.toRadians(-90.0),Math.toRadians(-170.0))
             .build()
         val test7 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(125.0,33.0).mirror(), Pose(87.5,104.0).mirror()))
-            .setConstantHeadingInterpolation(Math.toRadians(-125.0))
+            .addPath(BezierCurve(Pose(125.0, 33.0).mirror(), Pose(83.0,68.5).mirror(),Pose(81.0, 101.0).mirror()))
+            .setLinearHeadingInterpolation(Math.toRadians(-170.0),Math.toRadians(-90.0))
             .build()
         paths += test1
         paths += test2
@@ -401,35 +402,35 @@ class SortedAutoBlue: NextFTCOpMode() {
             .addPath(BezierLine(Pose(79.0,7.5).mirror(),Pose(89.0,7.5).mirror()))
             .setConstantHeadingInterpolation(PI/2)
             .addPath(BezierLine(Pose(89.0,7.5).mirror(),Pose(89.0,77.5).mirror()))
-            .setLinearHeadingInterpolation(PI/2, Math.toRadians(-155.0))
+            .setLinearHeadingInterpolation(PI/2, Math.toRadians(-160.0))
             .build()
         val test2 = follower.pathBuilder()
             .addPath(BezierCurve(Pose(89.0,77.5).mirror(),Pose(94.5,55.0).mirror(),Pose(125.0,65.25).mirror()))
-            .setLinearHeadingInterpolation(Math.toRadians(-160.0),180.0)
+            .setLinearHeadingInterpolation(Math.toRadians(-160.0),PI)
             .build()
         val test3 = follower.pathBuilder()
             .addPath(BezierCurve(Pose(125.0,65.25).mirror(),Pose(100.0,65.0).mirror(),Pose(90.0,83.5).mirror()))
-            .setConstantHeadingInterpolation(180.0)
+            .setConstantHeadingInterpolation(PI)
             .build()
         val test4 = follower.pathBuilder()
             .addPath((BezierLine(Pose(90.0, 83.5).mirror(), Pose(125.0, 83.5).mirror())))
-            .setConstantHeadingInterpolation(180.0)
+            .setConstantHeadingInterpolation(PI)
             .build()
         val test5 = follower.pathBuilder()
             .addPath(BezierLine(Pose(125.0, 83.5).mirror(), Pose(90.0, 83.5).mirror()))
-            .setLinearHeadingInterpolation(180.0,Math.toRadians(-90.0))
+            .setConstantHeadingInterpolation(PI)
             .build()
         val test6 = follower.pathBuilder()
             .addPath(BezierLine(Pose(90.0,83.5).mirror(), Pose(90.0,37.0).mirror()))
-            .setLinearHeadingInterpolation(Math.toRadians(-90.0),Math.toRadians(180.0))
+            .setConstantHeadingInterpolation(PI)
             .build()
         val test7 = follower.pathBuilder()
             .addPath((BezierLine(Pose(90.0,37.0).mirror(),Pose(125.0,37.0).mirror())))
-            .setConstantHeadingInterpolation(180.0)
+            .setLinearHeadingInterpolation(PI,PI)
             .build()
         val test8 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(125.0,37.0).mirror(), Pose(84.5,108.0).mirror()))
-            .setConstantHeadingInterpolation(Math.toRadians(-118.0))
+            .addPath(BezierCurve(Pose(125.0, 37.0).mirror(), Pose(83.0,68.5).mirror(),Pose(81.0, 101.0).mirror()))
+            .setLinearHeadingInterpolation(PI,Math.toRadians(-90.0))
             .build()
         paths += test1
         paths += test2
@@ -446,37 +447,37 @@ class SortedAutoBlue: NextFTCOpMode() {
             .addPath(BezierLine(Pose(79.0,7.5).mirror(),Pose(89.0,7.5).mirror()))
             .setConstantHeadingInterpolation(PI/2)
             .addPath(BezierLine(Pose(89.0,7.5).mirror(),Pose(89.0,77.5).mirror()))
-            .setLinearHeadingInterpolation(PI/2, Math.toRadians(-155.0))
+            .setLinearHeadingInterpolation(PI/2, Math.toRadians(-160.0))
             .build()
         val test2 = follower.pathBuilder()
             .addPath(BezierCurve(Pose(89.0,77.5).mirror(),Pose(94.5,55.0).mirror(),Pose(125.0,65.25).mirror()))
-            .setLinearHeadingInterpolation(Math.toRadians(-160.0),180.0)
-            .addParametricCallback(0.17)  { follower.setMaxPower(0.35) }
+            .setLinearHeadingInterpolation(Math.toRadians(-160.0),PI)
+            .addParametricCallback(0.17) { follower.setMaxPower(0.35) }
             .addParametricCallback(0.94) { follower.setMaxPower(1.0) }
             .build()
         val test3 = follower.pathBuilder()
             .addPath(BezierCurve(Pose(125.0, 65.25).mirror(), Pose(100.0, 65.0).mirror(), Pose(90.0, 83.5).mirror()))
-            .setConstantHeadingInterpolation(180.0)
+            .setConstantHeadingInterpolation(PI)
             .build()
         val test4 = follower.pathBuilder()
             .addPath((BezierLine(Pose(90.0, 83.5).mirror(), Pose(125.0, 83.5).mirror())))
-            .setConstantHeadingInterpolation(180.0)
+            .setConstantHeadingInterpolation(PI)
             .build()
         val test5 = follower.pathBuilder()
             .addPath(BezierLine(Pose(125.0, 83.5).mirror(), Pose(90.0, 83.5).mirror()))
-            .setLinearHeadingInterpolation(180.0,Math.toRadians(-90.0))
+            .setLinearHeadingInterpolation(PI,Math.toRadians(-90.0))
             .build()
         val test6 = follower.pathBuilder()
             .addPath(BezierLine(Pose(90.0,83.5).mirror(), Pose(90.0,37.0).mirror()))
-            .setLinearHeadingInterpolation(Math.toRadians(-90.0),Math.toRadians(180.0))
+            .setLinearHeadingInterpolation(Math.toRadians(-90.0),PI)
             .build()
         val test7 = follower.pathBuilder()
-            .addPath((BezierLine(Pose(90.0,37.0).mirror(),Pose(125.0,37.0).mirror())))
-            .setConstantHeadingInterpolation(180.0)
+            .addPath((BezierLine(Pose(90.0,37.0).mirror(),Pose(128.0,37.0).mirror())))
+            .setLinearHeadingInterpolation(PI,PI)
             .build()
         val test8 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(125.0, 37.0).mirror(), Pose(84.5, 105.5).mirror()))
-            .setConstantHeadingInterpolation(Math.toRadians(-118.0))
+            .addPath(BezierCurve(Pose(128.0, 37.0).mirror(), Pose(83.0,68.5).mirror(),Pose(81.0, 101.0).mirror()))
+            .setLinearHeadingInterpolation(PI,Math.toRadians(-90.0))
             .build()
         paths += test1 //push plus shoot first
         paths += test2 //intake second spike plus push gate
