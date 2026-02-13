@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.Util
 
 import com.pedropathing.geometry.Pose
 import dev.nextftc.extensions.pedro.PedroComponent
+import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -20,7 +21,7 @@ data object ROBOT {
 
     internal fun correctedPose(lVScalar: Double, angVScalar: Double): Pose {
         val v = follower.velocity.times(lVScalar)
-        return (shooterPose() + Pose(v.xComponent, v.yComponent, follower.angularHeading * angVScalar))
+        return (shooterPose() + Pose(v.xComponent, v.yComponent, follower.heading * angVScalar))
     }
     
     internal fun shooterPose(): Pose {
@@ -45,11 +46,11 @@ data object ROBOT {
 enum class Alliance {
     BLUE {
         override val resetPoses: ResetPoses  = ResetPoses(Pose(9.5,8.9,-PI).mirror(), Pose(117.0,129.0,-2.448).mirror(), Pose(116.0,130.0,-0.939).mirror())
-        override val goalPoses: GoalPoses = GoalPoses(Pose(130.0,140.0).mirror(),Pose(134.0,140.0).mirror(),Pose(132.0,140.0).mirror())
+        override val goalPoses: GoalPoses = GoalPoses(Pose(130.0,140.0).mirror(),Pose(136.0,140.0).mirror(),Pose(132.0,140.0).mirror())
     },
     RED{
         override val resetPoses: ResetPoses  = ResetPoses(Pose(9.5,8.9,-PI), Pose(117.0,129.0,-2.448), Pose(116.0,130.0,-0.939))
-        override val goalPoses: GoalPoses = GoalPoses(Pose(130.0,140.0),Pose(134.0,140.0),Pose(132.0,140.0))
+        override val goalPoses: GoalPoses = GoalPoses(Pose(130.0,140.0),Pose(136.0,140.0),Pose(132.0,140.0))
     };
     abstract val resetPoses: ResetPoses
     abstract val goalPoses: GoalPoses
