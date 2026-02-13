@@ -492,4 +492,5 @@ class SortedAutoRed: NextFTCOpMode() {
         paths += test7 //intake third spike
         paths += test8 //shoot third spike
     }
+    override fun onStop() { ROBOT.currTeleOpStartPose = follower.pose }
 }

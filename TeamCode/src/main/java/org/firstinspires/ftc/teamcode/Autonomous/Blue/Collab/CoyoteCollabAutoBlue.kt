@@ -207,4 +207,5 @@ class CoyoteCollabAutoBlue: NextFTCOpMode() {
         paths += shootthird
         paths += leave
     }
+    override fun onStop() { ROBOT.currTeleOpStartPose = follower.pose }
 }

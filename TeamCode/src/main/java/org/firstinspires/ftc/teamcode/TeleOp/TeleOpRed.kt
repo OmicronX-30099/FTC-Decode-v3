@@ -42,7 +42,7 @@ class TeleOpRed: NextFTCOpMode() {
         ROBOT.currAlliance = Alliance.RED
         ROBOT.currStage = Stage.TELEOP
         ROBOT.currStage.useFlywheelVel = false
-        follower.setStartingPose(Pose(79.0,7.5,PI/2))
+        follower.setStartingPose(ROBOT.currTeleOpStartPose)
         drivetrain.schedule()
 
         Gamepads.gamepad1.rightTrigger.greaterThan(0.0)

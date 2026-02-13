@@ -142,4 +142,5 @@ class Unsorted15AutoRed(): NextFTCOpMode() {
         paths += path9
 
     }
+    override fun onStop() { ROBOT.currTeleOpStartPose = follower.pose }
 }

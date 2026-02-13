@@ -188,4 +188,5 @@ class BWSCollabAutoBlue(): NextFTCOpMode() {
         paths += shoottunnel
         paths += leave
     }
+    override fun onStop() { ROBOT.currTeleOpStartPose = follower.pose }
 }
