@@ -23,8 +23,8 @@ import org.firstinspires.ftc.teamcode.Util.Stage
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.includePedro
 
-@Autonomous(name = "Unsorted 18-ball Red", group = "Unsorted Auto", preselectTeleOp = "Red TeleOp")
-class Unsorted18AutoRed(): NextFTCOpMode() {
+@Autonomous(name = "Unsorted 15-ball Red", group = "Unsorted Auto", preselectTeleOp = "Red TeleOp")
+class Unsorted15AutoRed(): NextFTCOpMode() {
     init {
         addSubsystems(Load, Shooter, Miscellaneous)
         includePedro(PedroConstants::createFollower)
