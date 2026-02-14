@@ -186,7 +186,7 @@ class Unsorted15AutoRed(): NextFTCOpMode() {
             BezierLine(
                 Pose(56.000, 73.000).mirror(),
 
-                Pose(11.500, 57.000).mirror()
+                Pose(10.500, 57.000).mirror()
             )
         ).setLinearHeadingInterpolation(Math.toRadians(-23.0), Math.toRadians(180.0-147.731))
             .addParametricCallback(0.8) {follower.setMaxPower(0.2)}
@@ -195,7 +195,7 @@ class Unsorted15AutoRed(): NextFTCOpMode() {
 
         val shootgate1 = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(11.500, 57.000).mirror(),
+                Pose(10.500, 57.000).mirror(),
 
                 Pose(56.000, 73.000).mirror()
             )
