@@ -45,6 +45,8 @@ class TeleOpRed: NextFTCOpMode() {
         follower.setStartingPose(ROBOT.currTeleOpStartPose)
         drivetrain.schedule()
 
+        Shooter.flywheelState = FlywheelState.AUTO_AIM
+
         Gamepads.gamepad1.rightTrigger.greaterThan(0.0)
             .whenBecomesTrue { Rollers.run(0.35,1.0) }
             .whenBecomesFalse { Rollers.run(0.0,0.0) }
@@ -63,9 +65,9 @@ class TeleOpRed: NextFTCOpMode() {
                 else { Shooter.flywheelState = FlywheelState.AUTO_AIM }
             }
         Gamepads.gamepad1.dpadUp.or(Gamepads.gamepad2.dpadUp)
-            .whenBecomesTrue { Miscellaneous.raiseBot() .also { Shooter.flywheelState == FlywheelState.STOPPED } }
+            .whenBecomesTrue { Miscellaneous.raiseBot() .also { Shooter.flywheelState = FlywheelState.STOPPED } }
         Gamepads.gamepad1.dpadDown.or(Gamepads.gamepad2.dpadDown)
-            .whenBecomesTrue { Miscellaneous.lowerBot() .also { Shooter.flywheelState == FlywheelState.AUTO_AIM } }
+            .whenBecomesTrue { Miscellaneous.lowerBot() .also { Shooter.flywheelState = FlywheelState.AUTO_AIM } }
         Gamepads.gamepad2.triangle
             .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose2 }
         Gamepads.gamepad2.square
@@ -75,7 +77,6 @@ class TeleOpRed: NextFTCOpMode() {
     }
 
     override fun onUpdate() {
-        telemetry.addData("pose:", follower.pose)
         Shooter.update()
         telemetry.update()
     }

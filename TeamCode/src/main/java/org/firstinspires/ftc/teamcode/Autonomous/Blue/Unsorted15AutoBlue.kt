@@ -45,38 +45,30 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
         val main = SequentialGroup(
             InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(55.0,73.0)))},
             FollowPath(paths[0]), //shoot preload
-            Delay(0.4),
+            Delay(0.6),
             Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[1]), //intake second spike mark
                 InstantCommand { Rollers.run(0.3, 1.0) }
             ),
-            InstantCommand { Rollers.run(0.0,0.0)},
             InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(55.0,73.0)))},
-            FollowPath(paths[2]), //shoot second spike mark
-            Delay(0.4),
+            ParallelGroup(FollowPath(paths[2]), //shoot second spike mark
+                Delay(1.0),
+                InstantCommand { Rollers.run(0.0,0.0)},
+                ),
+            Delay(0.6),
             Load . shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[3],true,1.0), //intake gate
                 InstantCommand { Rollers.run(0.3, 1.0) }
             ),
-            Delay(1.0),
+            Delay(0.5),
             InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(55.0,73.0)))},
             ParallelGroup(FollowPath(paths[4],true,1.0), //shoot gate
-                Delay(0.5),
+                InstantCommand { Delay(1.0) },
                 InstantCommand { Rollers.run(0.0,0.0)},
             ),
-            Delay(0.4),
-            Load . shootTripleCommand,
-            ParallelGroup(
-                FollowPath(paths[3],true,1.0), //intake gate
-                InstantCommand { Rollers.run(0.3, 1.0) }
-            ),
-            Delay(1.0),
-            InstantCommand { Rollers.run(0.0,0.0)},
-            InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(55.0,73.0)))},
-            FollowPath(paths[4],true,1.0), //shoot gate
-            Delay(0.4),
+            Delay(0.6),
             Load . shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[5]), //intake first spike
@@ -85,7 +77,20 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
             InstantCommand { Rollers.run(0.0,0.0)},
             InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(55.0,73.0)))},
             FollowPath(paths[6]), //shoot first spike
-            Delay(0.4),
+            Delay(0.6),
+            Load . shootTripleCommand,
+            ParallelGroup(
+                FollowPath(paths[3],true,1.0), //intake gate
+                InstantCommand { Rollers.run(0.3, 1.0) }
+            ),
+            Delay(0.7),
+            InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(55.0,73.0)))},
+            ParallelGroup(
+                FollowPath(paths[4],true,1.0), //shoot gate
+                InstantCommand { Delay(1.0) },
+                InstantCommand { Rollers.run(0.0,0.0)},
+            ),
+            Delay(0.6),
             Load . shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[7]), //intake third spike
@@ -94,7 +99,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
             InstantCommand { Rollers.run(0.0,0.0)},
             InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(56.0,76.0)))},
             FollowPath(paths[8]), //shoot third spike
-            Delay(0.4),
+            Delay(0.6),
             Load . shootTripleCommand,
             FollowPath(paths[9]) //leave
         )
@@ -186,20 +191,21 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
             BezierLine(
                 Pose(55.000, 73.000),
 
-                Pose(10.500, 58.910)
+                Pose(10.500, 58.000)
             )
         ).setLinearHeadingInterpolation(Math.toRadians(-157.0), Math.toRadians(147.731))
             .addParametricCallback(0.8) {follower.setMaxPower(0.2)}
-            .addParametricCallback(0.95) {follower.setMaxPower(1.0)}
+            .addParametricCallback(0.94) {follower.setMaxPower(1.0)}
             .build()
 
         val shootgate1 = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(11.500, 58.910),
+                Pose(10.500, 58.000),
 
                 Pose(55.000, 73.000)
             )
         ).setLinearHeadingInterpolation(Math.toRadians(147.731), Math.toRadians(160.0))
+            .addParametricCallback(0.05) {follower.setMaxPower(1.0)}
             .build()
 
         val intakefirstspike = follower.pathBuilder().addPath(
