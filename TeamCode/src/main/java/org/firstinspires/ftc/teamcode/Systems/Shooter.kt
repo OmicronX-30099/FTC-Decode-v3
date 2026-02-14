@@ -44,7 +44,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
     fun getVelocity(pose: Pose): Double {
         val distance = pose.distanceFrom(ROBOT.currAlliance.goalPoses.flywheelGoalPose)
         val flywheelVelocity = if (distance < 120.0) {0.0142645 * distance * distance + 1.26161 * distance + 748.88095}
-            else { 0.0142645 * distance * distance + 1.26161 * distance + 748.88095 + 20.0}
+            else { 0.0142645 * distance * distance + 1.26161 * distance + 748.88095 + 40.0}
         return flywheelVelocity
     }
     fun setFlywheelAutoAim() {

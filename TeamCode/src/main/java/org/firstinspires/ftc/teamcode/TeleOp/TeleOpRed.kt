@@ -59,7 +59,7 @@ class TeleOpRed: NextFTCOpMode() {
             .toggleOnBecomesTrue()
             .whenBecomesTrue { drivetrain.scalar = 0.2 }
             .whenBecomesFalse { drivetrain.scalar = 1.0 }
-        Gamepads.gamepad1.cross.or(Gamepads.gamepad2.rightBumper)
+        Gamepads.gamepad1.circle.or(Gamepads.gamepad2.rightBumper)
             .whenBecomesTrue {
                 if (Shooter.flywheelState == FlywheelState.AUTO_AIM) { Shooter.flywheelState = FlywheelState.IDLE }
                 else { Shooter.flywheelState = FlywheelState.AUTO_AIM }
