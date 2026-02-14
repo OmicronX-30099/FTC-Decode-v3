@@ -38,6 +38,9 @@ object Flywheel: Subsystem {
     private const val ALPHA_VOLT = 0.08
 
     internal fun isAtTarget(): Boolean { return ((flywheelTarget - 20.0) < flywheelMotors.velocity) && ((flywheelTarget + 40.0) > flywheelMotors.velocity) }
+
+    internal var usePID = true
+
     
     internal fun update(voltageCompEnabled: Boolean) {
         val target = roundToNearest20(flywheelTarget)
@@ -51,8 +54,10 @@ object Flywheel: Subsystem {
         val error = target - velFilt
         val pid = flywheelPIDController.calculate(error = error)
         val ff  = flywheelFFController.calculate(target)
-
-        val raw = (pid + ff).coerceIn(-1.0,1.0)
+        var raw = (PIDController(0.0, 0.0, 0.0).calculate(error = error) + 0.0).coerceIn(-1.0, 1.0)
+        if (usePID) {
+            raw = (pid + ff).coerceIn(-1.0, 1.0)
+        }
 
         val pow = if (voltageCompEnabled) {
             (raw * (V_NOMINAL / voltFilt)).coerceIn(-1.0,1.0)

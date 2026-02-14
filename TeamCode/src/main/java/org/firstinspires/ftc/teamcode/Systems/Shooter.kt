@@ -25,14 +25,14 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
     fun update() {
         updateTurret()
         when (flywheelState) {
-            FlywheelState.AUTO_AIM -> { updateFlywheel().also { backRGBLight.position = 0.47 } }
+            FlywheelState.AUTO_AIM -> {Flywheel.usePID = true .also{updateFlywheel()} .also { backRGBLight.position = 0.47 } }
             FlywheelState.MANUAL -> {
                 // Do NOT call updateFlywheel() here.
                 // Flywheel.flywheelTarget was already set by setFlywheelManualVelocity()
                 backRGBLight.position = 0.722
             }
             FlywheelState.IDLE -> { Flywheel.flywheelTarget = Flywheel.IDLE_VELOCITY .also { backRGBLight.position = 0.28 } }
-            FlywheelState.STOPPED -> { Flywheel.flywheelTarget = 0.0 .also{backRGBLight.position = 0.28} }
+            FlywheelState.STOPPED -> { Flywheel.usePID = false .also{Flywheel.flywheelTarget = 0.0} .also{backRGBLight.position = 0.28} }
         }
 
         Turret.update()
