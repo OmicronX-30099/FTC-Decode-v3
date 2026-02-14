@@ -38,6 +38,7 @@ object Flywheel: Subsystem {
     private const val ALPHA_VOLT = 0.08
 
     internal fun isAtTarget(): Boolean { return ((flywheelTarget - 20.0) < flywheelMotors.velocity) && ((flywheelTarget + 40.0) > flywheelMotors.velocity) }
+    internal fun stop() { flywheelMotors.power = 0.0 }
     
     internal fun update(voltageCompEnabled: Boolean) {
         val target = roundToNearest20(flywheelTarget)

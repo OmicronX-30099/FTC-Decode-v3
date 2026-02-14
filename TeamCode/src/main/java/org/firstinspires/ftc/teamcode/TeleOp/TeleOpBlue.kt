@@ -45,6 +45,8 @@ class TeleOpBlue: NextFTCOpMode() {
         follower.setStartingPose(ROBOT.currTeleOpStartPose)
         drivetrain.schedule()
 
+        Shooter.flywheelState = FlywheelState.AUTO_AIM
+
         Gamepads.gamepad1.rightTrigger.greaterThan(0.0)
             .whenBecomesTrue { Rollers.run(0.35,1.0) }
             .whenBecomesFalse { Rollers.run(0.0,0.0) }

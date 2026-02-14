@@ -25,19 +25,29 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
     fun update() {
         updateTurret()
         when (flywheelState) {
-            FlywheelState.AUTO_AIM -> { updateFlywheel().also { backRGBLight.position = 0.47 } }
+            FlywheelState.AUTO_AIM -> {
+                updateFlywheel()
+                backRGBLight.position = 0.47
+                Flywheel.update(true)
+            }
             FlywheelState.MANUAL -> {
                 // Do NOT call updateFlywheel() here.
                 // Flywheel.flywheelTarget was already set by setFlywheelManualVelocity()
                 backRGBLight.position = 0.722
+                Flywheel.update(false)
             }
-            FlywheelState.IDLE -> { Flywheel.flywheelTarget = Flywheel.IDLE_VELOCITY .also { backRGBLight.position = 0.28 } }
-            FlywheelState.STOPPED -> { Flywheel.flywheelTarget = 0.0 .also{backRGBLight.position = 0.28} }
+            FlywheelState.IDLE -> {
+                Flywheel.flywheelTarget = Flywheel.IDLE_VELOCITY
+                backRGBLight.position = 0.28
+                Flywheel.update(false)
+            }
+            FlywheelState.STOPPED -> { Flywheel.flywheelTarget = 0.0
+                backRGBLight.position = 0.28
+                Flywheel.stop()
+            }
         }
 
         Turret.update()
-        val voltageComp = (flywheelState == FlywheelState.AUTO_AIM)
-        Flywheel.update(voltageComp)
         if (Flywheel.isAtTarget()) { frontRGBLight.position = 0.47 }
         else { frontRGBLight.position = 0.28 }
     }
@@ -47,21 +57,9 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
             else { 0.0142645 * distance * distance + 1.26161 * distance + 748.88095 + 20.0}
         return flywheelVelocity
     }
-    fun setFlywheelAutoAim() {
-        flywheelState = FlywheelState.AUTO_AIM
-    }
-
     fun setFlywheelManualVelocity(velocity: Double) {
-        Flywheel.flywheelTarget = velocity
         flywheelState = FlywheelState.MANUAL
-    }
-
-    fun setFlywheelIdle() {
-        flywheelState = FlywheelState.IDLE
-    }
-
-    fun setFlywheelStopped() {
-        flywheelState = FlywheelState.STOPPED
+        Flywheel.flywheelTarget = velocity
     }
 
     private fun updateFlywheel() {
