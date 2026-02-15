@@ -62,7 +62,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
                 FollowPath(paths[3],true,1.0), //intake gate
                 InstantCommand { Rollers.run(0.3, 1.0) }
             ),
-            Delay(0.5),
+            Delay(0.6),
             InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(55.0,73.0)))},
             ParallelGroup(FollowPath(paths[4],true,1.0), //shoot gate
                 InstantCommand { Delay(1.0) },
@@ -83,7 +83,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
                 FollowPath(paths[3],true,1.0), //intake gate
                 InstantCommand { Rollers.run(0.3, 1.0) }
             ),
-            Delay(0.7),
+            Delay(0.6),
             InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(55.0,73.0)))},
             ParallelGroup(
                 FollowPath(paths[4],true,1.0), //shoot gate
@@ -161,7 +161,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
             BezierLine(
                 Pose(34.000, 132.900),
 
-                Pose(55.000, 73.000)
+                Pose(56.000, 73.000)
             )
         ).setLinearHeadingInterpolation(Math.toRadians(-180.0), Math.toRadians(-157.0))
 
@@ -169,7 +169,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
 
         val intakesecondspike = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(55.000, 73.000),
+                Pose(56.000, 73.000),
 
                 Pose(15.400, 56.200)
             )
@@ -181,7 +181,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
             BezierLine(
                 Pose(15.400, 56.200),
 
-                Pose(55.000, 73.000)
+                Pose(56.000, 73.000)
             )
         ).setTangentHeadingInterpolation()
             .setReversed()
@@ -189,7 +189,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
 
         val gateintake = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(55.000, 73.000),
+                Pose(56.000, 73.000),
 
                 Pose(10.500, 58.000)
             )
@@ -202,7 +202,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
             BezierLine(
                 Pose(10.500, 58.000),
 
-                Pose(55.000, 73.000)
+                Pose(56.000, 73.000)
             )
         ).setLinearHeadingInterpolation(Math.toRadians(147.731), Math.toRadians(160.0))
             .addParametricCallback(0.05) {follower.setMaxPower(1.0)}
@@ -210,7 +210,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
 
         val intakefirstspike = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(55.000, 73.000),
+                Pose(56.000, 73.000),
 
                 Pose(19.000, 85.000)
             )
@@ -222,7 +222,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
             BezierLine(
                 Pose(19.000, 85.000),
 
-                Pose(55.000, 73.000)
+                Pose(56.000, 73.000)
             )
         ).setTangentHeadingInterpolation()
             .setReversed()
@@ -230,7 +230,7 @@ class Unsorted15AutoBlue(): NextFTCOpMode() {
 
         val intakethirdspike = follower.pathBuilder().addPath(
             BezierCurve(
-                Pose(55.000, 73.000),
+                Pose(56.000, 73.000),
                 Pose(55.000, 32.000),
                 Pose(45.000, 32.000),
                 Pose(17.000, 34.000)

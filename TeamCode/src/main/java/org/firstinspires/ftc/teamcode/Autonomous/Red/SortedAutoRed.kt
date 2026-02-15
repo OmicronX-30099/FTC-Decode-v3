@@ -48,7 +48,7 @@ class SortedAutoRed: NextFTCOpMode() {
 
     override fun onStartButtonPressed() {
         Miscellaneous.shutDownLimelight()
-        follower.setStartingPose(Pose(79.0,7.5,Math.toRadians(90.0)))
+        follower.setStartingPose(Pose(79.75,7.5,Math.toRadians(90.0)))
         when (ROBOT.currStage.currMotif) {
             Motif.PPG -> { ppg() }
             Motif.PGP -> { pgp() }
@@ -361,7 +361,7 @@ class SortedAutoRed: NextFTCOpMode() {
     fun buildGPPPaths() {
         paths = arrayOf()
         val test1 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(79.0,7.5),Pose(89.0,7.5)))
+            .addPath(BezierLine(Pose(79.75,7.5),Pose(89.0,7.5)))
             .setConstantHeadingInterpolation(PI/2)
             .addPath(BezierLine(Pose(89.0,7.5),Pose(89.0,77.5)))
             .setLinearHeadingInterpolation(PI/2, Math.toRadians(-25.0))
@@ -403,7 +403,7 @@ class SortedAutoRed: NextFTCOpMode() {
     fun buildPGPPaths() {
         paths = arrayOf()
         val test1 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(79.0,7.5),Pose(89.0,7.5)))
+            .addPath(BezierLine(Pose(79.75,7.5),Pose(89.0,7.5)))
             .setConstantHeadingInterpolation(PI/2)
             .addPath(BezierLine(Pose(89.0,7.5),Pose(89.0,77.5)))
             .setLinearHeadingInterpolation(PI/2, Math.toRadians(-20.0))
@@ -448,7 +448,7 @@ class SortedAutoRed: NextFTCOpMode() {
     fun buildPPGPaths() {
         paths = arrayOf()
         val test1 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(79.0,7.5),Pose(89.0,7.5)))
+            .addPath(BezierLine(Pose(79.75,7.5),Pose(89.0,7.5)))
             .setConstantHeadingInterpolation(PI/2)
             .addPath(BezierLine(Pose(89.0,7.5),Pose(89.0,77.5)))
             .setLinearHeadingInterpolation(PI/2, Math.toRadians(-25.0))
@@ -480,7 +480,7 @@ class SortedAutoRed: NextFTCOpMode() {
             .setLinearHeadingInterpolation(Math.toRadians(0.0),Math.toRadians(0.0))
             .build()
         val test8 = follower.pathBuilder()
-            .addPath(BezierCurve(Pose(125.0, 37.0), Pose(83.0,68.5),Pose(81.0, 101.0)))
+            .addPath(BezierCurve(Pose(125.0, 37.0), Pose(83.0,68.5),Pose(81.0, 103.5)))
             .setLinearHeadingInterpolation(Math.toRadians(0.0),Math.toRadians(-90.0))
             .build()
         paths += test1 //push plus shoot first

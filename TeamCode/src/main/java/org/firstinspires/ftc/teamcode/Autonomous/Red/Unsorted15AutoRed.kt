@@ -59,7 +59,7 @@ class Unsorted15AutoRed(): NextFTCOpMode() {
                 FollowPath(paths[3],true,1.0), //intake gate
                 InstantCommand { Rollers.run(0.3, 1.0) }
             ),
-            Delay(0.6),
+            Delay(0.4),
             InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(56.0,73.0).mirror()))},
             ParallelGroup(FollowPath(paths[4],true,1.0), //shoot gate
                 InstantCommand { Rollers.run(0.0,0.5)},
@@ -79,7 +79,7 @@ class Unsorted15AutoRed(): NextFTCOpMode() {
                 FollowPath(paths[3],true,1.0), //intake gate
                 InstantCommand { Rollers.run(0.3, 1.0) }
             ),
-            Delay(0.7),
+            Delay(0.4),
             InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(56.0,73.0).mirror()))},
             ParallelGroup(
                 FollowPath(paths[4],true,1.0), //shoot gate
@@ -156,7 +156,7 @@ class Unsorted15AutoRed(): NextFTCOpMode() {
             BezierLine(
                 Pose(34.000, 132.900).mirror(),
 
-                Pose(56.000, 73.000).mirror()
+                Pose(57.000, 73.000).mirror()
             )
         ).setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(-23.0))
 
@@ -164,7 +164,7 @@ class Unsorted15AutoRed(): NextFTCOpMode() {
 
         val intakesecondspike = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(56.000, 73.000).mirror(),
+                Pose(57.000, 73.000).mirror(),
 
                 Pose(15.400, 56.200).mirror()
             )
@@ -176,7 +176,7 @@ class Unsorted15AutoRed(): NextFTCOpMode() {
             BezierLine(
                 Pose(15.400, 56.200).mirror(),
 
-                Pose(56.000, 73.000).mirror()
+                Pose(57.000, 73.000).mirror()
             )
         ).setTangentHeadingInterpolation()
             .setReversed()
@@ -184,7 +184,7 @@ class Unsorted15AutoRed(): NextFTCOpMode() {
 
         val gateintake = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(56.000, 73.000).mirror(),
+                Pose(57.000, 73.000).mirror(),
 
                 Pose(10.500, 57.000).mirror()
             )
@@ -197,7 +197,7 @@ class Unsorted15AutoRed(): NextFTCOpMode() {
             BezierLine(
                 Pose(10.500, 57.000).mirror(),
 
-                Pose(56.000, 73.000).mirror()
+                Pose(57.000, 73.000).mirror()
             )
         ).setLinearHeadingInterpolation(Math.toRadians(180-147.731), Math.toRadians(20.0))
             .addParametricCallback(0.05) {follower.setMaxPower(1.0)}
@@ -205,7 +205,7 @@ class Unsorted15AutoRed(): NextFTCOpMode() {
 
         val intakefirstspike = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(56.000, 73.000).mirror(),
+                Pose(57.000, 73.000).mirror(),
 
                 Pose(19.000, 85.000).mirror()
             )
@@ -217,7 +217,7 @@ class Unsorted15AutoRed(): NextFTCOpMode() {
             BezierLine(
                 Pose(19.000, 85.000).mirror(),
 
-                Pose(56.000, 73.000).mirror()
+                Pose(57.000, 73.000).mirror()
             )
         ).setTangentHeadingInterpolation()
             .setReversed()
@@ -225,7 +225,7 @@ class Unsorted15AutoRed(): NextFTCOpMode() {
 
         val intakethirdspike = follower.pathBuilder().addPath(
             BezierCurve(
-                Pose(56.000, 73.000).mirror(),
+                Pose(57.000, 73.000).mirror(),
                 Pose(55.000, 32.000).mirror(),
                 Pose(45.000, 32.000).mirror(),
                 Pose(17.000, 34.000).mirror()
@@ -238,7 +238,7 @@ class Unsorted15AutoRed(): NextFTCOpMode() {
             BezierLine(
                 Pose(17.000, 34.000).mirror(),
 
-                Pose(56.000, 76.000).mirror()
+                Pose(57.000, 78.000).mirror()
             )
         ).setTangentHeadingInterpolation()
             .setReversed()
@@ -246,7 +246,7 @@ class Unsorted15AutoRed(): NextFTCOpMode() {
 
         val leave = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(56.000, 76.000).mirror(),
+                Pose(57.000, 78.000).mirror(),
 
                 Pose(52.500, 72.500).mirror()
             )

@@ -48,7 +48,7 @@ class SortedAutoBlue: NextFTCOpMode() {
 
     override fun onStartButtonPressed() {
         Miscellaneous.shutDownLimelight()
-        follower.setStartingPose(Pose(79.0,7.5,Math.toRadians(90.0)).mirror())
+        follower.setStartingPose(Pose(79.75,7.5,Math.toRadians(90.0)).mirror())
         when (ROBOT.currStage.currMotif) {
             Motif.PPG -> { ppg() }
             Motif.PGP -> { pgp() }
@@ -357,7 +357,7 @@ class SortedAutoBlue: NextFTCOpMode() {
     fun buildGPPPaths() {
         paths = arrayOf()
         val test1 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(79.0,7.5).mirror(),Pose(89.0,7.5).mirror()))
+            .addPath(BezierLine(Pose(79.75,7.5).mirror(),Pose(89.0,7.5).mirror()))
             .setConstantHeadingInterpolation(PI/2)
             .addPath(BezierLine(Pose(89.0,7.5).mirror(),Pose(89.0,77.5).mirror()))
             .setLinearHeadingInterpolation(PI/2, Math.toRadians(-155.0))
@@ -399,7 +399,7 @@ class SortedAutoBlue: NextFTCOpMode() {
     fun buildPGPPaths() {
         paths = arrayOf()
         val test1 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(79.0,7.5).mirror(),Pose(89.0,7.5).mirror()))
+            .addPath(BezierLine(Pose(79.75,7.5).mirror(),Pose(89.0,7.5).mirror()))
             .setConstantHeadingInterpolation(PI/2)
             .addPath(BezierLine(Pose(89.0,7.5).mirror(),Pose(89.0,77.5).mirror()))
             .setLinearHeadingInterpolation(PI/2, Math.toRadians(-160.0))
@@ -444,7 +444,7 @@ class SortedAutoBlue: NextFTCOpMode() {
     fun buildPPGPaths() {
         paths = arrayOf()
         val test1 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(79.0,7.5).mirror(),Pose(89.0,7.5).mirror()))
+            .addPath(BezierLine(Pose(79.75,7.5).mirror(),Pose(89.0,7.5).mirror()))
             .setConstantHeadingInterpolation(PI/2)
             .addPath(BezierLine(Pose(89.0,7.5).mirror(),Pose(89.0,77.5).mirror()))
             .setLinearHeadingInterpolation(PI/2, Math.toRadians(-160.0))
@@ -476,7 +476,7 @@ class SortedAutoBlue: NextFTCOpMode() {
             .setLinearHeadingInterpolation(PI,PI)
             .build()
         val test8 = follower.pathBuilder()
-            .addPath(BezierCurve(Pose(128.0, 37.0).mirror(), Pose(83.0,68.5).mirror(),Pose(81.0, 101.0).mirror()))
+            .addPath(BezierCurve(Pose(128.0, 37.0).mirror(), Pose(83.0,68.5).mirror(),Pose(81.0, 103.5).mirror()))
             .setLinearHeadingInterpolation(PI,Math.toRadians(-90.0))
             .build()
         paths += test1 //push plus shoot first

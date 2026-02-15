@@ -41,8 +41,10 @@ class BWSCollabAutoBlue(): NextFTCOpMode() {
         follower.setStartingPose(Pose(86.750, 7.5, Math.toRadians(90.0)).mirror())
 
         val main = SequentialGroup(
-            Delay(1.3),
+            InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(86.75,7.5)) + 20.0)},
+            Delay(1.8),
             Load.shootTripleCommand,
+            InstantCommand { Shooter.setFlywheelManualVelocity(Shooter.getVelocity(Pose(90.0,15.0)))},
             ParallelGroup(
                 FollowPath(paths[0], holdEnd = true, 1.0),
                 SequentialGroup(
