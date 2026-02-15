@@ -7,6 +7,7 @@ import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
 import com.pedropathing.paths.PathChain
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import dev.nextftc.core.commands.delays.Delay
 import dev.nextftc.core.commands.groups.SequentialGroup
 import dev.nextftc.core.commands.utility.InstantCommand
@@ -24,7 +25,8 @@ import org.firstinspires.ftc.teamcode.Util.Stage
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.includePedro
 
-@Autonomous(name = "Blue Coyote Collab Auto", group = "Coyote Collab Auto", preselectTeleOp = "Blue TeleOp")
+@Disabled
+@Autonomous(name = "[DO NOT USE] Blue Coyote Collab Auto", group = "Coyote Collab Auto", preselectTeleOp = "Blue TeleOp")
 class CoyoteCollabAutoBlue: NextFTCOpMode() {
     init {
         addSubsystems(Shooter, Load, Miscellaneous)
