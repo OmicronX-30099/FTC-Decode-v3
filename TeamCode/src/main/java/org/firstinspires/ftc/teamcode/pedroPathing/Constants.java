@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Constants;
+package org.firstinspires.ftc.teamcode.pedroPathing;
 
 import com.pedropathing.control.FilteredPIDFCoefficients;
 import com.pedropathing.control.PIDFCoefficients;
@@ -14,15 +14,18 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-public class PedroConstants {
+public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(14.0)
             .forwardZeroPowerAcceleration(-40.386)
             .lateralZeroPowerAcceleration(-74.0)
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.01,0.0,0.0001,0.6,0.06))
+            .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.005,0.0,0.003,0.6,0.06))
             .headingPIDFCoefficients(new PIDFCoefficients(1.5,0.0,0.03,0.03))
             .translationalPIDFCoefficients(new PIDFCoefficients(0.08,0.0,0.003,0.04))
             .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.2,0.0,0.005,0.003))
+            .useSecondaryDrivePIDF(true)
+            .useSecondaryTranslationalPIDF(true)
             .centripetalScaling(0.0005);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
