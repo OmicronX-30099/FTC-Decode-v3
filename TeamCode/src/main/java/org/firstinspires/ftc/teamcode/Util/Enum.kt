@@ -6,10 +6,12 @@ import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 data object ROBOT {
     private const val TURRET_Y_OFFSET: Double = -1.774
 
-    var currAlliance: Alliance        = Alliance.BLUE
+    var currAlliance: Alliance        = Alliance.RED
     var currStage: Stage              = Stage.TELEOP
 
     fun turretPose(): Pose = follower.pose.offset(TURRET_Y_OFFSET)
+
+    fun inZone() {}
 }
 
 enum class Alliance {
