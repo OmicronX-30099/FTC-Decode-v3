@@ -33,6 +33,7 @@ android {
     namespace = 'org.firstinspires.ftc.teamcode'
 
     kotlinOptions {
+        //noinspection GrDeprecatedAPIUsage
         jvmTarget = '1.8'
     }
 
@@ -49,27 +50,19 @@ repositories {
 dependencies {
     implementation project(':FtcRobotController')
 
-    // NextFTC Core
     implementation 'dev.nextftc:ftc:1.1.0-beta.4'
     implementation 'dev.nextftc:hardware:1.1.0-beta.4'
-
-    // NextBindings
     implementation 'dev.nextftc:bindings:1.0.1'
-
-    // NextControl v1/v2
     implementation 'dev.nextftc:control:1.0.0'
     implementation 'dev.nextftc.control2:control:0.0.1-alpha.4'
 
-    // NextPedro
     implementation 'dev.nextftc.extensions:pedro:1.0.0'
-
-    // PedroPathing
     implementation 'com.pedropathing:ftc:2.0.6'
     implementation 'com.pedropathing:telemetry:1.0.0'
 
-    // SlothPanels
-    implementation 'com.bylazar.sloth:fullpanels:0.2.4+1.0.12'
+    implementation 'gay.zharel.fateweaver:ftc:0.3.3'
+    implementation 'dev.nextftc.extensions:fateweaver:1.0.0'
 
-    // Sloth
+    implementation 'com.bylazar.sloth:fullpanels:0.2.4+1.0.12'
     implementation 'dev.frozenmilk.sinister:Sloth:0.2.4'
 }
