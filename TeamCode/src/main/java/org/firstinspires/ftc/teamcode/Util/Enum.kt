@@ -5,13 +5,21 @@ import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 
 data object ROBOT {
     private const val TURRET_Y_OFFSET: Double = -1.774
+    private const val CLOSE_ZONE_THRESHOLD: Double = 0.0
+    private const val FAR_ZONE_THRESHOLD: Double = 0.0
 
     var currAlliance: Alliance        = Alliance.RED
     var currStage: Stage              = Stage.TELEOP
 
     fun turretPose(): Pose = follower.pose.offset(TURRET_Y_OFFSET)
 
-    fun inZone() {}
+    fun inCloseZone(p: Pose): Boolean = (p.y > CLOSE_ZONE_THRESHOLD)
+    fun inCloseZone(): Boolean = inCloseZone(follower.pose)
+    fun inCloseZone(useTurretCenter: Any): Boolean = inCloseZone(turretPose())
+
+    fun inFarZone(p: Pose): Boolean = (p.y < FAR_ZONE_THRESHOLD)
+    fun inFarZone(): Boolean = inFarZone(follower.pose)
+    fun inFarZone(useTurretCenter: Any): Boolean = inFarZone(turretPose())
 }
 
 enum class Alliance {
