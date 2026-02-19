@@ -31,3 +31,7 @@ fun Pose.offset(yOffset: Double) =
             yOffset * sin(this.heading)
         )
     )
+
+infix fun <T> T.exec(task: T.() -> Unit): T = this.apply(task)
+infix fun <T> T.execute(task: T.() -> Unit): T = this.apply(task)
+infix fun <T> T.and(task: (T) -> Unit): T = this.also(task)
