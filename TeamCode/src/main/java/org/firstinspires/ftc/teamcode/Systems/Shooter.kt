@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.Systems
 
 import dev.nextftc.core.subsystems.Subsystem
+import dev.nextftc.hardware.impl.MotorEx
 import dev.nextftc.hardware.impl.ServoEx
 import dev.nextftc.hardware.positionable.ServoGroup
 
 object Flywheel: Subsystem {
-
+    private val topFlywheelMotor: MotorEx = MotorEx("")
+    private val bottomFlywheelMotor: MotorEx = MotorEx("")
 }
 
 object Turret: Subsystem {
