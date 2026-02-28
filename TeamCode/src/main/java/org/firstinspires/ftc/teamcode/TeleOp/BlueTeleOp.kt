@@ -44,49 +44,44 @@ class BlueTeleOp: NextFTCOpMode() {
         ROBOT.currAlliance = Alliance.BLUE
         follower.setStartingPose(ROBOT.teleopStartPose)
         drivetrain.schedule()
-        Gamepads.gamepad1 .apply {
-            rightTrigger.greaterThan(0.0)
-                .whenBecomesTrue { Rollers.run(0.35,1.0) }
-                .whenBecomesFalse { Rollers.stop() }
-            leftTrigger.greaterThan(0.0).and(rightTrigger.inRange(0.0..0.0))
-                .whenBecomesTrue { Rollers.run(-1.0,-1.0) }
-                .whenBecomesFalse { Rollers.stop() }
-            rightBumper
-                .whenBecomesTrue ( Load.shootTripleCommand )
-            leftBumper
-                .toggleOnBecomesTrue()
-                .whenBecomesTrue { drivetrain.scalar = 0.2 }
-                .whenBecomesFalse { drivetrain.scalar = 1.0 }
-            circle
-                .toggleOnBecomesTrue()
-                .whenBecomesTrue { Shooter.flywheelManual() }
-                .whenBecomesTrue { Shooter.flywheelAutoAim() }
-            cross
-                .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose1 }
-        }
-        Gamepads.gamepad2 .apply {
-            triangle
-                .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose2 }
-            square
+        Gamepads.gamepad1.rightTrigger.greaterThan(0.0)
+            .whenBecomesTrue { Rollers.run(0.35,1.0) }
+            .whenBecomesFalse { Rollers.stop() }
+        Gamepads.gamepad1.leftTrigger.greaterThan(0.0).and(Gamepads.gamepad1.rightTrigger.inRange(0.0..0.0))
+            .whenBecomesTrue { Rollers.run(-1.0,-1.0) }
+            .whenBecomesFalse { Rollers.stop() }
+        Gamepads.gamepad1.rightBumper
+            .whenBecomesTrue ( Load.shootTripleCommand )
+        Gamepads.gamepad1.leftBumper
+            .toggleOnBecomesTrue()
+            .whenBecomesTrue { drivetrain.scalar = 0.2 }
+            .whenBecomesFalse { drivetrain.scalar = 1.0 }
+        Gamepads.gamepad1.circle
+            .toggleOnBecomesTrue()
+            .whenBecomesTrue { Shooter.flywheelManual() }
+            .whenBecomesTrue { Shooter.flywheelAutoAim() }
+        Gamepads.gamepad1.cross
+            .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose1 }
+        Gamepads.gamepad2.triangle
+            .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose2 }
+        Gamepads.gamepad2.square
                 .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose3 }
-        }
-        Gamepads .apply {
-            gamepad1.dpadLeft.or(gamepad2.dpadLeft)
-                .whenBecomesTrue { Turret.offset(1.0) }
-            gamepad1.dpadRight.or(gamepad2.dpadRight)
-                .whenBecomesTrue { Turret.offset(-1.0) }
-            gamepad1.dpadUp.or(gamepad2.dpadUp)
-                .whenBecomesTrue {
-                    if (Shooter.flywheelState == FlywheelState.MANUAL) {
-                        Flywheel.targetVelocity += 40.0
-                    }
+        Gamepads.gamepad1.dpadLeft.or(Gamepads.gamepad2.dpadLeft)
+            .whenBecomesTrue { Turret.offset(1.0) }
+        Gamepads.gamepad1.dpadRight.or(Gamepads.gamepad2.dpadRight)
+            .whenBecomesTrue { Turret.offset(-1.0) }
+        Gamepads.gamepad1.dpadUp.or(Gamepads.gamepad2.dpadUp)
+            .whenBecomesTrue {
+                if (Shooter.flywheelState == FlywheelState.MANUAL) {
+                    Flywheel.targetVelocity += 40.0
                 }
-            gamepad1.dpadDown.or(gamepad2.dpadDown)
-                .whenBecomesTrue {
-                    if (Shooter.flywheelState == FlywheelState.MANUAL) {
-                        Flywheel.targetVelocity -= 40.0
-                    }
+            }
+        Gamepads.gamepad1.dpadDown.or(Gamepads.gamepad2.dpadDown)
+            .whenBecomesTrue {
+                if (Shooter.flywheelState == FlywheelState.MANUAL) {
+                    Flywheel.targetVelocity -= 40.0
                 }
+            }
         }
     }
 
