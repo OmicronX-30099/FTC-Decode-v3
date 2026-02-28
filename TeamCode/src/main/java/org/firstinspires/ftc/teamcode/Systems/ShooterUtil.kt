@@ -15,7 +15,7 @@ object Flywheel: Subsystem {
     private val flywheelMotors: MotorGroup = MotorGroup(flywheelMotor1, flywheelMotor2)
     private val voltageSensor: VoltageSensor by lazy { ActiveOpMode.hardwareMap.get(VoltageSensor::class.java, "Control Hub") }
 
-    private val flywheelCoeffs: PSVCoeffs = PSVCoeffs(0.003, 0.035, 0.0002)
+    private val flywheelCoeffs: PSVCoeffs = PSVCoeffs(0.003, 0.08, 0.0002)
 
     const val IDLE_VELOCITY = 1500.0
     var targetVelocity: Double = 0.0
@@ -31,6 +31,8 @@ object Flywheel: Subsystem {
         }
         flywheelMotors.power = calculatePow()
     }
+    fun reset() { targetVelocity = 0.0 }
+    fun debug(): String = "Target Velocity = $targetVelocity \nCurrent Velocity = ${flywheelMotors.velocity} \nCoeffs = $flywheelCoeffs \nPower = ${flywheelMotors.power}"
 }
 
 object Turret: Subsystem {
@@ -48,7 +50,7 @@ object Turret: Subsystem {
     fun offset(by: Double) { offset += by }
     fun update() { turretServos.position = (normalizeAngle(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE) + 0.5) }
     fun reset() { offset = 0.0; targetAngle = 0.0 }
-    fun debug(): String = "Target Angle = $targetAngle \n Offset = $offset \n Current Position = ${turretServos.position}"
+    fun debug(): String = "Target Angle = $targetAngle \nOffset = $offset \nCurrent Position = ${turretServos.position}"
 }
 
 internal fun normalizeAngle(angDeg: Double): Double {
