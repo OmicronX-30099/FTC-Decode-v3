@@ -82,8 +82,8 @@ class BlueTeleOp: NextFTCOpMode() {
                     Flywheel.targetVelocity -= 40.0
                 }
             }
-        }
     }
+
 
     override fun onUpdate() {
         Shooter.update()
