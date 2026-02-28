@@ -10,6 +10,7 @@ import dev.nextftc.hardware.impl.MotorEx
 import dev.nextftc.hardware.impl.ServoEx
 import dev.nextftc.hardware.positionable.ServoGroup
 import kotlin.math.abs
+import kotlin.math.sign
 
 object Flywheel: Subsystem {
     private val flywheelMotor1: MotorEx = MotorEx("fwt")
@@ -24,7 +25,7 @@ object Flywheel: Subsystem {
 
     fun atTarget(): Boolean = (abs(targetVelocity - flywheelMotors.velocity) <= 20.0)
 
-    fun calculatePow(): Double = ((flywheelCoeffs.kP * (targetVelocity - flywheelMotors.velocity)) + (flywheelCoeffs.kV * targetVelocity) + flywheelCoeffs.kS)
+    fun calculatePow(): Double = ((flywheelCoeffs.kP * (targetVelocity - flywheelMotors.velocity)) + (flywheelCoeffs.kV * targetVelocity) + (flywheelCoeffs.kS * sign(targetVelocity)))
     fun update() {
         val currVoltage: Double = voltageSensor.voltage
         flywheelCoeffs.apply {
