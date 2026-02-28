@@ -27,14 +27,17 @@ data object ROBOT {
 enum class Alliance {
     BLUE {
         override val resetPoses: ResetPoses  = ResetPoses(Pose(9.5,8.9,-PI).mirror(), Pose(117.0,129.0,-2.448).mirror(), Pose(116.0,130.0,-0.939).mirror())
-        override val goalPoses: GoalPoses = GoalPoses(Pose(134.0,134.0).mirror(),Pose(140.0,140.0).mirror())
+        override val turretGoalPose: Pose = Pose(130.0,134.0).mirror()
+        override val flywheelGoalPose: Pose = Pose(141.5,141.5).mirror()
     },
     RED{
         override val resetPoses: ResetPoses  = ResetPoses(Pose(9.5,8.9,-PI), Pose(117.0,129.0,-2.448), Pose(116.0,130.0,-0.939))
-        override val goalPoses: GoalPoses = GoalPoses(Pose(130.0,134.0),Pose(141.5,141.5))
+        override val turretGoalPose: Pose = Pose(130.0,134.0)
+        override val flywheelGoalPose: Pose = Pose(141.5,141.5)
     };
     abstract val resetPoses: ResetPoses
-    abstract val goalPoses: GoalPoses
+    abstract val turretGoalPose: Pose
+    abstract val flywheelGoalPose: Pose
 }
 
 enum class Motif {
@@ -50,7 +53,5 @@ enum class Stage {
     AUTONOMOUS;
     open var currMotif: Motif = Motif.UNKNOWN
 }
-
-data class GoalPoses(val turretGoalPose: Pose, val flywheelGoalPose: Pose)
 
 data class ResetPoses(val resetPose1: Pose, val resetPose2: Pose, val resetPose3: Pose)

@@ -8,6 +8,7 @@ import dev.nextftc.core.subsystems.SubsystemGroup
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.hardware.impl.ServoEx
 import org.firstinspires.ftc.teamcode.Util.ROBOT
+import org.firstinspires.ftc.teamcode.Util.genVector
 import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.math.max
@@ -15,48 +16,49 @@ import kotlin.math.min
 
 object Shooter: SubsystemGroup(Turret, Flywheel) {
     private val shooterRGB: ServoEx = ServoEx("front_light",-0.1)
-    private var disabledFuture: Boolean = false
     private const val ITERATIONS: Int = 10
     var flywheelState: FlywheelState = FlywheelState.AUTO_AIM
         private set
 
     fun update() {
         when (flywheelState) {
-            FlywheelState.AUTO_AIM -> { updateFlywheel() }
+            FlywheelState.PREDICTIVE_AUTO_AIM -> { updateFlywheel(true); updateTurret(true) }
+            FlywheelState.AUTO_AIM -> { updateFlywheel(); updateTurret() }
             FlywheelState.MANUAL -> { Flywheel.update() }
         }
         shooterRGB.position = if (Flywheel.atTarget()) { 0.47 } else { 0.28 }
-        updateTurret()
     }
     fun flywheelManual() {
         flywheelState = FlywheelState.MANUAL
         Flywheel.targetVelocity = Flywheel.IDLE_VELOCITY
-    }
-
-    fun disableFuture() {
-        disabledFuture = !disabledFuture
     }
     fun flywheelAutoAim() { flywheelState = FlywheelState.AUTO_AIM }
 
     fun reset() { Flywheel.reset(); Turret.reset(); flywheelState == FlywheelState.AUTO_AIM }
     fun debug(): String = "Turret Data: \n${Turret.debug()} \nFlywheel Data: \n${Flywheel.debug()}"
 
-    private fun updateTurret() {
-        if (!disabledFuture) {
-            val futureVec = getCorrectedVecIterative(
-                ROBOT.shooterPose(),
-                ROBOT.currAlliance.goalPoses.turretGoalPose,
-                follower.velocity
-            )
-            Turret.targetAngle = calculateTurretAngle(futureVec)
-        }
+    private fun updateTurret(predictive: Boolean = false) {
+        val vec =
+            if (predictive) {
+                getCorrectedVecIterative(
+                    ROBOT.shooterPose(),
+                    ROBOT.currAlliance.turretGoalPose,
+                    follower.velocity
+                )
+            } else {
+                ROBOT.currAlliance.turretGoalPose.genVector(ROBOT.shooterPose())
+            }
+        Turret.targetAngle = calculateTurretAngle(vec)
         Turret.update()
     }
-    private fun updateFlywheel() {
-        if (!disabledFuture) {
-            val futureVec = getCorrectedVecIterative(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose, follower.velocity)
-            Flywheel.targetVelocity = calculateFlywheelVelocity(futureVec.magnitude)
-        }
+    private fun updateFlywheel(predictive: Boolean = false) {
+        val d =
+            if (predictive) {
+                getCorrectedVecIterative(ROBOT.shooterPose(), ROBOT.currAlliance.flywheelGoalPose, follower.velocity).magnitude
+            } else {
+                ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.flywheelGoalPose)
+            }
+        Flywheel.targetVelocity = calculateFlywheelVelocity(d)
         Flywheel.update()
     }
     private fun calculateFlywheelVelocity(d: Double) = ((0.019454 * d * d) + (2.007 * d) + 1102.62509)

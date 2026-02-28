@@ -63,6 +63,7 @@ internal fun normalizeAngle(angDeg: Double): Double {
 }
 
 enum class FlywheelState {
+    PREDICTIVE_AUTO_AIM,
     AUTO_AIM,
     MANUAL
 }
