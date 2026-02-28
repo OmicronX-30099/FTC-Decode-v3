@@ -14,9 +14,9 @@ import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.Stage
 
 object Rollers: Subsystem {
-    private val transferMotor: MotorEx = MotorEx("")
-    private val intakeMotor: MotorEx = MotorEx("")
-    private val shooterGateServo: ServoEx = ServoEx("",-0.1)
+    private val transferMotor: MotorEx = MotorEx("t")
+    private val intakeMotor: MotorEx = MotorEx("i")
+    private val shooterGateServo: ServoEx = ServoEx("sg",-0.1)
 
     override fun initialize() { lockShooter() }
 
