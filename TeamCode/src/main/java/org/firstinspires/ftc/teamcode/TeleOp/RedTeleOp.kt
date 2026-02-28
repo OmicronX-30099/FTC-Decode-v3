@@ -57,13 +57,13 @@ class RedTeleOp: NextFTCOpMode() {
                 .whenBecomesTrue { drivetrain.scalar = 0.2 }
                 .whenBecomesFalse { drivetrain.scalar = 1.0 }
             circle
-                .toggleOnBecomesTrue()
                 .whenBecomesTrue { Shooter.flywheelManual() }
-                .whenBecomesTrue { Shooter.flywheelAutoAim() }
             cross
                 .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose1 }
             triangle
-                .whenBecomesTrue {Shooter.disableFuture()}
+                .toggleOnBecomesTrue()
+                .whenBecomesTrue { Shooter.flywheelAutoAim() }
+                .whenBecomesFalse { Shooter.enablePredictive() }
         }
         Gamepads.gamepad2 .apply {
             triangle

@@ -17,7 +17,7 @@ import kotlin.math.min
 object Shooter: SubsystemGroup(Turret, Flywheel) {
     private val shooterRGB: ServoEx = ServoEx("front_light",-0.1)
     private const val ITERATIONS: Int = 10
-    var flywheelState: FlywheelState = FlywheelState.AUTO_AIM
+    var flywheelState: FlywheelState = FlywheelState.PREDICTIVE_AUTO_AIM
         private set
 
     fun update() {
@@ -32,6 +32,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
         flywheelState = FlywheelState.MANUAL
         Flywheel.targetVelocity = Flywheel.IDLE_VELOCITY
     }
+    fun enablePredictive() { flywheelState == FlywheelState.PREDICTIVE_AUTO_AIM }
     fun flywheelAutoAim() { flywheelState = FlywheelState.AUTO_AIM }
 
     fun reset() { Flywheel.reset(); Turret.reset(); flywheelState == FlywheelState.AUTO_AIM }
