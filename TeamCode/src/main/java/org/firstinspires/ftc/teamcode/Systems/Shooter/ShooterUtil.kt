@@ -12,8 +12,8 @@ import dev.nextftc.hardware.positionable.ServoGroup
 import kotlin.math.abs
 
 object Flywheel: Subsystem {
-    private val flywheelMotor1: MotorEx = MotorEx("")
-    private val flywheelMotor2: MotorEx = MotorEx("")
+    private val flywheelMotor1: MotorEx = MotorEx("fwt")
+    private val flywheelMotor2: MotorEx = MotorEx("fwb")
     private val flywheelMotors: MotorGroup = MotorGroup(flywheelMotor1, flywheelMotor2)
     private val voltageSensor: VoltageSensor by lazy { ActiveOpMode.hardwareMap.get(VoltageSensor::class.java, "Control Hub") }
 
@@ -38,8 +38,8 @@ object Flywheel: Subsystem {
 }
 
 object Turret: Subsystem {
-    private val turretServo1: ServoEx = ServoEx("")
-    private val turretServo2: ServoEx = ServoEx("")
+    private val turretServo1: ServoEx = ServoEx("lt")
+    private val turretServo2: ServoEx = ServoEx("ft")
     private val turretServos: ServoGroup = ServoGroup(turretServo1, turretServo2)
 
     private const val GEAR_RATIO: Double = 0.9375

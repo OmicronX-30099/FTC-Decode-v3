@@ -44,7 +44,8 @@ public class PedroConstants {
             .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .xVelocity(69.247)
-            .yVelocity(52.4);
+            .yVelocity(52.4)
+            .useBrakeModeInTeleOp(true);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)

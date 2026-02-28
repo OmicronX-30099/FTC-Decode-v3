@@ -13,7 +13,7 @@ data object ROBOT {
 
     var currAlliance: Alliance = Alliance.BLUE
     var currStage: Stage = Stage.TELEOP
-    var teleopStartPose: Pose = Pose(0.0,0.0,0.0)
+    var teleopStartPose: Pose = Pose(141.5-34.0,132.9,Math.toRadians(0.0))
 
     fun shooterPose(): Pose {
         val a: Double = follower.heading
