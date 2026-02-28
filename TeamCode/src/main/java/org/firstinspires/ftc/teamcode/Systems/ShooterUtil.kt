@@ -1,8 +1,37 @@
 package org.firstinspires.ftc.teamcode.Systems
 
+import com.qualcomm.robotcore.hardware.VoltageSensor
 import dev.nextftc.core.subsystems.Subsystem
+import dev.nextftc.ftc.ActiveOpMode
+import dev.nextftc.hardware.controllable.MotorGroup
+import dev.nextftc.hardware.impl.MotorEx
 import dev.nextftc.hardware.impl.ServoEx
 import dev.nextftc.hardware.positionable.ServoGroup
+import kotlin.math.abs
+
+object Flywheel: Subsystem {
+    private val flywheelMotor1: MotorEx = MotorEx("")
+    private val flywheelMotor2: MotorEx = MotorEx("")
+    private val flywheelMotors: MotorGroup = MotorGroup(flywheelMotor1, flywheelMotor2)
+    private val voltageSensor: VoltageSensor by lazy { ActiveOpMode.hardwareMap.get(VoltageSensor::class.java, "Control Hub") }
+
+    private val flywheelCoeffs: PSVCoeffs = PSVCoeffs(0.003, 0.035, 0.0002)
+
+    const val IDLE_VELOCITY = 1500.0
+    var targetVelocity: Double = 0.0
+
+    fun atTarget(): Boolean = (abs(targetVelocity - flywheelMotors.velocity) <= 20.0)
+
+    fun calculatePow(): Double = ((flywheelCoeffs.kP * (targetVelocity - flywheelMotors.velocity)) + (flywheelCoeffs.kV * targetVelocity) + flywheelCoeffs.kS)
+    fun update() {
+        val currVoltage: Double = voltageSensor.voltage
+        flywheelCoeffs.apply {
+            kP = -0.0033333 * currVoltage + 0.045
+            kV = -0.00003333 * currVoltage + 0.000777
+        }
+        flywheelMotors.power = calculatePow()
+    }
+}
 
 object Turret: Subsystem {
     private val turretServo1: ServoEx = ServoEx("")
@@ -12,11 +41,14 @@ object Turret: Subsystem {
     private const val GEAR_RATIO: Double = 0.9375
     private const val SERVO_RANGE: Double = 358.75
 
-    private var turretOffset: Double = 0.0
-    var targetTurretAngle: Double = 0.0
+    var offset: Double = 0.0
+        private set
+    var targetAngle: Double = 0.0
 
-    fun offset(by: Double) { turretOffset += by }
-    fun update() { turretServos.position = (normalizeAngle(targetTurretAngle + turretOffset) * (GEAR_RATIO / SERVO_RANGE) + 0.5) }
+    fun offset(by: Double) { offset += by }
+    fun update() { turretServos.position = (normalizeAngle(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE) + 0.5) }
+    fun reset() { offset = 0.0; targetAngle = 0.0 }
+    fun debug(): String = "Target Angle = $targetAngle \n Offset = $offset \n Current Position = ${turretServos.position}"
 }
 
 internal fun normalizeAngle(angDeg: Double): Double {
@@ -25,3 +57,10 @@ internal fun normalizeAngle(angDeg: Double): Double {
     while (a > 180.0) { a -= 360.0 }
     return a
 }
+
+enum class FlywheelState {
+    AUTO_AIM,
+    MANUAL
+}
+
+data class PSVCoeffs ( @JvmField var kP: Double, @JvmField var kS: Double, @JvmField var kV: Double)

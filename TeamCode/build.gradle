@@ -54,10 +54,10 @@ dependencies {
     implementation 'dev.nextftc:hardware:1.1.0'
     implementation 'dev.nextftc:bindings:1.0.1'
     implementation 'dev.nextftc:control:1.0.0'
-    implementation 'dev.nextftc.control2:control:0.0.1-alpha.4'
+    implementation 'dev.nextftc:control2:0.0.3'
 
     implementation 'dev.nextftc.extensions:pedro:1.0.0'
-    implementation 'com.pedropathing:ftc:2.1.0-alpha.2'
+    implementation 'com.pedropathing:ftc:2.1.0-beta.1'
     implementation 'com.pedropathing:telemetry:1.0.0'
 
     implementation 'gay.zharel.fateweaver:ftc:0.3.3'
