@@ -25,8 +25,10 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
         flywheelState = FlywheelState.MANUAL
         Flywheel.targetVelocity = Flywheel.IDLE_VELOCITY
     }
+    fun flywheelAutoAim() { flywheelState = FlywheelState.AUTO_AIM }
 
     fun reset() { Flywheel.reset(); Turret.reset(); flywheelState == FlywheelState.AUTO_AIM }
+    fun debug(): String = "Turret Data: \n${Turret.debug()} \nFlywheel Data: \n${Flywheel.debug()}"
 
     private fun updateTurret() {
         val futureVec = getCorrectedVecIterative(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPose, follower.velocity)
