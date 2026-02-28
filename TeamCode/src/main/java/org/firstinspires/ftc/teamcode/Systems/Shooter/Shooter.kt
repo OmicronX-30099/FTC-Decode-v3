@@ -26,7 +26,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
         Flywheel.targetVelocity = Flywheel.IDLE_VELOCITY
     }
 
-    fun reset() { Flywheel.reset(); Turret.reset() }
+    fun reset() { Flywheel.reset(); Turret.reset(); flywheelState == FlywheelState.AUTO_AIM }
 
     private fun updateTurret() {
         val futureVec = getCorrectedVecIterative(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPose, follower.velocity)
