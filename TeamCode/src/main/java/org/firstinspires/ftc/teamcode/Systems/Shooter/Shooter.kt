@@ -13,7 +13,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 object Shooter: SubsystemGroup(Turret, Flywheel) {
-    private val shooterRGB: ServoEx = ServoEx("",-0.1)
+    private val shooterRGB: ServoEx = ServoEx("front_light",-0.1)
     private const val ITERATIONS: Int = 10
     var flywheelState: FlywheelState = FlywheelState.AUTO_AIM
         private set
