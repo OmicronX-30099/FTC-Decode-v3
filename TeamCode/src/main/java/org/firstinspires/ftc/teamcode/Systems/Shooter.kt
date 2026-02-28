@@ -11,8 +11,6 @@ import kotlin.math.max
 import kotlin.math.min
 
 object Shooter: SubsystemGroup(Turret, Flywheel) {
-    private val frontRGBLight: ServoEx = ServoEx("")
-    private val backRGBLight: ServoEx = ServoEx("")
     private const val ITERATIONS: Int = 10
     var flywheelState: FlywheelState = FlywheelState.AUTO_AIM
         private set
@@ -24,11 +22,12 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
         }
         updateTurret()
     }
-
     fun flywheelManual() {
         flywheelState = FlywheelState.MANUAL
         Flywheel.targetVelocity = Flywheel.IDLE_VELOCITY
     }
+
+    fun reset() { Flywheel.reset(); Turret.reset() }
 
     private fun updateTurret() {
         val futureVec = getCorrectedVecIterative(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPose, follower.velocity)
