@@ -49,7 +49,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
     private fun calculateTurretAngle(vec: Vector) = Math.toDegrees(atan2(vec.yComponent, vec.xComponent) - follower.pose.heading)
 
     private fun getFlyTime(d: Double): Double {
-        val t = (-4.64e-5 * d * d) + (1.51e-2 * d) - 3.48e-1
+        val t = (-0.0000251859 * d * d) + (0.00940245 * d) - 0.111539
         return max(0.05, min(t, 0.7))
     }
     private fun getCorrectedVecIterative(botPose: Pose, targetPose: Pose, velocity: Vector): Vector {
