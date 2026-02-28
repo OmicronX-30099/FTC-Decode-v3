@@ -45,7 +45,7 @@ class BlueTeleOp: NextFTCOpMode() {
         follower.setStartingPose(ROBOT.teleopStartPose)
         drivetrain.schedule()
         Gamepads.gamepad1.rightTrigger.greaterThan(0.0)
-            .whenBecomesTrue { Rollers.run(0.35,1.0) }
+            .whenBecomesTrue { Rollers.run(0.25,1.0) }
             .whenBecomesFalse { Rollers.stop() }
         Gamepads.gamepad1.leftTrigger.greaterThan(0.0).and(Gamepads.gamepad1.rightTrigger.inRange(0.0..0.0))
             .whenBecomesTrue { Rollers.run(-1.0,-1.0) }

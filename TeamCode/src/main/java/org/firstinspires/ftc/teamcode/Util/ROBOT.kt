@@ -13,7 +13,7 @@ data object ROBOT {
 
     var currAlliance: Alliance = Alliance.BLUE
     var currStage: Stage = Stage.TELEOP
-    var teleopStartPose: Pose = Pose(141.5-34.0,132.9,Math.toRadians(0.0))
+    var teleopStartPose: Pose = Pose(86.750,7.5,Math.toRadians(90.0))
 
     fun shooterPose(): Pose {
         val a: Double = follower.heading
@@ -31,7 +31,7 @@ enum class Alliance {
     },
     RED{
         override val resetPoses: ResetPoses  = ResetPoses(Pose(9.5,8.9,-PI), Pose(117.0,129.0,-2.448), Pose(116.0,130.0,-0.939))
-        override val goalPoses: GoalPoses = GoalPoses(Pose(134.0,134.0),Pose(140.0,140.0))
+        override val goalPoses: GoalPoses = GoalPoses(Pose(130.0,134.0),Pose(141.5,141.5))
     };
     abstract val resetPoses: ResetPoses
     abstract val goalPoses: GoalPoses
