@@ -9,6 +9,7 @@ import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.hardware.impl.ServoEx
 import org.firstinspires.ftc.teamcode.Util.ROBOT
 import kotlin.math.atan2
+import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.min
 
@@ -53,7 +54,10 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
         return max(0.05, min(t, 0.7))
     }
     private fun getCorrectedVecIterative(botPose: Pose, targetPose: Pose, velocity: Vector): Vector {
-        val r = Vector(Pose(targetPose.x-botPose.x, targetPose.y-botPose.y))
+        val r = Vector(
+            hypot(targetPose.x-botPose.x, targetPose.y-botPose.y),
+            atan2( botPose.y-targetPose.y,botPose.x-targetPose.x)
+        )
         var c = r
         repeat(ITERATIONS) {
             val t = getFlyTime(c.magnitude)
