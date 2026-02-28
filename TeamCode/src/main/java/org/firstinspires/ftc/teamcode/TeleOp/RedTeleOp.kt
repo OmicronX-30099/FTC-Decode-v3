@@ -36,7 +36,6 @@ class RedTeleOp: NextFTCOpMode() {
             true
         )
     }
-
     override fun onInit() { Shooter.reset() }
 
     override fun onStartButtonPressed() {
@@ -63,6 +62,8 @@ class RedTeleOp: NextFTCOpMode() {
                 .whenBecomesTrue { Shooter.flywheelAutoAim() }
             cross
                 .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose1 }
+            triangle
+                .whenBecomesTrue {Shooter.disableFuture()}
         }
         Gamepads.gamepad2 .apply {
             triangle

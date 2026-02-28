@@ -15,6 +15,7 @@ import kotlin.math.min
 
 object Shooter: SubsystemGroup(Turret, Flywheel) {
     private val shooterRGB: ServoEx = ServoEx("front_light",-0.1)
+    private var disabledFuture: Boolean = false
     private const val ITERATIONS: Int = 10
     var flywheelState: FlywheelState = FlywheelState.AUTO_AIM
         private set
@@ -31,19 +32,31 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
         flywheelState = FlywheelState.MANUAL
         Flywheel.targetVelocity = Flywheel.IDLE_VELOCITY
     }
+
+    fun disableFuture() {
+        disabledFuture = !disabledFuture
+    }
     fun flywheelAutoAim() { flywheelState = FlywheelState.AUTO_AIM }
 
     fun reset() { Flywheel.reset(); Turret.reset(); flywheelState == FlywheelState.AUTO_AIM }
     fun debug(): String = "Turret Data: \n${Turret.debug()} \nFlywheel Data: \n${Flywheel.debug()}"
 
     private fun updateTurret() {
-        val futureVec = getCorrectedVecIterative(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.turretGoalPose, follower.velocity)
-        Turret.targetAngle = calculateTurretAngle(futureVec)
+        if (!disabledFuture) {
+            val futureVec = getCorrectedVecIterative(
+                ROBOT.shooterPose(),
+                ROBOT.currAlliance.goalPoses.turretGoalPose,
+                follower.velocity
+            )
+            Turret.targetAngle = calculateTurretAngle(futureVec)
+        }
         Turret.update()
     }
     private fun updateFlywheel() {
-        val futureVec = getCorrectedVecIterative(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose, follower.velocity)
-        Flywheel.targetVelocity = calculateFlywheelVelocity(futureVec.magnitude)
+        if (!disabledFuture) {
+            val futureVec = getCorrectedVecIterative(ROBOT.shooterPose(), ROBOT.currAlliance.goalPoses.flywheelGoalPose, follower.velocity)
+            Flywheel.targetVelocity = calculateFlywheelVelocity(futureVec.magnitude)
+        }
         Flywheel.update()
     }
     private fun calculateFlywheelVelocity(d: Double) = ((0.019454 * d * d) + (2.007 * d) + 1102.62509)
