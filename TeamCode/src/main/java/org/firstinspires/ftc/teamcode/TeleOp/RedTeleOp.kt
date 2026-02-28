@@ -1,13 +1,13 @@
+@file:Suppress("PackageName")
+
 package org.firstinspires.ftc.teamcode.TeleOp
 
-import addSubsystems
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.extensions.pedro.PedroDriverControlled
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.hardware.driving.DriverControlledCommand
-import includePedro
 import org.firstinspires.ftc.teamcode.Constants.PedroConstants
 import org.firstinspires.ftc.teamcode.Systems.Load.Load
 import org.firstinspires.ftc.teamcode.Systems.Load.Rollers
@@ -18,6 +18,8 @@ import org.firstinspires.ftc.teamcode.Systems.Shooter.Turret
 import org.firstinspires.ftc.teamcode.Util.Alliance
 import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.Stage
+import org.firstinspires.ftc.teamcode.Util.addSubsystems
+import org.firstinspires.ftc.teamcode.Util.includePedro
 
 @TeleOp(name = "Red TeleOp", group = "Standard TeleOp")
 class RedTeleOp: NextFTCOpMode() {

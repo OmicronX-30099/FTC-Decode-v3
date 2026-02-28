@@ -1,3 +1,7 @@
+@file:Suppress("PackageName")
+
+package org.firstinspires.ftc.teamcode.Util
+
 import com.pedropathing.follower.Follower
 import com.qualcomm.robotcore.hardware.HardwareMap
 import dev.nextftc.core.components.BindingsComponent

@@ -1,3 +1,5 @@
+@file:Suppress("PackageName")
+
 package org.firstinspires.ftc.teamcode.Systems.Shooter
 
 import com.qualcomm.robotcore.hardware.VoltageSensor
