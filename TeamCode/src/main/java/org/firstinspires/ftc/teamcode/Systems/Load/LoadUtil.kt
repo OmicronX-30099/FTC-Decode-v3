@@ -43,7 +43,7 @@ object BilinearIndexMachine: Subsystem {
 }
 
 object BreakBeam: Subsystem {
-    val bb by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb") }
+    val bb: DigitalChannel by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb") }
     val bbTrigger = button { !bb.state }
 
     var count = 0.0
