@@ -14,9 +14,9 @@ import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.Stage
 
 object Rollers: Subsystem {
-    private val transferMotor: MotorEx = MotorEx("t")
-    private val intakeMotor: MotorEx = MotorEx("i")
-    private val shooterGateServo: ServoEx = ServoEx("sg",-0.1)
+    private val transferMotor: MotorEx = MotorEx("")
+    private val intakeMotor: MotorEx = MotorEx("")
+    private val shooterGateServo: ServoEx = ServoEx("",-0.1)
 
     override fun initialize() { lockShooter() }
 
@@ -31,16 +31,16 @@ object Rollers: Subsystem {
 }
 
 object BilinearIndexMachine: Subsystem {
-    private val leftModuleServo: ServoEx = ServoEx("lm",-0.1)
-    private val rightModuleServo: ServoEx = ServoEx("rm",-0.1)
-    private val transferGate: ServoEx = ServoEx("transfer_gate",-0.1)
+    private val leftModuleServo: ServoEx = ServoEx("",-0.1)
+    private val rightModuleServo: ServoEx = ServoEx("",-0.1)
+    private val transferGate: ServoEx = ServoEx("",-0.1)
 
     fun unlockTransfer() { transferGate.position = 0.3 }
     fun lockTransfer() { transferGate.position = 0.6 }
 
-    fun transferLeft() {leftModuleServo.position = 0.95 .also { rightModuleServo.position = 0.05 } }
-    fun transferRight() {leftModuleServo.position = 0.05 .also { rightModuleServo.position = 0.95 } }
-    fun transferMiddle() {leftModuleServo.position = 0.95 .also { rightModuleServo.position = 0.05 } }
+    fun transferLeft() {leftModuleServo.position = 1.0 .also { rightModuleServo.position = 0.0 } }
+    fun transferRight() {leftModuleServo.position = 0.0 .also { rightModuleServo.position = 1.0 } }
+    fun transferMiddle() {leftModuleServo.position = 0.0 .also { rightModuleServo.position = 0.0 } }
     override fun initialize() { transferMiddle(); unlockTransfer() }
 }
 
