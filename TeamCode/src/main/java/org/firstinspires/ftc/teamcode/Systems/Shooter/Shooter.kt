@@ -1,10 +1,9 @@
-package org.firstinspires.ftc.teamcode.Systems
+package org.firstinspires.ftc.teamcode.Systems.Shooter
 
 import com.pedropathing.geometry.Pose
 import com.pedropathing.math.Vector
 import dev.nextftc.core.subsystems.SubsystemGroup
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
-import dev.nextftc.hardware.impl.ServoEx
 import org.firstinspires.ftc.teamcode.Util.ROBOT
 import kotlin.math.atan2
 import kotlin.math.max

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Systems
+package org.firstinspires.ftc.teamcode.Systems.Shooter
 
 import com.qualcomm.robotcore.hardware.VoltageSensor
 import dev.nextftc.core.subsystems.Subsystem
