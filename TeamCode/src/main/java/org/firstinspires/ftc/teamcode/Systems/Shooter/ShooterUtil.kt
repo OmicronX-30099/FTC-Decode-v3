@@ -58,7 +58,7 @@ object Turret: Subsystem {
 internal fun normalizeAngle(angDeg: Double): Double {
     var a = angDeg
     while (a < 0.0) { a += 360.0 }
-    while (a > 180.0) { a -= 360.0 }
+    if (a > 180.0) { a -= 360.0 }
     return a
 }
 
