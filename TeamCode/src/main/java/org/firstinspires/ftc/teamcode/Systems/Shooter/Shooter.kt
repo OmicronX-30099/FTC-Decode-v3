@@ -6,12 +6,14 @@ import com.pedropathing.geometry.Pose
 import com.pedropathing.math.Vector
 import dev.nextftc.core.subsystems.SubsystemGroup
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
+import dev.nextftc.hardware.impl.ServoEx
 import org.firstinspires.ftc.teamcode.Util.ROBOT
 import kotlin.math.atan2
 import kotlin.math.max
 import kotlin.math.min
 
 object Shooter: SubsystemGroup(Turret, Flywheel) {
+    private val shooterRGB: ServoEx = ServoEx("",-0.1)
     private const val ITERATIONS: Int = 10
     var flywheelState: FlywheelState = FlywheelState.AUTO_AIM
         private set
@@ -21,6 +23,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
             FlywheelState.AUTO_AIM -> { updateFlywheel() }
             FlywheelState.MANUAL -> { Flywheel.update() }
         }
+        shooterRGB.position = if (Flywheel.atTarget()) { 0.47 } else { 0.28 }
         updateTurret()
     }
     fun flywheelManual() {
