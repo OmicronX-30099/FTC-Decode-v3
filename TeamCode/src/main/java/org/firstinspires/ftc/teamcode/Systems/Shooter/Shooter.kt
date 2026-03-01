@@ -32,7 +32,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
         flywheelState = FlywheelState.MANUAL
         Flywheel.targetVelocity = Flywheel.IDLE_VELOCITY
     }
-    fun enablePredictive() { flywheelState == FlywheelState.PREDICTIVE_AUTO_AIM }
+    fun enablePredictive() { flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM }
     fun flywheelAutoAim() { flywheelState = FlywheelState.AUTO_AIM }
 
     fun reset() { Flywheel.reset(); Turret.reset(); flywheelState == FlywheelState.AUTO_AIM }
