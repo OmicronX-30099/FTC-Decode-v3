@@ -41,7 +41,6 @@ object Flywheel: Subsystem {
 object Turret: Subsystem {
     private val turretServo1: ServoEx = ServoEx("lt")
     private val turretServo2: ServoEx = ServoEx("ft")
-    private val turretServos: ServoGroup = ServoGroup(turretServo1, turretServo2)
 
     private const val GEAR_RATIO: Double = 0.9375
     private const val SERVO_RANGE: Double = 360.0
@@ -51,9 +50,12 @@ object Turret: Subsystem {
     var targetAngle: Double = 0.0
 
     fun offset(by: Double) { offset += by }
-    fun update() { turretServos.position = (normalizeAngle(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE) + 0.5) }
+    fun update() {
+        turretServo1.position = (normalizeAngle(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE) + 0.5) + 0.00130571
+        turretServo2.position = (normalizeAngle(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE) + 0.5) - 0.00130571
+    }
     fun reset() { offset = 0.0; targetAngle = 0.0 }
-    fun debug(): String = "Target Angle = $targetAngle \nOffset = $offset \nCurrent Position = ${turretServos.position}"
+    fun debug(): String = "Target Angle = $targetAngle \nOffset = $offset \nCurrent Position = ${turretServo1.position - 0.00130571}"
 }
 
 internal fun normalizeAngle(angDeg: Double): Double {
