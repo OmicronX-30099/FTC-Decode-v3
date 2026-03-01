@@ -50,44 +50,44 @@ class Red18BallUnsorted(): NextFTCOpMode() {
                 InstantCommand { Rollers.run(1.0,0.25) }
             ),
             ParallelGroup(FollowPath(paths[2]), //shoot second spike mark
-                InstantCommand { Rollers.run(0.0,0.5)},
+                InstantCommand { Rollers.run(0.0,0.0)},
             ),
             Delay(0.2),
             Load . shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[3],true,1.0), //intake gate
-                InstantCommand { Rollers.run(0.3, 1.0) }
+                InstantCommand { Rollers.run(1.0, 0.25) }
             ),
-            Delay(0.4),
+            Delay(0.2),
             ParallelGroup(FollowPath(paths[4],true,1.0), //shoot gate
-                InstantCommand { Rollers.run(0.0,0.5)},
+                InstantCommand { Rollers.run(0.0,0.0)},
             ),
             Delay(0.2),
             Load . shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[5]), //intake first spike
-                InstantCommand { Rollers.run(0.3, 1.0) }
+                InstantCommand { Rollers.run(1.0, 0.25) }
             ),
-            InstantCommand { Rollers.run(0.0,0.5)},
+            InstantCommand { Rollers.run(0.0,0.0)},
             FollowPath(paths[6]), //shoot first spike
             Delay(0.2),
             Load . shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[3],true,1.0), //intake gate
-                InstantCommand { Rollers.run(0.3, 1.0) }
+                InstantCommand { Rollers.run(1.0, 0.25) }
             ),
-            Delay(0.4),
+            Delay(0.2),
             ParallelGroup(
                 FollowPath(paths[4],true,1.0), //shoot gate
-                InstantCommand { Rollers.run(0.0,0.5)},
+                InstantCommand { Rollers.run(0.0,0.0)},
             ),
             Delay(0.2),
             Load . shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[7]), //intake third spike
-                InstantCommand { Rollers.run(0.3, 1.0) }
+                InstantCommand { Rollers.run(1.0, 0.25) }
             ),
-            InstantCommand { Rollers.run(0.0,0.5)},
+            InstantCommand { Rollers.run(0.0,0.0)},
             FollowPath(paths[8]), //shoot third spike
             Delay(0.2),
             Load . shootTripleCommand,

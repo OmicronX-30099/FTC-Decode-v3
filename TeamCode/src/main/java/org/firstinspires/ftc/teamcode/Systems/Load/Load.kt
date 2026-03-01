@@ -13,7 +13,7 @@ object Load: SubsystemGroup(BilinearIndexMachine, Rollers, BreakBeam) {
     val shootTripleCommand: Command = IfElseCommand(
         { ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.flywheelGoalPose) > 110.0},
         shootCommand(1.1,0.6,0.7),
-        shootCommand(0.6, 1.0, 1.0)
+        shootCommand(0.65, 1.0, 1.0)
     )
 
     fun shootCommand(waitTime: Double, tPow: Double, iPow: Double): Command =

@@ -44,7 +44,7 @@ object Turret: Subsystem {
     private val turretServos: ServoGroup = ServoGroup(turretServo1, turretServo2)
 
     private const val GEAR_RATIO: Double = 0.9375
-    private const val SERVO_RANGE: Double = 359.0
+    private const val SERVO_RANGE: Double = 360.0
 
     var offset: Double = 0.0
         private set
