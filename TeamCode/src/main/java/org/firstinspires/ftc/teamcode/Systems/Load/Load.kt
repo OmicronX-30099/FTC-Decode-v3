@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.Util.ROBOT
 object Load: SubsystemGroup(BilinearIndexMachine, Rollers, BreakBeam) {
     val shootTripleCommand: Command = IfElseCommand(
         { ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.flywheelGoalPose) > 110.0},
-        shootCommand(1.0,0.7,0.7),
+        shootCommand(1.1,0.6,0.7),
         shootCommand(0.6, 1.0, 1.0)
     )
 
