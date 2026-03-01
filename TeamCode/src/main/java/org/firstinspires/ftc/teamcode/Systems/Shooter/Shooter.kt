@@ -15,18 +15,19 @@ import kotlin.math.max
 import kotlin.math.min
 
 object Shooter: SubsystemGroup(Turret, Flywheel) {
-    private val shooterRGB: ServoEx = ServoEx("front_light",-0.1)
+    private val shooterFrontRGB: ServoEx = ServoEx("front_light",-0.1)
+    private val shooterMiddleRGB: ServoEx = ServoEx("back_light", -0.1)
     private const val ITERATIONS: Int = 10
     var flywheelState: FlywheelState = FlywheelState.PREDICTIVE_AUTO_AIM
         private set
 
     fun update() {
         when (flywheelState) {
-            FlywheelState.PREDICTIVE_AUTO_AIM -> { updateFlywheel(true); updateTurret(true) }
-            FlywheelState.AUTO_AIM -> { updateFlywheel(); updateTurret() }
-            FlywheelState.MANUAL -> { Flywheel.update() }
+            FlywheelState.PREDICTIVE_AUTO_AIM -> { updateFlywheel(true); updateTurret(true); shooterMiddleRGB.position = 0.722 }
+            FlywheelState.AUTO_AIM -> { updateFlywheel(); updateTurret(); shooterMiddleRGB.position = 0.611 }
+            FlywheelState.MANUAL -> { Flywheel.update(); shooterMiddleRGB.position = 0.0 }
         }
-        shooterRGB.position = if (Flywheel.atTarget()) { 0.47 } else { 0.28 }
+        shooterFrontRGB.position = if (Flywheel.atTarget()) { 0.47 } else { 0.28 }
     }
     fun flywheelManual() {
         flywheelState = FlywheelState.MANUAL
