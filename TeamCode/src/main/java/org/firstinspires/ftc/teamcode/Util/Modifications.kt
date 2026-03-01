@@ -13,9 +13,11 @@ import dev.nextftc.extensions.pedro.PedroComponent
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.ftc.components.BulkReadComponent
 import dev.nextftc.ftc.components.LoopTimeComponent
+import kotlin.math.atan2
+import kotlin.math.hypot
 
 fun NextFTCOpMode.addSubsystems(vararg subsystems: Subsystem) =
     addComponents(BindingsComponent, BulkReadComponent, LoopTimeComponent(), SubsystemComponent(*subsystems))
 fun NextFTCOpMode.includePedro(followerFactory: (HardwareMap) -> Follower) =
     addComponents(PedroComponent(followerFactory))
-fun Pose.genVector(otherPose: Pose): Vector = Vector(Pose(this.x-otherPose.x,this.y - otherPose.y))
+fun Pose.genVector(otherPose: Pose): Vector = Vector(hypot(otherPose.x-this.x, otherPose.y-this.y),atan2(this.y-otherPose.y,this.x-otherPose.x))
