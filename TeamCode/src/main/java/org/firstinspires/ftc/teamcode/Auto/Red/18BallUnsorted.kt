@@ -15,6 +15,7 @@ import dev.nextftc.ftc.NextFTCOpMode
 import org.firstinspires.ftc.teamcode.Constants.PedroConstants
 import org.firstinspires.ftc.teamcode.Systems.Load.Load
 import org.firstinspires.ftc.teamcode.Systems.Load.Rollers
+import org.firstinspires.ftc.teamcode.Systems.Shooter.FlywheelState
 import org.firstinspires.ftc.teamcode.Systems.Shooter.Shooter
 import org.firstinspires.ftc.teamcode.Util.Alliance
 import org.firstinspires.ftc.teamcode.Util.ROBOT
@@ -33,6 +34,7 @@ class Unsorted15AutoRed(): NextFTCOpMode() {
 
     override fun onInit() {
         ROBOT.currAlliance = Alliance.RED
+        Shooter.enableAutoAim()
         ROBOT.currStage = Stage.AUTONOMOUS
         follower.setStartingPose(Pose(34.0,132.9,Math.toRadians(-180.0)).mirror())
     }
