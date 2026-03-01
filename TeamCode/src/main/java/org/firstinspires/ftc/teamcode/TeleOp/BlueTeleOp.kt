@@ -63,7 +63,7 @@ class BlueTeleOp: NextFTCOpMode() {
                 .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose1 }
             triangle
                 .toggleOnBecomesTrue()
-                .whenBecomesTrue { Shooter.flywheelAutoAim() }
+                .whenBecomesTrue { Shooter.enableAutoAim() }
                 .whenBecomesFalse { Shooter.enablePredictive() }
         }
         Gamepads.gamepad2 .apply {
