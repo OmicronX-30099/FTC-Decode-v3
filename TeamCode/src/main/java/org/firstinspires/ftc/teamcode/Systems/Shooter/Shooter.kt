@@ -48,7 +48,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
                     follower.velocity
                 )
             } else {
-                ROBOT.currAlliance.turretGoalPose.genVector(ROBOT.shooterPose())
+                ROBOT.shooterPose().genVector(ROBOT.currAlliance.turretGoalPose)
             }
         Turret.targetAngle = calculateTurretAngle(vec)
         Turret.update()
