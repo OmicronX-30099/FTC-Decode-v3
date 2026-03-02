@@ -5,6 +5,7 @@ import com.pedropathing.geometry.Pose
 import com.pedropathing.paths.PathChain
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import dev.nextftc.core.commands.Command
 import dev.nextftc.core.commands.delays.Delay
 import dev.nextftc.core.commands.groups.ParallelGroup
 import dev.nextftc.core.commands.groups.SequentialGroup
@@ -39,7 +40,36 @@ class SortedAuto: NextFTCOpMode() {
         ROBOT.currAlliance = Alliance.RED
     }
 
-    fun intake(path: PathChain, initDelay: Double) = SequentialGroup(
+
+    val LMR: Command = SequentialGroup(
+        instant { Rollers.unlockShooter(); BilinearIndexMachine.unlockTransfer(); Rollers.run(0.6,0.6) },
+        Delay(1.0),
+        instant { BilinearIndexMachine.toLeft() },
+        Delay(0.5),
+        instant {
+            Rollers.stop()
+            Rollers.lockShooter()
+        }
+    )
+
+
+    override fun onStartButtonPressed() {
+        follower.setStartingPose(Pose(34.0,132.9,Math.toRadians(-180.0)).mirror())
+        buildPaths()
+        val main = SequentialGroup(
+            FollowPath(paths[0]),
+            Delay(0.4),
+            Load.shootTripleCommand,
+            sortedIntake(paths[1],0.6),
+            Delay(0.1),
+            FollowPath(paths[2]),
+            LMR
+        )
+        main.schedule()
+
+    }
+
+    fun sortedIntake(path: PathChain, initDelay: Double) = SequentialGroup(
         Delay(initDelay),
         ParallelGroup(
             FollowPath(path),
@@ -57,21 +87,6 @@ class SortedAuto: NextFTCOpMode() {
         instant { Rollers.intake(0.0)}
     )
 
-    override fun onStartButtonPressed() {
-        follower.setStartingPose(Pose(34.0,132.9,Math.toRadians(-180.0)).mirror())
-        buildPaths()
-        val main = SequentialGroup(
-            FollowPath(paths[0]),
-            Delay(0.4),
-            Load.shootTripleCommand,
-            intake(paths[1],0.6),
-            Delay(0.1),
-            FollowPath(paths[2]),
-            Load.LMR
-        )
-        main.schedule()
-
-    }
     fun buildPaths() {
         val preload = follower.pathBuilder().addPath(
             BezierLine(
