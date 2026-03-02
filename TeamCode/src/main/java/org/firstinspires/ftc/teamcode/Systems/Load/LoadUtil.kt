@@ -2,6 +2,7 @@
 
 package org.firstinspires.ftc.teamcode.Systems.Load
 
+import android.util.Log
 import com.qualcomm.robotcore.hardware.DigitalChannel
 import dev.nextftc.bindings.button
 import dev.nextftc.core.commands.delays.Delay
@@ -14,6 +15,9 @@ import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.Stage
 
 object Rollers: Subsystem {
+    init {
+        Log.d("Rollers", "Initializing")
+    }
     private val transferMotor: MotorEx = MotorEx("t").reversed()
     private val intakeMotor: MotorEx = MotorEx("i")
     private val shooterGateServo: ServoEx = ServoEx("sg",-0.1)
@@ -31,6 +35,9 @@ object Rollers: Subsystem {
 }
 
 object BilinearIndexMachine: Subsystem {
+    init {
+        Log.d("BIM", "Initializing")
+    }
     private val leftModuleServo: ServoEx = ServoEx("lm",-0.1)
     private val rightModuleServo: ServoEx = ServoEx("rm",-0.1)
     private val transferGate: ServoEx = ServoEx("transfer_gate",-0.1)
@@ -45,6 +52,9 @@ object BilinearIndexMachine: Subsystem {
 }
 
 object BreakBeam: Subsystem {
+    init {
+        Log.d("BB", "Initializing")
+    }
     val bb: DigitalChannel by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb") }
     val bbTrigger = button { !bb.state }
 
