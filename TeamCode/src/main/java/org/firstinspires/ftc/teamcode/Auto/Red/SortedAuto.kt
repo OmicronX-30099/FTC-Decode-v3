@@ -52,23 +52,6 @@ class SortedAuto: NextFTCOpMode() {
         }
     )
 
-
-    override fun onStartButtonPressed() {
-        follower.setStartingPose(Pose(34.0,132.9,Math.toRadians(-180.0)).mirror())
-        buildPaths()
-        val main = SequentialGroup(
-            FollowPath(paths[0]),
-            Delay(0.4),
-            Load.shootTripleCommand,
-            sortedIntake(paths[1],0.6),
-            Delay(0.1),
-            FollowPath(paths[2]),
-            LMR
-        )
-        main.schedule()
-
-    }
-
     fun sortedIntake(path: PathChain, initDelay: Double) = SequentialGroup(
         Delay(initDelay),
         ParallelGroup(
@@ -86,6 +69,22 @@ class SortedAuto: NextFTCOpMode() {
         Delay(0.5),
         instant { Rollers.intake(0.0)}
     )
+
+    override fun onStartButtonPressed() {
+        follower.setStartingPose(Pose(34.0,132.9,Math.toRadians(-180.0)).mirror())
+        buildPaths()
+        val main = SequentialGroup(
+            FollowPath(paths[0]),
+            Delay(0.4),
+            Load.shootTripleCommand,
+            sortedIntake(paths[1],0.6),
+            Delay(0.1),
+            FollowPath(paths[2]),
+            LMR
+        )
+        main.schedule()
+
+    }
 
     fun buildPaths() {
         val preload = follower.pathBuilder().addPath(
