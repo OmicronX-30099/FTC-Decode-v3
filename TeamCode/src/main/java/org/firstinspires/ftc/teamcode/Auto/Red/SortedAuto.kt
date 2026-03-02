@@ -66,8 +66,8 @@ class SortedAuto: NextFTCOpMode() {
             Load.shootTripleCommand,
             intake(paths[1],0.6),
             Delay(0.1),
-            /*FollowPath(paths[2]),
-            Load.LMR*/
+            FollowPath(paths[2]),
+            Load.LMR
         )
         main.schedule()
 

@@ -16,7 +16,7 @@ object Load: SubsystemGroup(BilinearIndexMachine, Rollers, BreakBeam) {
         shootCommand(0.65, 0.9, 0.9)
     )
 
-    /*val LMR: Command = SequentialGroup(
+    val LMR: Command = SequentialGroup(
         instant { Rollers.unlockShooter(); BilinearIndexMachine.unlockTransfer(); Rollers.run(0.6,0.6) },
         Delay(1.0),
         instant { BilinearIndexMachine.toLeft() },
@@ -25,8 +25,7 @@ object Load: SubsystemGroup(BilinearIndexMachine, Rollers, BreakBeam) {
             Rollers.stop()
             Rollers.lockShooter()
         }
-
-    )*/
+    )
 
     fun shootCommand(waitTime: Double, tPow: Double, iPow: Double): Command =
         SequentialGroup(
