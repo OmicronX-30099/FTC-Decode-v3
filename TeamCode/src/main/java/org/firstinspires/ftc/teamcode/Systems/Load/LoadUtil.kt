@@ -38,9 +38,9 @@ object BilinearIndexMachine: Subsystem {
     fun unlockTransfer() { transferGate.position = 0.3 }
     fun lockTransfer() { transferGate.position = 0.6 }
 
-    fun transferLeft() {leftModuleServo.position = 0.95 .also { rightModuleServo.position = 0.05 } }
-    fun transferRight() {leftModuleServo.position = 0.05 .also { rightModuleServo.position = 0.95 } }
-    fun transferMiddle() {leftModuleServo.position = 0.95 .also { rightModuleServo.position = 0.05 } }
+    fun toLeft() {leftModuleServo.position = 0.1 .also { rightModuleServo.position = 0.06 } }
+    fun toRight() {leftModuleServo.position = 0.95 .also { rightModuleServo.position = 0.93 } }
+    fun split() {leftModuleServo.position = 0.1 .also { rightModuleServo.position = 0.93 } }
     override fun initialize() { unlockTransfer() }
 }
 
