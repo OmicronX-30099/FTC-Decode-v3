@@ -67,7 +67,7 @@ class SortedAuto: NextFTCOpMode() {
         Delay(0.6),
         instant { Rollers.intake(0.7,) },
         Delay(0.5),
-        instant { Rollers.intake(0.0)}
+        instant { Rollers.stop() }
     )
 
     override fun onStartButtonPressed() {
