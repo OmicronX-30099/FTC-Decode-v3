@@ -78,7 +78,7 @@ class SortedAuto: NextFTCOpMode() {
             FollowPath(paths[0]),
             Delay(0.4),
             Load.shootTripleCommand,
-            sortedIntake(paths[1],0.6),
+            sortedIntake(paths[1],1.0),
             Delay(0.1),
             FollowPath(paths[2]),
             Delay(0.2),
