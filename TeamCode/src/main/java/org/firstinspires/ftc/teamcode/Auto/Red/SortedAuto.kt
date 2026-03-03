@@ -56,15 +56,12 @@ class SortedAuto: NextFTCOpMode() {
     fun sortedIntake(path: PathChain, initDelay: Double) = SequentialGroup(
         ParallelGroup(
             FollowPath(path),
-            SequentialGroup(
-                Delay(initDelay),
-                instant {
-                    Rollers.intake(0.55)
-                    Rollers.lockShooter()
-                    BilinearIndexMachine.lockTransfer()
-                    BilinearIndexMachine.toLeft()
-                }
-            )
+            instant {
+                Rollers.intake(0.55)
+                Rollers.lockShooter()
+                BilinearIndexMachine.lockTransfer()
+                BilinearIndexMachine.toLeft()
+            }
         ),
         instant { BilinearIndexMachine.toRight(); Rollers.stop() },
         Delay(0.6),
