@@ -17,7 +17,7 @@ import kotlin.math.min
 object Shooter: SubsystemGroup(Turret, Flywheel) {
     private val shooterFrontRGB: ServoEx = ServoEx("front_light",-0.1)
     private val shooterMiddleRGB: ServoEx = ServoEx("back_light", -0.1)
-    private const val ITERATIONS: Int = 10
+    private const val ITERATIONS: Int = 5
     var flywheelState: FlywheelState = FlywheelState.PREDICTIVE_AUTO_AIM
         private set
 
@@ -64,7 +64,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
         Flywheel.targetVelocity = calculateFlywheelVelocity(d)
         Flywheel.update()
     }
-    private fun calculateFlywheelVelocity(d: Double) = ((0.019454 * d * d) + (2.007 * d) + 1102.62509 + 100.0)
+    private fun calculateFlywheelVelocity(d: Double) = ((0.019454 * d * d) + (2.007 * d) + 1102.62509 + 20.0)
     private fun calculateTurretAngle(vec: Vector) = Math.toDegrees(atan2(vec.yComponent, vec.xComponent) - follower.pose.heading)
 
     private fun getFlyTime(d: Double): Double {

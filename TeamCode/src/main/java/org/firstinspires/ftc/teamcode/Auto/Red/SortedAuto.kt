@@ -54,19 +54,22 @@ class SortedAuto: NextFTCOpMode() {
     )
 
     fun sortedIntake(path: PathChain, initDelay: Double) = SequentialGroup(
+        instant {
+            Rollers.lockShooter()
+            BilinearIndexMachine.lockTransfer()
+            BilinearIndexMachine.toLeft()
+        },
+        Delay(initDelay),
         ParallelGroup(
             FollowPath(path),
             instant {
-                Rollers.intake(0.55)
-                Rollers.lockShooter()
-                BilinearIndexMachine.lockTransfer()
-                BilinearIndexMachine.toLeft()
+                Rollers.intake(0.6)
             }
         ),
         instant { BilinearIndexMachine.toRight(); Rollers.stop() },
-        Delay(0.6),
-        instant { Rollers.intake(0.7) },
-        Delay(0.5),
+        Delay(0.7),
+        instant { Rollers.intake(1.0) },
+        Delay(0.8), // ok then lets fix the gate path
         instant { Rollers.stop() }
     )
 
@@ -77,13 +80,14 @@ class SortedAuto: NextFTCOpMode() {
             FollowPath(paths[0]),
             Delay(0.4),
             Load.shootTripleCommand,
-            sortedIntake(paths[1],1.0),
+            sortedIntake(paths[1],0.5),
             Delay(0.1),
+            // open gate, we gotta fix the path
             FollowPath(paths[2]),
-            Delay(0.2),
+            /*Delay(0.2),
             FollowPath(paths[3]),
             LMR,
-            sortedIntake(paths[4], 1.2),
+            sortedIntake(paths[4], 1.2),*/
 
         )
         main.schedule()
@@ -96,12 +100,11 @@ class SortedAuto: NextFTCOpMode() {
             .setConstantHeadingInterpolation(Math.toRadians(90.0))
             .build()
         val intakeSpike1 = follower.pathBuilder()
-            .addPath(
-            BezierLine(Pose(82.750, 82.250),Pose(121.750, 82.250)))
+            .addPath(BezierLine(Pose(82.750, 82.250),Pose(123.750, 82.250)))
             .setConstantHeadingInterpolation(Math.toRadians(0.0))
             .build()
-        val openGate = follower.pathBuilder().addPath(
-            BezierCurve(Pose(121.750, 82.250),Pose(127.000, 82.250),Pose(127.000, 76.000)))
+        val openGate = follower.pathBuilder()
+            .addPath(BezierCurve(Pose(123.750, 82.250),Pose(127.000, 82.250),Pose(127.000, 76.000)))
             .setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(-80.0))
             .build()
         val shootSet1 = follower.pathBuilder()
