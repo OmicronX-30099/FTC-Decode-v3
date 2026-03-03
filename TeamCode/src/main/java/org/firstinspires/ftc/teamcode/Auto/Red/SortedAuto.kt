@@ -72,7 +72,7 @@ class SortedAuto: NextFTCOpMode() {
     )
 
     override fun onStartButtonPressed() {
-        follower.setStartingPose(Pose(34.0,132.9,Math.toRadians(-180.0)).mirror())
+        follower.setStartingPose(Pose(79.750, 7.500,Math.toRadians(-180.0)).mirror())
         buildPaths()
         val main = SequentialGroup(
             FollowPath(paths[0]),
