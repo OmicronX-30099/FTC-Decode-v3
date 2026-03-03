@@ -69,7 +69,7 @@ class SortedAuto: NextFTCOpMode() {
         instant { BilinearIndexMachine.toRight(); Rollers.stop() },
         Delay(0.7),
         instant { Rollers.intake(1.0) },
-        Delay(0.8), // ok then lets fix the gate path
+        Delay(1.0),
         instant { Rollers.stop() }
     )
 
@@ -81,7 +81,6 @@ class SortedAuto: NextFTCOpMode() {
             Delay(0.4),
             Load.shootTripleCommand,
             sortedIntake(paths[1],0.5),
-            Delay(0.1),
             FollowPath(paths[2]),
             /*Delay(0.2),
             FollowPath(paths[3]),
