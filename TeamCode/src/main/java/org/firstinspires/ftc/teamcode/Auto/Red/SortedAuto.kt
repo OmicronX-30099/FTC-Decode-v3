@@ -103,7 +103,7 @@ class SortedAuto: NextFTCOpMode() {
             .setConstantHeadingInterpolation(Math.toRadians(0.0))
             .build()
         val openGate = follower.pathBuilder()
-            .addPath(BezierCurve(Pose(123.750, 82.250),Pose(127.000, 82.250),Pose(124.250, 77.250)))
+            .addPath(BezierCurve(Pose(123.750, 82.250),Pose(120.000, 79.750),Pose(124.250, 77.250)))
             .setConstantHeadingInterpolation(Math.toRadians(0.0))
             .build()
         val shootSet1 = follower.pathBuilder()
