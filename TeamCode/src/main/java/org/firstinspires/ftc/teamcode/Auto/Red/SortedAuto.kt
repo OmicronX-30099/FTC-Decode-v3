@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.Auto.Red
 
+import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
 import com.pedropathing.paths.PathChain
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.core.commands.Command
 import dev.nextftc.core.commands.delays.Delay
 import dev.nextftc.core.commands.groups.ParallelGroup
@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.Stage
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.includePedro
-import kotlin.math.PI
+
 
 @Autonomous(name = "Sorted Red Auto", group = "Autos", preselectTeleOp = "Red TeleOp")
 class SortedAuto: NextFTCOpMode() {
@@ -33,6 +33,7 @@ class SortedAuto: NextFTCOpMode() {
     }
 
     var paths: Array<PathChain> = arrayOf()
+    var altpaths: Array<PathChain> = arrayOf()
 
     override fun onInit() {
         Shooter.reset()
@@ -65,7 +66,7 @@ class SortedAuto: NextFTCOpMode() {
         ),
         instant { BilinearIndexMachine.toRight(); Rollers.stop() },
         Delay(0.6),
-        instant { Rollers.intake(0.7,) },
+        instant { Rollers.intake(0.7) },
         Delay(0.5),
         instant { Rollers.stop() }
     )
@@ -80,6 +81,8 @@ class SortedAuto: NextFTCOpMode() {
             sortedIntake(paths[1],0.6),
             Delay(0.1),
             FollowPath(paths[2]),
+            Delay(0.2),
+            FollowPath(paths[3]),
             LMR
         )
         main.schedule()
@@ -87,6 +90,62 @@ class SortedAuto: NextFTCOpMode() {
     }
 
     fun buildPaths() {
+        val shootPreload = follower.pathBuilder()
+            .addPath(BezierCurve(Pose(79.750, 7.500),Pose(100.000, 6.000),Pose(82.750, 82.250)))
+            .setConstantHeadingInterpolation(Math.toRadians(90.0))
+            .build()
+        val intakeSpike1 = follower.pathBuilder()
+            .addPath(
+            BezierLine(Pose(82.750, 82.250),Pose(121.750, 82.250)))
+            .setConstantHeadingInterpolation(Math.toRadians(0.0))
+            .build()
+        val openGate = follower.pathBuilder().addPath(
+            BezierCurve(Pose(121.750, 82.250),Pose(127.000, 82.250),Pose(127.000, 76.000)))
+            .setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(-80.0))
+            .build()
+        val shootSet1 = follower.pathBuilder()
+            .addPath(BezierLine(Pose(127.000, 76.000),Pose(82.750, 82.250)))
+            .setLinearHeadingInterpolation(Math.toRadians(-80.0), Math.toRadians(-10.0))
+            .build()
+        val intakeSpike2 = follower.pathBuilder()
+            .addPath(BezierLine(Pose(82.750, 82.250),Pose(100.750, 35.250)))
+            .setLinearHeadingInterpolation(Math.toRadians(-70.0), Math.toRadians(0.0))
+            .addPath(BezierLine(Pose(100.750, 35.250),Pose(121.750, 35.250)))
+            .setConstantHeadingInterpolation(Math.toRadians(0.0))
+            .build()
+        val shootSet2 = follower.pathBuilder()
+            .addPath(BezierCurve(Pose(121.750, 35.250),Pose(98.700, 57.000),Pose(82.750, 82.250)))
+            .setTangentHeadingInterpolation()
+            .setReversed()
+            .build()
+        val IntakeSpike3 = follower.pathBuilder()
+            .addPath(BezierLine(Pose(82.750, 82.250),Pose(100.750, 58.750)))
+            .setLinearHeadingInterpolation(Math.toRadians(-53.0), Math.toRadians(0.0))
+            .addPath(BezierLine(Pose(100.750, 58.750),Pose(121.750, 58.750)))
+            .setConstantHeadingInterpolation(Math.toRadians(0.0))
+            .build()
+        val shootSet3 = follower.pathBuilder()
+            .addPath(BezierLine(Pose(121.750, 58.750),Pose(82.750, 82.250)))
+            .setTangentHeadingInterpolation()
+            .setReversed()
+            .build()
+        val leave = follower.pathBuilder()
+            .addPath(BezierLine(Pose(82.750, 82.250),Pose(118.000, 66.600)))
+            .setConstantHeadingInterpolation(Math.toRadians(-31.0))
+            .build()
+
+        paths += shootPreload
+        paths += intakeSpike1
+        paths += openGate
+        paths += shootSet1
+        paths += intakeSpike2
+        paths += shootSet2
+        paths += IntakeSpike3
+        paths += shootSet3
+        paths += leave
+    }
+
+    fun buildAlt() {
         val preload = follower.pathBuilder().addPath(
             BezierLine(
                 Pose(34.000, 132.900).mirror(),
@@ -106,9 +165,9 @@ class SortedAuto: NextFTCOpMode() {
             .addPath(BezierLine(Pose(23.5*4.5+16.0,23.5*3.5), Pose(23.5*4.5-23.0, 23.5*3.5)))
             .setConstantHeadingInterpolation(0.0)
             .build()
-        paths += preload
-        paths += intake1
-        paths += shoot1
+        altpaths += preload
+        altpaths += intake1
+        altpaths += shoot1
     }
 
     override fun onUpdate() {
