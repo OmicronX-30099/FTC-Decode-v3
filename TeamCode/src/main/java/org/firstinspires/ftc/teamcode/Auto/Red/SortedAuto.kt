@@ -82,7 +82,6 @@ class SortedAuto: NextFTCOpMode() {
             Load.shootTripleCommand,
             sortedIntake(paths[1],0.5),
             Delay(0.1),
-            // open gate, we gotta fix the path
             FollowPath(paths[2]),
             /*Delay(0.2),
             FollowPath(paths[3]),
