@@ -67,7 +67,15 @@ class SortedAuto: NextFTCOpMode() {
         Delay(0.9),
         instant { Rollers.stop() }
     )
-    val MLR: Command = SequentialGroup()
+    val MLR: Command = SequentialGroup(
+        instant { Rollers.unlockShooter(); BilinearIndexMachine.unlockTransfer(); Rollers.run(1.0,0.7); BilinearIndexMachine.split() },
+        Delay(0.8),
+        instant { BilinearIndexMachine.toLeft() },
+        Delay(0.6),
+        instant { BilinearIndexMachine.toRight() },
+        Delay(0.7),
+        instant { Rollers.stop() }
+    )
 
     fun straightIntake(path: PathChain) = SequentialGroup(
         ParallelGroup(
