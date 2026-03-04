@@ -42,10 +42,10 @@ object BilinearIndexMachine: Subsystem {
     private val rightModuleServo: ServoEx = ServoEx("rm",-0.1)
     private val transferGate: ServoEx = ServoEx("transfer_gate",-0.1)
 
-    fun unlockTransfer() { transferGate.position = 0.27 }
+    fun unlockTransfer() { transferGate.position = 0.25 }
     fun lockTransfer() { transferGate.position = 0.6 }
 
-    fun toLeft() {leftModuleServo.position = 0.1 .also { rightModuleServo.position = 0.06 } }
+    fun toLeft() {leftModuleServo.position = 0.05 .also { rightModuleServo.position = 0.1 } }
     fun toRight() {leftModuleServo.position = 0.95 .also { rightModuleServo.position = 0.93 } }
     fun split() {leftModuleServo.position = 0.1 .also { rightModuleServo.position = 0.93 } }
     override fun initialize() { unlockTransfer() }
