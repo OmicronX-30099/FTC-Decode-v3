@@ -14,7 +14,7 @@ object Load: SubsystemGroup(BilinearIndexMachine, Rollers, BreakBeam) {
         { ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.flywheelGoalPose) > 115.0},
         shootCommand(1.2,0.55,0.55),
         shootCommand(0.7, 1.0, 1.0)
-    )
+    ).setRequirements(Stupid)
 
     fun shootCommand(waitTime: Double, tPow: Double, iPow: Double): Command =
         SequentialGroup(
@@ -27,5 +27,5 @@ object Load: SubsystemGroup(BilinearIndexMachine, Rollers, BreakBeam) {
                 Rollers.stop()
                 Rollers.lockShooter()
             }
-        )
+        ).setRequirements(Stupid)
 }

@@ -35,9 +35,6 @@ object Rollers: Subsystem {
 }
 
 object BilinearIndexMachine: Subsystem {
-    init {
-        Log.d("BIM", "Initializing")
-    }
     private val leftModuleServo: ServoEx = ServoEx("lm",-0.1)
     private val rightModuleServo: ServoEx = ServoEx("rm",-0.1)
     private val transferGate: ServoEx = ServoEx("transfer_gate",-0.1)
@@ -52,9 +49,6 @@ object BilinearIndexMachine: Subsystem {
 }
 
 object BreakBeam: Subsystem {
-    init {
-        Log.d("BB", "Initializing")
-    }
     val bb: DigitalChannel by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb") }
     val bbTrigger = button { !bb.state }
 
@@ -77,3 +71,5 @@ object BreakBeam: Subsystem {
             }
     }
 }
+
+object Stupid {  }
