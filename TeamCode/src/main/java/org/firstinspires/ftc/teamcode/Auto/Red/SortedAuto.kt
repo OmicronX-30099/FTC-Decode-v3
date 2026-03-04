@@ -138,7 +138,18 @@ class SortedAuto: NextFTCOpMode() {
             Delay(0.5),
             FollowPath(paths[3]),
             Delay(0.4),
-            MRL
+            MRL,
+            Delay(0.2),
+            straightIntake(paths[4]),
+            FollowPath(paths[5]),
+            Delay(0.3),
+            Load.shootCommand(1.0,0.4,1.0),
+            sortedIntake(paths[6], 0.15, instant { BilinearIndexMachine.toLeft() }),
+            FollowPath(paths[7]),
+            Delay(0.3),
+            RLM,
+            Delay(0.15),
+            FollowPath(paths[8])
         )
 
     }
