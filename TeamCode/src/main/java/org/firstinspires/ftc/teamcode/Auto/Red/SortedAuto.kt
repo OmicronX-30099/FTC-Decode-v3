@@ -83,12 +83,12 @@ class SortedAuto: NextFTCOpMode() {
             Delay(0.5),
             FollowPath(paths[3]),
             Delay(0.4),
-            LMR,
+            Load.LMR,
             Delay(0.2),
             sortedIntake(paths[4], 0.2, instant { BilinearIndexMachine.toLeft() }),
             FollowPath(paths[5]),
             Delay(0.3),
-            RLM,
+            Load.RLM,
             straightIntake(paths[6]),
             Delay(0.15),
             FollowPath(paths[7]),
@@ -114,20 +114,30 @@ class SortedAuto: NextFTCOpMode() {
             Delay(0.5),
             FollowPath(paths[3]),
             Delay(0.4),
-            MRL,
+            Load.MRL,
             Delay(0.2),
             straightIntake(paths[4]),
             FollowPath(paths[5]),
             Delay(0.3),
-            Load.shootCommand(1.0,0.4,1.0),
+            Load.shootCommand(1.4,0.5,1.0),
             sortedIntake(paths[6], 0.15, instant { BilinearIndexMachine.toLeft() }),
             FollowPath(paths[7]),
             Delay(0.3),
-            RLM,
+            Load.RLM,
             Delay(0.15),
             FollowPath(paths[8])
         )
 
+        val ppg = SequentialGroup(
+            FollowPath(paths[0]),
+            Delay(0.4),
+            Load.shootTripleCommand,
+            straightIntake(paths[1]),
+            FollowPath(paths[2]),
+            Delay(0.3),
+            Load.shootCommand(1.4,0.5,1.0),
+            
+        )
     }
 
     fun buildPaths() {
