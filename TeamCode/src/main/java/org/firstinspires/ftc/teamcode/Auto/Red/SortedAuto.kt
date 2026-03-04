@@ -67,7 +67,7 @@ class SortedAuto: NextFTCOpMode() {
         Delay(0.9),
         instant { Rollers.stop() }
     )
-    val MLR: Command =
+    val MLR: Command = SequentialGroup()
 
     fun straightIntake(path: PathChain) = SequentialGroup(
         ParallelGroup(
