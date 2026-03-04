@@ -57,7 +57,7 @@ class SortedAuto: NextFTCOpMode() {
         instant { Rollers.unlockShooter(); BilinearIndexMachine.unlockTransfer(); Rollers.transfer(0.7); BilinearIndexMachine.toLeft() },
         Delay(0.4),
         instant { BilinearIndexMachine.toRight() },
-        Delay(0.8),
+        Delay(0.5),
         instant { Rollers.intake(1.0) },
         Delay(0.9),
         instant { Rollers.stop() }
