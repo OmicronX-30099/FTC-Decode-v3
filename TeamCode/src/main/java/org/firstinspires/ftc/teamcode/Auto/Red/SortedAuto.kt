@@ -67,6 +67,7 @@ class SortedAuto: NextFTCOpMode() {
         Delay(0.9),
         instant { Rollers.stop() }
     )
+    val MLR: Command =
 
     fun straightIntake(path: PathChain) = SequentialGroup(
         ParallelGroup(
@@ -125,6 +126,18 @@ class SortedAuto: NextFTCOpMode() {
         )
         pgp.schedule()
 
+        val gpp = SequentialGroup(
+            FollowPath(paths[0]),
+            Delay(0.4),
+            Load.shootTripleCommand,
+            sortedIntake(paths[1],0.1, instant { BilinearIndexMachine.split() }),
+            FollowPath(paths[2]),
+            Delay(0.5),
+            FollowPath(paths[3]),
+            Delay(0.4),
+
+        )
+
     }
 
     fun buildPaths() {
@@ -151,7 +164,7 @@ class SortedAuto: NextFTCOpMode() {
             .setConstantHeadingInterpolation(Math.toRadians(0.0))
             .build()
         val shootSet2 = follower.pathBuilder()
-            .addPath(BezierCurve(Pose(121.750, 35.250),Pose(98.700, 57.000),Pose(82.750, 82.250)))
+            .addPath(BezierCurve(Pose(121.750, 35.250),Pose(94.500, 53.000),Pose(82.750, 82.250)))
             .setTangentHeadingInterpolation()
             .setReversed()
             .build()
