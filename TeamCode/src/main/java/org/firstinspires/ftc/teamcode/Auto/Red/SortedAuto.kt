@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Auto.Red
 import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
+import com.pedropathing.paths.Path
 import com.pedropathing.paths.PathChain
 import com.qualcomm.hardware.limelightvision.Limelight3A
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
@@ -20,6 +21,8 @@ import org.firstinspires.ftc.teamcode.Constants.PedroConstants
 import org.firstinspires.ftc.teamcode.Systems.Load.BilinearIndexMachine
 import org.firstinspires.ftc.teamcode.Systems.Load.Load
 import org.firstinspires.ftc.teamcode.Systems.Load.Rollers
+import org.firstinspires.ftc.teamcode.Systems.Shooter.Flywheel
+import org.firstinspires.ftc.teamcode.Systems.Shooter.FlywheelState
 import org.firstinspires.ftc.teamcode.Systems.Shooter.Shooter
 import org.firstinspires.ftc.teamcode.Util.Alliance
 import org.firstinspires.ftc.teamcode.Util.ROBOT
@@ -59,18 +62,22 @@ class SortedAuto: NextFTCOpMode() {
         instant { Rollers.unlockShooter(); BilinearIndexMachine.unlockTransfer(); Rollers.transfer(0.7); BilinearIndexMachine.toLeft() },
         Delay(0.4),
         instant { BilinearIndexMachine.toRight() },
-        Delay(0.5),
+        Delay(0.7),
         instant { Rollers.intake(1.0) },
         Delay(0.9),
         instant { Rollers.stop() }
     )
 
-    fun sortedIntake(path: PathChain, endDelay: Double, extra: Command = NullCommand(), ) = SequentialGroup(
+    fun straightIntake(path: PathChain) = SequentialGroup(
         ParallelGroup(
             FollowPath(path),
             instant { Rollers.run(1.0,0.32); Rollers.lockShooter(); BilinearIndexMachine.toLeft() }
         ),
-        instant { Rollers.stop() },
+        instant { Rollers.stop() }
+    )
+
+    fun sortedIntake(path: PathChain, endDelay: Double, extra: Command = NullCommand(), ) = SequentialGroup(
+        straightIntake(path),
         Delay(endDelay),
         SequentialGroup(
             instant { BilinearIndexMachine.toRight() },
@@ -91,13 +98,15 @@ class SortedAuto: NextFTCOpMode() {
         Shooter.reset()
         follower.setStartingPose(Pose(79.750, 7.500,Math.toRadians(90.0)))
         buildPaths()
-        val main = SequentialGroup(
+        Shooter.flywheelManual()
+        Shooter.increaseFlywheelVel(1460.0)
+        val pgp = SequentialGroup(
             FollowPath(paths[0]),
             Delay(0.4),
             Load.shootTripleCommand,
             sortedIntake(paths[1],0.1),
             FollowPath(paths[2]),
-            Delay(0.2),
+            Delay(0.5),
             FollowPath(paths[3]),
             Delay(0.4),
             LMR,
@@ -106,8 +115,15 @@ class SortedAuto: NextFTCOpMode() {
             FollowPath(paths[5]),
             Delay(0.3),
             RLM,
+            straightIntake(paths[6]),
+            Delay(0.15),
+            FollowPath(paths[7]),
+            Delay(0.3),
+            Load.shootTripleCommand,
+            Delay(0.15),
+            FollowPath(paths[8])
         )
-        main.schedule()
+        pgp.schedule()
 
     }
 
