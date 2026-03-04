@@ -68,15 +68,18 @@ class SortedAuto: NextFTCOpMode() {
             instant { Rollers.run(1.0,0.32); Rollers.lockShooter(); BilinearIndexMachine.toLeft() }
         ),
         Delay(initDelay),
-        instant { BilinearIndexMachine.toRight(); Rollers.stop() },
-        Delay(0.6),
-        instant { Rollers.transfer(-0.35) },
-        Delay(0.45),
         instant { Rollers.stop() },
-        Delay(0.1),
-        instant { BilinearIndexMachine.lockTransfer(); Rollers.run(1.0,0.5) },
-        Delay(0.2),
-        instant { Rollers.stop() }
+        SequentialGroup(
+            instant { BilinearIndexMachine.toRight() },
+            Delay(0.6),
+            instant { Rollers.transfer(-0.35) },
+            Delay(0.45),
+            instant { Rollers.stop() },
+            Delay(0.1),
+            instant { BilinearIndexMachine.lockTransfer(); Rollers.run(1.0,0.5) },
+            Delay(0.2),
+            instant { Rollers.stop() }
+        ).asProxy()
     )
 
 
