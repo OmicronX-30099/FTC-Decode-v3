@@ -11,8 +11,6 @@ import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.genVector
 import kotlin.math.atan2
 import kotlin.math.hypot
-import kotlin.math.max
-import kotlin.math.min
 
 object Shooter: SubsystemGroup(Turret, Flywheel) {
     private val shooterFrontRGB: ServoEx = ServoEx("front_light",-0.1)
@@ -25,7 +23,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
         when (flywheelState) {
             FlywheelState.PREDICTIVE_AUTO_AIM -> { updateFlywheel(true); updateTurret(true); shooterMiddleRGB.position = 0.722 }
             FlywheelState.AUTO_AIM -> { updateFlywheel(); updateTurret(); shooterMiddleRGB.position = 0.611 }
-            FlywheelState.MANUAL -> { Flywheel.update(); shooterMiddleRGB.position = 0.0 }
+            FlywheelState.MANUAL -> { Flywheel.update(); updateTurret(); shooterMiddleRGB.position = 0.0 }
         }
         shooterFrontRGB.position = if (Flywheel.atTarget()) { 0.47 } else { 0.28 }
     }
