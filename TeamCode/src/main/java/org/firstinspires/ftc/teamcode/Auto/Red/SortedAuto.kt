@@ -47,7 +47,7 @@ class SortedAuto: NextFTCOpMode() {
         instant { Rollers.unlockShooter(); BilinearIndexMachine.unlockTransfer(); Rollers.run(1.0,0.65) },
         Delay(0.8),
         instant { BilinearIndexMachine.toLeft() },
-        Delay(0.5),
+        Delay(0.8),
         instant {
             Rollers.stop()
             Rollers.lockShooter()
@@ -122,9 +122,14 @@ class SortedAuto: NextFTCOpMode() {
             straightIntake(paths[6]),
             Delay(0.15),
             FollowPath(paths[7]),
-            Delay(0.3),
-            Load.shootCommand(1.0,0.4,1.0),
-            Delay(0.15),
+            Delay(0.4),
+            instant {
+                Rollers.unlockShooter()
+                BilinearIndexMachine.unlockTransfer()
+                Rollers.transfer(0.5)
+                Rollers.intake(1.0)
+            },//Load.shootCommand(1.5,0.4,0.8),
+            Delay(1.4),
             FollowPath(paths[8])
         )
         pgp.schedule()
@@ -174,11 +179,11 @@ class SortedAuto: NextFTCOpMode() {
         val intakeSpike2 = follower.pathBuilder()
             .addPath(BezierLine(Pose(82.750, 82.250),Pose(100.750, 35.250)))
             .setLinearHeadingInterpolation(Math.toRadians(-70.0), Math.toRadians(0.0))
-            .addPath(BezierLine(Pose(100.750, 35.250),Pose(121.750, 35.250)))
+            .addPath(BezierLine(Pose(100.750, 35.250),Pose(131.750, 35.250)))
             .setConstantHeadingInterpolation(Math.toRadians(0.0))
             .build()
         val shootSet2 = follower.pathBuilder()
-            .addPath(BezierCurve(Pose(121.750, 35.250),Pose(94.500, 53.000),Pose(82.750, 82.250)))
+            .addPath(BezierCurve(Pose(131.750, 35.250),Pose(85.500, 53.000),Pose(82.750, 82.250)))
             .setTangentHeadingInterpolation()
             .setReversed()
             .build()
