@@ -3,9 +3,7 @@ package org.firstinspires.ftc.teamcode.Auto.Red
 import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
-import com.pedropathing.paths.Path
 import com.pedropathing.paths.PathChain
-import com.qualcomm.hardware.limelightvision.Limelight3A
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import dev.nextftc.core.commands.Command
 import dev.nextftc.core.commands.delays.Delay
@@ -15,14 +13,11 @@ import dev.nextftc.core.commands.instant
 import dev.nextftc.core.commands.utility.NullCommand
 import dev.nextftc.extensions.pedro.FollowPath
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
-import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.ftc.NextFTCOpMode
 import org.firstinspires.ftc.teamcode.Constants.PedroConstants
 import org.firstinspires.ftc.teamcode.Systems.Load.BilinearIndexMachine
 import org.firstinspires.ftc.teamcode.Systems.Load.Load
 import org.firstinspires.ftc.teamcode.Systems.Load.Rollers
-import org.firstinspires.ftc.teamcode.Systems.Shooter.Flywheel
-import org.firstinspires.ftc.teamcode.Systems.Shooter.FlywheelState
 import org.firstinspires.ftc.teamcode.Systems.Shooter.Shooter
 import org.firstinspires.ftc.teamcode.Util.Alliance
 import org.firstinspires.ftc.teamcode.Util.ROBOT
@@ -67,7 +62,7 @@ class SortedAuto: NextFTCOpMode() {
         Delay(0.9),
         instant { Rollers.stop() }
     )
-    val MLR: Command = SequentialGroup(
+    val MRL: Command = SequentialGroup(
         instant { Rollers.unlockShooter(); BilinearIndexMachine.unlockTransfer(); Rollers.run(1.0,0.7); BilinearIndexMachine.split() },
         Delay(0.8),
         instant { BilinearIndexMachine.toLeft() },
@@ -128,7 +123,7 @@ class SortedAuto: NextFTCOpMode() {
             Delay(0.15),
             FollowPath(paths[7]),
             Delay(0.3),
-            Load.shootTripleCommand,
+            Load.shootCommand(1.0,0.4,1.0),
             Delay(0.15),
             FollowPath(paths[8])
         )
@@ -143,7 +138,7 @@ class SortedAuto: NextFTCOpMode() {
             Delay(0.5),
             FollowPath(paths[3]),
             Delay(0.4),
-
+            MRL
         )
 
     }
