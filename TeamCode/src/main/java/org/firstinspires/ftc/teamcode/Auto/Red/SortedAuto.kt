@@ -99,12 +99,12 @@ class SortedAuto: NextFTCOpMode() {
             FollowPath(paths[2]),
             Delay(0.2),
             FollowPath(paths[3]),
-            Delay(0.3),
+            Delay(0.4),
             LMR,
             Delay(0.2),
             sortedIntake(paths[4], 0.2, instant { BilinearIndexMachine.toLeft() }),
             FollowPath(paths[5]),
-            Delay(0.2),
+            Delay(0.3),
             RLM,
         )
         main.schedule()
