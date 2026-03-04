@@ -45,7 +45,7 @@ class SortedAuto: NextFTCOpMode() {
 
     val LMR: Command = SequentialGroup(
         instant { Rollers.unlockShooter(); BilinearIndexMachine.unlockTransfer(); Rollers.run(1.0,0.7) },
-        Delay(0.8),
+        Delay(0.7),
         instant { BilinearIndexMachine.toLeft() },
         Delay(0.5),
         instant {
