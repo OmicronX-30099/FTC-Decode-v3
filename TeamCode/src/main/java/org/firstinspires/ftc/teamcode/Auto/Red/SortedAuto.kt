@@ -123,13 +123,14 @@ class SortedAuto: NextFTCOpMode() {
             Delay(0.15),
             FollowPath(paths[7]),
             Delay(0.4),
-            instant {
+            Load.shootCommand(1.4,0.5,1.0),
+            /*instant {
                 Rollers.unlockShooter()
                 BilinearIndexMachine.unlockTransfer()
                 Rollers.transfer(0.5)
                 Rollers.intake(1.0)
-            },//Load.shootCommand(1.5,0.4,0.8),
-            Delay(1.4),
+            },
+            Delay(1.4),*/
             FollowPath(paths[8])
         )
         pgp.schedule()
