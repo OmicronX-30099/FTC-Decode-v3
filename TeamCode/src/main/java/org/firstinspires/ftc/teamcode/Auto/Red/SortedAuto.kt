@@ -10,6 +10,7 @@ import dev.nextftc.core.commands.delays.Delay
 import dev.nextftc.core.commands.groups.ParallelGroup
 import dev.nextftc.core.commands.groups.SequentialGroup
 import dev.nextftc.core.commands.instant
+import dev.nextftc.core.commands.utility.NullCommand
 import dev.nextftc.extensions.pedro.FollowPath
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.ftc.NextFTCOpMode
@@ -44,7 +45,7 @@ class SortedAuto: NextFTCOpMode() {
 
     val LMR: Command = SequentialGroup(
         instant { Rollers.unlockShooter(); BilinearIndexMachine.unlockTransfer(); Rollers.run(1.0,0.7) },
-        Delay(1.0),
+        Delay(0.8),
         instant { BilinearIndexMachine.toLeft() },
         Delay(0.5),
         instant {
@@ -62,12 +63,13 @@ class SortedAuto: NextFTCOpMode() {
         instant { Rollers.stop() }
     )
 
-    fun sortedIntake(path: PathChain) = SequentialGroup(
+    fun sortedIntake(path: PathChain, endDelay: Double, extra: Command = NullCommand()) = SequentialGroup(
         ParallelGroup(
             FollowPath(path),
             instant { Rollers.run(1.0,0.32); Rollers.lockShooter(); BilinearIndexMachine.toLeft() }
         ),
         instant { Rollers.stop() },
+        Delay(endDelay),
         SequentialGroup(
             instant { BilinearIndexMachine.toRight() },
             Delay(0.6),
@@ -77,7 +79,8 @@ class SortedAuto: NextFTCOpMode() {
             Delay(0.1),
             instant { BilinearIndexMachine.lockTransfer(); Rollers.run(1.0,0.5) },
             Delay(0.2),
-            instant { Rollers.stop() }
+            instant { Rollers.stop() },
+            extra
         ).asProxy()
     )
 
@@ -90,16 +93,14 @@ class SortedAuto: NextFTCOpMode() {
             FollowPath(paths[0]),
             Delay(0.4),
             Load.shootTripleCommand,
-            sortedIntake(paths[1]),
-            Delay(0.1),
+            sortedIntake(paths[1],0.1),
             FollowPath(paths[2]),
             Delay(0.2),
             FollowPath(paths[3]),
             Delay(0.3),
             LMR,
             Delay(0.2),
-            sortedIntake(paths[4]),
-            Delay(0.1),
+            sortedIntake(paths[4], 0.2, instant { BilinearIndexMachine.toLeft() }),
             FollowPath(paths[5]),
             Delay(0.2),
             RLM
