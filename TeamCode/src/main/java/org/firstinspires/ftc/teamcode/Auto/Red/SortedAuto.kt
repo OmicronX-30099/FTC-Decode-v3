@@ -4,6 +4,7 @@ import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
 import com.pedropathing.paths.PathChain
+import com.qualcomm.hardware.limelightvision.Limelight3A
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import dev.nextftc.core.commands.Command
 import dev.nextftc.core.commands.delays.Delay
@@ -13,6 +14,7 @@ import dev.nextftc.core.commands.instant
 import dev.nextftc.core.commands.utility.NullCommand
 import dev.nextftc.extensions.pedro.FollowPath
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
+import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.ftc.NextFTCOpMode
 import org.firstinspires.ftc.teamcode.Constants.PedroConstants
 import org.firstinspires.ftc.teamcode.Systems.Load.BilinearIndexMachine
@@ -63,7 +65,7 @@ class SortedAuto: NextFTCOpMode() {
         instant { Rollers.stop() }
     )
 
-    fun sortedIntake(path: PathChain, endDelay: Double, extra: Command = NullCommand()) = SequentialGroup(
+    fun sortedIntake(path: PathChain, endDelay: Double, extra: Command = NullCommand(), ) = SequentialGroup(
         ParallelGroup(
             FollowPath(path),
             instant { Rollers.run(1.0,0.32); Rollers.lockShooter(); BilinearIndexMachine.toLeft() }
@@ -103,7 +105,7 @@ class SortedAuto: NextFTCOpMode() {
             sortedIntake(paths[4], 0.2, instant { BilinearIndexMachine.toLeft() }),
             FollowPath(paths[5]),
             Delay(0.2),
-            RLM
+            RLM,
         )
         main.schedule()
 
