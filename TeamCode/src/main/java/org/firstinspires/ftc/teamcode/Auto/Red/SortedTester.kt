@@ -49,4 +49,9 @@ class SortedTester: NextFTCOpMode() {
             Limelight.getFollowPath()
         )
     }
+
+    override fun onUpdate() {
+        Limelight.getFollowPath()
+        telemetry.update()
+    }
 }

@@ -56,6 +56,7 @@ object Limelight: Subsystem {
             .addPath(BezierLine(follower.pose, targetPose))
             .setConstantHeadingInterpolation(Math.toRadians(follower.pose.heading - tx))
             .build()
+        ActiveOpMode.telemetry.addData("Pose", "${targetPose.x}, ${targetPose.y}, ${Math.toDegrees(targetPose.heading)}")
         return FollowPath(path, true, 0.5).setRequirements(Stupid)
     }
 }
