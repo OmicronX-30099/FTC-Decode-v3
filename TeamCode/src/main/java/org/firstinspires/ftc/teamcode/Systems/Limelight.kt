@@ -19,5 +19,5 @@ object Limelight: Subsystem {
             }
         }
     }
-    fun getBlobTurnAngle
+    fun getBlobTurnAngle() {}
 }

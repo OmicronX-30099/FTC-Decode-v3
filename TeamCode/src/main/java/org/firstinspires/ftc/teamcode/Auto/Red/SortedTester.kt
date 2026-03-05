@@ -74,7 +74,7 @@ class SortedTester: NextFTCOpMode() {
         follower.setStartingPose(Pose(0.0,0.0,Math.toRadians(90.0)))
         buildPaths()
         val main = SequentialGroup(
-
+            sortedIntake(paths[0],0.3)
         )
         main.schedule()
 

@@ -73,54 +73,47 @@ class SortedAuto: NextFTCOpMode() {
         follower.setStartingPose(Pose(79.750, 7.500,Math.toRadians(90.0)))
         buildPaths()
         Shooter.flywheelManual()
-        Shooter.increaseFlywheelVel(1460.0)
+        Shooter.increaseFlywheelVel(1480.0)
         val pgp = SequentialGroup(
             FollowPath(paths[0]),
             Delay(0.4),
             Load.shootTripleCommand,
-            sortedIntake(paths[1],0.1),
+            sortedIntake(paths[1],0.2),
             FollowPath(paths[2]),
-            Delay(0.5),
+            Delay(0.6),
             FollowPath(paths[3]),
-            Delay(0.4),
+            Delay(0.5),
             Load.LMR,
             Delay(0.2),
-            sortedIntake(paths[4], 0.2, instant { BilinearIndexMachine.toLeft() }),
+            sortedIntake(paths[4], 0.3, instant { BilinearIndexMachine.toLeft() }),
             FollowPath(paths[5]),
-            Delay(0.3),
+            Delay(0.4),
             Load.RLM,
             straightIntake(paths[6]),
             Delay(0.15),
             FollowPath(paths[7]),
             Delay(0.4),
-            Load.shootCommand(1.4,0.5,1.0),
-            /*instant {
-                Rollers.unlockShooter()
-                BilinearIndexMachine.unlockTransfer()
-                Rollers.transfer(0.5)
-                Rollers.intake(1.0)
-            },
-            Delay(1.4),*/
+            Load.shootCommand(1.8,0.35,0.7),
             FollowPath(paths[8])
         )
-        pgp.schedule()
+
 
         val gpp = SequentialGroup(
             FollowPath(paths[0]),
             Delay(0.4),
             Load.shootTripleCommand,
-            sortedIntake(paths[1],0.1, instant { BilinearIndexMachine.split() }),
+            sortedIntake(paths[1],0.2, instant { BilinearIndexMachine.split() }),
             FollowPath(paths[2]),
-            Delay(0.5),
-            FollowPath(paths[3]),
             Delay(0.4),
+            FollowPath(paths[3]),
+            Delay(0.6),
             Load.MRL,
             Delay(0.2),
             straightIntake(paths[4]),
             FollowPath(paths[5]),
             Delay(0.3),
-            Load.shootCommand(1.4,0.5,1.0),
-            sortedIntake(paths[6], 0.15, instant { BilinearIndexMachine.toLeft() }),
+            Load.shootCommand(1.8,0.35,0.7),
+            sortedIntake(paths[6], 0.25, instant { BilinearIndexMachine.toLeft() }),
             FollowPath(paths[7]),
             Delay(0.3),
             Load.RLM,
@@ -134,22 +127,23 @@ class SortedAuto: NextFTCOpMode() {
             Load.shootTripleCommand,
             straightIntake(paths[1]),
             FollowPath(paths[2]),
-            Delay(0.5)
+            Delay(0.6),
             FollowPath(paths[3]),
             Delay(0.3),
-            Load.shootCommand(1.4,0.5,1.0),
+            Load.shootCommand(1.8,0.35,0.7),
             sortedIntake(paths[4], 0.2, instant { BilinearIndexMachine.toLeft() }),
             FollowPath(paths[5]),
             Delay(0.3),
             Load.RML,
             Delay(0.1),
-            sortedIntake(paths[6], 0.15),
+            sortedIntake(paths[6], 0.25),
             FollowPath(paths[7]),
             Delay(0.3),
-            Load.LMR
+            Load.LMR,
             Delay(0.1),
             FollowPath(paths[8])
         )
+        gpp.schedule()
     }
 
     fun buildPaths() {
@@ -162,7 +156,7 @@ class SortedAuto: NextFTCOpMode() {
             .setConstantHeadingInterpolation(Math.toRadians(0.0))
             .build()
         val openGate = follower.pathBuilder()
-            .addPath(BezierCurve(Pose(124.750, 82.250),Pose(120.000, 79.375),Pose(124.250, 76.500)))
+            .addPath(BezierCurve(Pose(124.750, 82.250),Pose(120.000, 79.375),Pose(124.50, 76.500)))
             .setConstantHeadingInterpolation(Math.toRadians(0.0))
             .build()
         val shootSet1 = follower.pathBuilder()
