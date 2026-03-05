@@ -21,3 +21,4 @@ fun NextFTCOpMode.addSubsystems(vararg subsystems: Subsystem) =
 fun NextFTCOpMode.includePedro(followerFactory: (HardwareMap) -> Follower) =
     addComponents(PedroComponent(followerFactory))
 fun Pose.genVector(otherPose: Pose): Vector = Vector(hypot(otherPose.x-this.x, otherPose.y-this.y),atan2(this.y-otherPose.y,this.x-otherPose.x))
+fun Vector.toPose(): Pose = Pose(this.xComponent, this.yComponent)
