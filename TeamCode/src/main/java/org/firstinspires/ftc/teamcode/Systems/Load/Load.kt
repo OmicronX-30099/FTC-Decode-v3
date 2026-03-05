@@ -48,6 +48,13 @@ object Load: SubsystemGroup(BilinearIndexMachine, Rollers, BreakBeam) {
         Delay(0.9),
         instant { Rollers.stop() }
     ).setRequirements(Stupid)
+    val RML: Command = SequentialGroup(
+        instant { Rollers.unlockShooter(); BilinearIndexMachine.unlockTransfer(); Rollers.run(1.0,0.7); BilinearIndexMachine.toLeft() },
+        Delay(1.0),
+        instant { BilinearIndexMachine.toRight() },
+        Delay(0.6),
+        instant { Rollers.stop() }
+    ).setRequirements(Stupid)
     val MRL: Command = SequentialGroup(
         instant { Rollers.unlockShooter(); BilinearIndexMachine.unlockTransfer(); Rollers.run(1.0,0.7); BilinearIndexMachine.split() },
         Delay(0.8),
