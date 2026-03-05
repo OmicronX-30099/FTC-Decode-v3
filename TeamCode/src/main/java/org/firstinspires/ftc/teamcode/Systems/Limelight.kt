@@ -10,6 +10,7 @@ import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.extensions.pedro.FollowPath
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.ftc.ActiveOpMode
+import org.firstinspires.ftc.teamcode.Systems.Load.Stupid
 import org.firstinspires.ftc.teamcode.Util.Motif
 import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.toPose
@@ -55,6 +56,6 @@ object Limelight: Subsystem {
             .addPath(BezierLine(follower.pose, targetPose))
             .setConstantHeadingInterpolation(Math.toRadians(follower.pose.heading - tx))
             .build()
-        return FollowPath(path, true, 0.5)
+        return FollowPath(path, true, 0.5).setRequirements(Stupid)
     }
 }

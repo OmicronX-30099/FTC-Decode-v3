@@ -44,6 +44,9 @@ class SortedTester: NextFTCOpMode() {
 
     override fun onStartButtonPressed() {
         Limelight.startBlobDetection()
-        Limelight.getFollowPath().schedule()
+        SequentialGroup(
+            Delay(5.0),
+            Limelight.getFollowPath()
+        )
     }
 }

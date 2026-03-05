@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Auto.Red
+package org.firstinspires.ftc.teamcode.Auto.Blue
 
 import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.BezierLine
@@ -28,8 +28,8 @@ import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.includePedro
 
 
-@Autonomous(name = "Sorted Red Auto", group = "Autos", preselectTeleOp = "Red TeleOp")
-class SortedAuto: NextFTCOpMode() {
+@Autonomous(name = "Sorted Blue Auto", group = "Autos", preselectTeleOp = "Blue TeleOp")
+class BlueSortedAuto: NextFTCOpMode() {
     init {
         addSubsystems(Shooter, Load)
         includePedro(PedroConstants::createFollower)
@@ -41,7 +41,7 @@ class SortedAuto: NextFTCOpMode() {
     override fun onInit() {
         Shooter.reset()
         ROBOT.currStage = Stage.TELEOP
-        ROBOT.currAlliance = Alliance.RED
+        ROBOT.currAlliance = Alliance.BLUE
         Limelight.startMotifDetection()
     }
 
@@ -74,7 +74,7 @@ class SortedAuto: NextFTCOpMode() {
 
     override fun onStartButtonPressed() {
         Shooter.reset()
-        follower.setStartingPose(Pose(79.750, 7.500,Math.toRadians(90.0)))
+        follower.setStartingPose(Pose(79.750, 7.500,Math.toRadians(90.0)).mirror())
         buildPaths()
         Shooter.flywheelManual()
         Shooter.increaseFlywheelVel(1480.0)
@@ -158,45 +158,45 @@ class SortedAuto: NextFTCOpMode() {
 
     fun buildPaths() {
         val shootPreload = follower.pathBuilder()
-            .addPath(BezierCurve(Pose(79.750, 7.500),Pose(100.000, 6.000),Pose(82.750, 82.250)))
+            .addPath(BezierCurve(Pose(79.750, 7.500).mirror(),Pose(100.000, 6.000).mirror(),Pose(82.750, 82.250).mirror()))
             .setConstantHeadingInterpolation(Math.toRadians(90.0))
             .build()
         val intakeSpike1 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(82.750, 82.250),Pose(124.750, 82.250)))
+            .addPath(BezierLine(Pose(82.750, 82.250).mirror(),Pose(124.750, 82.250).mirror()))
             .setConstantHeadingInterpolation(Math.toRadians(0.0))
             .build()
         val openGate = follower.pathBuilder()
-            .addPath(BezierCurve(Pose(124.750, 82.250),Pose(120.000, 79.375),Pose(124.50, 76.500)))
+            .addPath(BezierCurve(Pose(124.750, 82.250).mirror(),Pose(120.000, 79.375).mirror(),Pose(124.50, 76.500).mirror()))
             .setConstantHeadingInterpolation(Math.toRadians(0.0))
             .build()
         val shootSet1 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(124.250, 77.250),Pose(82.750, 82.250)))
+            .addPath(BezierLine(Pose(124.250, 77.250).mirror(),Pose(82.750, 82.250).mirror()))
             .setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(-10.0))
             .build()
         val intakeSpike2 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(82.750, 82.250),Pose(100.750, 35.250)))
+            .addPath(BezierLine(Pose(82.750, 82.250).mirror(),Pose(100.750, 35.250).mirror()))
             .setLinearHeadingInterpolation(Math.toRadians(-70.0), Math.toRadians(0.0))
-            .addPath(BezierLine(Pose(100.750, 35.250),Pose(131.750, 35.250)))
+            .addPath(BezierLine(Pose(100.750, 35.250).mirror(),Pose(131.750, 35.250).mirror()))
             .setConstantHeadingInterpolation(Math.toRadians(0.0))
             .build()
         val shootSet2 = follower.pathBuilder()
-            .addPath(BezierCurve(Pose(131.750, 35.250),Pose(85.500, 53.000),Pose(82.750, 82.250)))
+            .addPath(BezierCurve(Pose(131.750, 35.250).mirror(),Pose(85.500, 53.000).mirror(),Pose(82.750, 82.250).mirror()))
             .setTangentHeadingInterpolation()
             .setReversed()
             .build()
         val IntakeSpike3 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(82.750, 82.250),Pose(100.750, 58.750)))
+            .addPath(BezierLine(Pose(82.750, 82.250).mirror(),Pose(100.750, 58.750).mirror()))
             .setLinearHeadingInterpolation(Math.toRadians(-53.0), Math.toRadians(0.0))
-            .addPath(BezierLine(Pose(100.750, 58.750),Pose(121.750, 58.750)))
+            .addPath(BezierLine(Pose(100.750, 58.750).mirror(),Pose(121.750, 58.750).mirror()))
             .setConstantHeadingInterpolation(Math.toRadians(0.0))
             .build()
         val shootSet3 = follower.pathBuilder()
-            .addPath(BezierLine(Pose(121.750, 58.750),Pose(82.750, 82.250)))
+            .addPath(BezierLine(Pose(121.750, 58.750).mirror(),Pose(82.750, 82.250).mirror()))
             .setTangentHeadingInterpolation()
             .setReversed()
             .build()
         val leave = follower.pathBuilder()
-            .addPath(BezierLine(Pose(82.750, 82.250),Pose(118.000, 66.600)))
+            .addPath(BezierLine(Pose(82.750, 82.250).mirror(),Pose(118.000, 66.600).mirror()))
             .setConstantHeadingInterpolation(Math.toRadians(-31.0))
             .build()
 
