@@ -47,7 +47,7 @@ class SortedTester: NextFTCOpMode() {
         SequentialGroup(
             Delay(5.0),
             Limelight.getFollowPath()
-        )
+        ).schedule()
     }
 
     override fun onUpdate() {
