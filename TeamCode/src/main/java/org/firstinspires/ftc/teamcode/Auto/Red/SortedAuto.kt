@@ -15,11 +15,13 @@ import dev.nextftc.extensions.pedro.FollowPath
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.ftc.NextFTCOpMode
 import org.firstinspires.ftc.teamcode.Constants.PedroConstants
+import org.firstinspires.ftc.teamcode.Systems.Limelight
 import org.firstinspires.ftc.teamcode.Systems.Load.BilinearIndexMachine
 import org.firstinspires.ftc.teamcode.Systems.Load.Load
 import org.firstinspires.ftc.teamcode.Systems.Load.Rollers
 import org.firstinspires.ftc.teamcode.Systems.Shooter.Shooter
 import org.firstinspires.ftc.teamcode.Util.Alliance
+import org.firstinspires.ftc.teamcode.Util.Motif
 import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.Stage
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
@@ -40,6 +42,7 @@ class SortedAuto: NextFTCOpMode() {
         Shooter.reset()
         ROBOT.currStage = Stage.TELEOP
         ROBOT.currAlliance = Alliance.RED
+        Limelight.startMotifDetection()
     }
 
     fun straightIntake(path: PathChain) = SequentialGroup(
@@ -67,6 +70,7 @@ class SortedAuto: NextFTCOpMode() {
         ).asProxy()
     )
 
+    override fun onWaitForStart() { Limelight.detectMotif() }
 
     override fun onStartButtonPressed() {
         Shooter.reset()
@@ -143,7 +147,13 @@ class SortedAuto: NextFTCOpMode() {
             Delay(0.1),
             FollowPath(paths[8])
         )
-        gpp.schedule()
+
+        when (ROBOT.currStage.currMotif) {
+            Motif.PPG -> { ppg.schedule() }
+            Motif.PGP -> { pgp.schedule() }
+            Motif.GPP -> { gpp.schedule() }
+            Motif.UNKNOWN -> { ppg.schedule() }
+        }
     }
 
     fun buildPaths() {
@@ -228,6 +238,7 @@ class SortedAuto: NextFTCOpMode() {
 
     override fun onUpdate() {
         Shooter.update()
+        ROBOT.teleopStartPose = follower.pose
         telemetry.update()
     }
 }

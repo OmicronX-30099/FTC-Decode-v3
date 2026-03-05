@@ -103,6 +103,7 @@ class RedCollabFar(): NextFTCOpMode() {
 
     override fun onUpdate() {
         Shooter.update()
+        ROBOT.teleopStartPose = follower.pose
         telemetry.update()
     }
     fun buildPaths() {
@@ -184,5 +185,4 @@ class RedCollabFar(): NextFTCOpMode() {
         paths += shoottunnel
         paths += leave
     }
-    override fun onStop() { ROBOT.teleopStartPose = follower.pose }
 }

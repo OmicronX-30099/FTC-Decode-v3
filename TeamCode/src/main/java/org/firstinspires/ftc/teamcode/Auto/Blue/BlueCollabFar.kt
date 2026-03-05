@@ -107,6 +107,7 @@ class BlueCollabFar(): NextFTCOpMode() {
 
     override fun onUpdate() {
         Shooter.update()
+        ROBOT.teleopStartPose = follower.pose
         telemetry.update()
     }
     fun buildPaths() {
@@ -188,5 +189,4 @@ class BlueCollabFar(): NextFTCOpMode() {
         paths += shoottunnel
         paths += leave
     }
-    override fun onStop() { ROBOT.teleopStartPose = follower.pose }
 }

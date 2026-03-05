@@ -215,7 +215,7 @@ class Blue18BallUnsorted(): NextFTCOpMode() {
 
     override fun onUpdate() {
         Shooter.update()
+        ROBOT.teleopStartPose = follower.pose
         telemetry.update()
     }
-    override fun onStop() { ROBOT.teleopStartPose = follower.pose }
 }
