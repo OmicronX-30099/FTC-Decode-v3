@@ -49,8 +49,7 @@ object Limelight: Subsystem {
         }
         val tx = result.tx
         val ty = result.ty
-        val d = (1 / tan(Math.toRadians(-ty))) * LIMELIGHT_HEIGHT
-        val targetPose = follower.pose + Vector(d, follower.pose.heading - Math.toRadians(tx)).toPose()
+        val targetPose = follower.pose + Vector((1 / tan(Math.toRadians(-ty))) * LIMELIGHT_HEIGHT, follower.pose.heading - Math.toRadians(tx)).toPose()
         val path = follower.pathBuilder()
             .addPath(BezierLine(follower.pose, targetPose))
             .setConstantHeadingInterpolation(follower.pose.heading - Math.toRadians(tx))
