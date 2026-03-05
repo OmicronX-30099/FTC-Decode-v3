@@ -49,12 +49,11 @@ object Limelight: Subsystem {
         }
         val tx = result.tx
         val ty = result.ty
-        val straightD = (1 / tan(Math.toRadians(ty))) * LIMELIGHT_HEIGHT
-        val d = (1 / cos(Math.toRadians(tx))) * straightD
-        val targetPose = follower.pose + Vector(d, Math.toRadians(follower.pose.heading-tx)).toPose()
+        val d = (1 / tan(Math.toRadians(-ty))) * LIMELIGHT_HEIGHT
+        val targetPose = follower.pose + Vector(d, follower.pose.heading - Math.toRadians(tx)).toPose()
         val path = follower.pathBuilder()
             .addPath(BezierLine(follower.pose, targetPose))
-            .setConstantHeadingInterpolation(Math.toRadians(follower.pose.heading - tx))
+            .setConstantHeadingInterpolation(follower.pose.heading - Math.toRadians(tx))
             .build()
         ActiveOpMode.telemetry.addData("Pose", "${targetPose.x}, ${targetPose.y}, ${Math.toDegrees(targetPose.heading)}")
         return FollowPath(path, true, 0.5).setRequirements(Stupid)
