@@ -5,6 +5,7 @@ import com.pedropathing.geometry.Pose
 import com.pedropathing.math.Vector
 import com.qualcomm.hardware.limelightvision.Limelight3A
 import dev.nextftc.core.commands.Command
+import dev.nextftc.core.commands.utility.NullCommand
 import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.extensions.pedro.FollowPath
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
@@ -42,6 +43,9 @@ object Limelight: Subsystem {
     }
     fun getFollowPath(): Command {
         val result = limelight.latestResult
+        if (!result.isValid || result == null) {
+            return NullCommand()
+        }
         val tx = result.tx
         val ty = result.ty
         val straightD = (1 / tan(Math.toRadians(ty))) * LIMELIGHT_HEIGHT
