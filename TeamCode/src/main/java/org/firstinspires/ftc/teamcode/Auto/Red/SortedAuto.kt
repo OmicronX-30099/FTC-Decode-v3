@@ -146,7 +146,7 @@ class SortedAuto: NextFTCOpMode() {
             sortedIntake(paths[6], 0.15),
             FollowPath(paths[7]),
             Delay(0.3),
-            Load.//some command,
+            Load.LMR
             Delay(0.1),
             FollowPath(paths[8])
         )
