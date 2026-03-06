@@ -73,6 +73,7 @@ class RedSortedAuto: NextFTCOpMode() {
     override fun onWaitForStart() { Limelight.detectMotif() }
 
     override fun onStartButtonPressed() {
+        Limelight.limelight.stop()
         Shooter.reset()
         follower.setStartingPose(Pose(79.750, 7.500,Math.toRadians(90.0)))
         buildPaths()
