@@ -25,12 +25,10 @@ object Limelight: Subsystem {
     const val BLOBBY_PIPELINE: Int = 3
 
     fun startMotifDetection() {
-        limelight.stop()
         limelight.pipelineSwitch(MOTIF_PIPELINE)
         limelight.start()
     }
     fun startBlobDetection() {
-        limelight.stop()
         limelight.pipelineSwitch(BLOBBY_PIPELINE)
         limelight.start()
     }
