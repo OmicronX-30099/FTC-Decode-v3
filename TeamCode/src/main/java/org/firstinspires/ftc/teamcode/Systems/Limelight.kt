@@ -25,12 +25,12 @@ object Limelight: Subsystem {
     const val BLOBBY_PIPELINE: Int = 3
 
     fun startMotifDetection() {
-        limelight = ActiveOpMode.hardwareMap.get(Limelight3A::class.java, "limelight")
+        limelight = ActiveOpMode.hardwareMap.get(Limelight3A::class.java, "ll")
         limelight.pipelineSwitch(MOTIF_PIPELINE)
         limelight.start()
     }
     fun startBlobDetection() {
-        limelight = ActiveOpMode.hardwareMap.get(Limelight3A::class.java, "limelight")
+        limelight = ActiveOpMode.hardwareMap.get(Limelight3A::class.java, "ll")
         limelight.pipelineSwitch(BLOBBY_PIPELINE)
         limelight.start()
     }
