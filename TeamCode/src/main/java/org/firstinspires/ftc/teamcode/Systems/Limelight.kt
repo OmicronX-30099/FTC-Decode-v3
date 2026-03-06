@@ -18,17 +18,19 @@ import kotlin.math.cos
 import kotlin.math.tan
 
 object Limelight: Subsystem {
-    val limelight: Limelight3A by lazy { ActiveOpMode.hardwareMap.get(Limelight3A::class.java, "limelight") }
+    lateinit var limelight: Limelight3A
 
     const val LIMELIGHT_HEIGHT: Double = 8.5
     const val MOTIF_PIPELINE: Int = 0
     const val BLOBBY_PIPELINE: Int = 3
 
     fun startMotifDetection() {
+        limelight = ActiveOpMode.hardwareMap.get(Limelight3A::class.java, "limelight")
         limelight.pipelineSwitch(MOTIF_PIPELINE)
         limelight.start()
     }
     fun startBlobDetection() {
+        limelight = ActiveOpMode.hardwareMap.get(Limelight3A::class.java, "limelight")
         limelight.pipelineSwitch(BLOBBY_PIPELINE)
         limelight.start()
     }
