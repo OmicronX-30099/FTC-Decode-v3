@@ -33,11 +33,12 @@ class Blue18BallUnsorted(): NextFTCOpMode() {
 
     override fun onInit() {
         ROBOT.currAlliance = Alliance.BLUE
+        Shooter.enableAutoAim()
         ROBOT.currStage = Stage.AUTONOMOUS
     }
 
     override fun onStartButtonPressed() {
-        follower.setStartingPose(Pose(34.0,132.9,Math.toRadians(-180.0)))
+        follower.setStartingPose(Pose(33.0,132.6875,Math.toRadians(-180.0)))
         buildPaths()
         val main = SequentialGroup(
             FollowPath(paths[0]), //shoot preload
@@ -45,48 +46,45 @@ class Blue18BallUnsorted(): NextFTCOpMode() {
             Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[1]), //intake second spike mark
-                InstantCommand { Rollers.run(0.3, 1.0) }
+                InstantCommand { Rollers.run(1.0,0.25) }
             ),
             ParallelGroup(FollowPath(paths[2]), //shoot second spike mark
-                Delay(1.0),
                 InstantCommand { Rollers.run(0.0,0.0)},
             ),
             Delay(0.2),
             Load . shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[3],true,1.0), //intake gate
-                InstantCommand { Rollers.run(0.3, 1.0) }
+                InstantCommand { Rollers.run(1.0, 0.25) }
             ),
-            Delay(0.6),
+            Delay(0.7),
             ParallelGroup(FollowPath(paths[4],true,1.0), //shoot gate
-                InstantCommand { Delay(1.0) },
+                InstantCommand { Rollers.run(0.0,0.0)},
+            ),
+            Delay(0.2),
+            Load . shootTripleCommand,
+            ParallelGroup(
+                FollowPath(paths[3],true,1.0), //intake gate
+                InstantCommand { Rollers.run(1.0, 0.25) }
+            ),
+            Delay(.7),
+            ParallelGroup(
+                FollowPath(paths[4],true,1.0), //shoot gate
                 InstantCommand { Rollers.run(0.0,0.0)},
             ),
             Delay(0.2),
             Load . shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[5]), //intake first spike
-                InstantCommand { Rollers.run(0.3, 1.0) }
+                InstantCommand { Rollers.run(1.0, 0.25) }
             ),
             InstantCommand { Rollers.run(0.0,0.0)},
             FollowPath(paths[6]), //shoot first spike
             Delay(0.2),
             Load . shootTripleCommand,
             ParallelGroup(
-                FollowPath(paths[3],true,1.0), //intake gate
-                InstantCommand { Rollers.run(0.3, 1.0) }
-            ),
-            Delay(0.6),
-            ParallelGroup(
-                FollowPath(paths[4],true,1.0), //shoot gate
-                InstantCommand { Delay(1.0) },
-                InstantCommand { Rollers.run(0.0,0.0)},
-            ),
-            Delay(0.2),
-            Load . shootTripleCommand,
-            ParallelGroup(
                 FollowPath(paths[7]), //intake third spike
-                InstantCommand { Rollers.run(0.3, 1.0) }
+                InstantCommand { Rollers.run(1.0, 0.25) }
             ),
             InstantCommand { Rollers.run(0.0,0.0)},
             FollowPath(paths[8]), //shoot third spike
@@ -101,7 +99,7 @@ class Blue18BallUnsorted(): NextFTCOpMode() {
 
         val shootpreload = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(34.000, 132.900),
+                Pose(33.0,132.6875),
 
                 Pose(56.000, 73.000)
             )
@@ -113,7 +111,7 @@ class Blue18BallUnsorted(): NextFTCOpMode() {
             BezierLine(
                 Pose(56.000, 73.000),
 
-                Pose(15.400, 56.200)
+                Pose(10.400, 56.200)
             )
         ).setTangentHeadingInterpolation()
 
@@ -121,7 +119,7 @@ class Blue18BallUnsorted(): NextFTCOpMode() {
 
         val shootsecondspike = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(15.400, 56.200),
+                Pose(10.400, 56.200),
 
                 Pose(56.000, 73.000)
             )
@@ -133,20 +131,20 @@ class Blue18BallUnsorted(): NextFTCOpMode() {
             BezierLine(
                 Pose(56.000, 73.000),
 
-                Pose(10.500, 58.000)
+                Pose(13.438, 59.45)
             )
-        ).setLinearHeadingInterpolation(Math.toRadians(-157.0), Math.toRadians(147.731))
+        ).setLinearHeadingInterpolation(Math.toRadians(-157.0), Math.toRadians(148.5))
             .addParametricCallback(0.8) {follower.setMaxPower(0.2)}
             .addParametricCallback(0.94) {follower.setMaxPower(1.0)}
             .build()
 
         val shootgate1 = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(10.500, 58.000),
+                Pose(13.438, 59.45),
 
                 Pose(56.000, 73.000)
             )
-        ).setLinearHeadingInterpolation(Math.toRadians(147.731), Math.toRadians(160.0))
+        ).setLinearHeadingInterpolation(Math.toRadians(148.5), Math.toRadians(160.0))
             .addParametricCallback(0.05) {follower.setMaxPower(1.0)}
             .build()
 

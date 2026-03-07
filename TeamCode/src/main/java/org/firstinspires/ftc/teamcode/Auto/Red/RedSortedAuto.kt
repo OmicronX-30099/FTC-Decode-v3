@@ -59,7 +59,7 @@ class RedSortedAuto: NextFTCOpMode() {
         SequentialGroup(
             instant { BilinearIndexMachine.toRight() },
             Delay(0.6),
-            instant { Rollers.transfer(-0.35) },
+            instant { Rollers.transfer(-0.4) },
             Delay(0.45),
             instant { Rollers.stop() },
             Delay(0.1),

@@ -36,10 +36,9 @@ class Red18BallUnsorted(): NextFTCOpMode() {
         ROBOT.currAlliance = Alliance.RED
         Shooter.enableAutoAim()
         ROBOT.currStage = Stage.AUTONOMOUS
-        follower.setStartingPose(Pose(34.0,132.9,Math.toRadians(-180.0)).mirror())
     }
     override fun onStartButtonPressed() {
-        follower.setStartingPose(Pose(34.0,132.9,Math.toRadians(-180.0)).mirror())
+        follower.setStartingPose(Pose(33.0,132.6875,Math.toRadians(-180.0)).mirror())
         buildPaths()
         val main = SequentialGroup(
             FollowPath(paths[0]), //shoot preload
@@ -65,14 +64,6 @@ class Red18BallUnsorted(): NextFTCOpMode() {
             Delay(0.2),
             Load . shootTripleCommand,
             ParallelGroup(
-                FollowPath(paths[5]), //intake first spike
-                InstantCommand { Rollers.run(1.0, 0.25) }
-            ),
-            InstantCommand { Rollers.run(0.0,0.0)},
-            FollowPath(paths[6]), //shoot first spike
-            Delay(0.2),
-            Load . shootTripleCommand,
-            ParallelGroup(
                 FollowPath(paths[3],true,1.0), //intake gate
                 InstantCommand { Rollers.run(1.0, 0.25) }
             ),
@@ -81,6 +72,14 @@ class Red18BallUnsorted(): NextFTCOpMode() {
                 FollowPath(paths[4],true,1.0), //shoot gate
                 InstantCommand { Rollers.run(0.0,0.0)},
             ),
+            Delay(0.2),
+            Load . shootTripleCommand,
+            ParallelGroup(
+                FollowPath(paths[5]), //intake first spike
+                InstantCommand { Rollers.run(1.0, 0.25) }
+            ),
+            InstantCommand { Rollers.run(0.0,0.0)},
+            FollowPath(paths[6]), //shoot first spike
             Delay(0.2),
             Load . shootTripleCommand,
             ParallelGroup(
@@ -132,7 +131,7 @@ class Red18BallUnsorted(): NextFTCOpMode() {
             BezierLine(
                 Pose(57.000, 73.000).mirror(),
 
-                Pose(10.500, 57.000).mirror()
+                Pose(10.00, 57.000).mirror()
             )
         ).setLinearHeadingInterpolation(Math.toRadians(-23.0), Math.toRadians(180.0-147.731))
             .addParametricCallback(0.8) {follower.setMaxPower(0.2)}

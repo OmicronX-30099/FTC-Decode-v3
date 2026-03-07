@@ -35,6 +35,9 @@ object Limelight: Subsystem {
         limelight.start()
     }
     fun detectMotif() {
+        if (!limelight.latestResult.isValid || limelight.latestResult == null) {
+            return
+        }
         val currTagID: Int = limelight.latestResult.fiducialResults[0].fiducialId
         Motif.entries.forEach {
             if (it.tagID == currTagID) {

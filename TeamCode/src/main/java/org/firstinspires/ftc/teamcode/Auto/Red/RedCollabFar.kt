@@ -38,10 +38,10 @@ class RedCollabFar(): NextFTCOpMode() {
     }
     override fun onStartButtonPressed() {
         buildPaths()
-        follower.setStartingPose(Pose(86.750,7.5,Math.toRadians(90.0)))
+        follower.setStartingPose(Pose(86.4375,7.5,Math.toRadians(90.0)))
 
         val main = SequentialGroup(
-            Delay(1.5),
+            Delay(1.8),
             Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[0]),
@@ -110,7 +110,7 @@ class RedCollabFar(): NextFTCOpMode() {
         paths = arrayOf()
         val intakespike3 = follower.pathBuilder().addPath(
             BezierCurve(
-                Pose(86.750, 7.500),
+                Pose(86.4375, 7.500),
                 Pose(92.000, 34.000),
                 Pose(133.500, 35.000)
             )
