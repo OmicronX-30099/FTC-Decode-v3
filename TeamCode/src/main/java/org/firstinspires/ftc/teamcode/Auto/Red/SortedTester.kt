@@ -7,6 +7,7 @@ import com.pedropathing.paths.PathChain
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import dev.nextftc.core.commands.Command
 import dev.nextftc.core.commands.delays.Delay
+import dev.nextftc.core.commands.delays.WaitUntil
 import dev.nextftc.core.commands.groups.ParallelGroup
 import dev.nextftc.core.commands.groups.SequentialGroup
 import dev.nextftc.core.commands.instant
@@ -44,10 +45,17 @@ class SortedTester: NextFTCOpMode() {
 
     override fun onStartButtonPressed() {
         Limelight.startBlobDetection()
-        SequentialGroup(
+        val main = SequentialGroup(
             Delay(5.0),
-            Limelight.getFollowPath()
-        ).schedule()
+            WaitUntil { Limelight.getFollowPath() != null },
+            FollowPath(
+                follower.pathBuilder()
+                    .addPath(BezierLine(Limelight.getFollowPath()!!.third, Limelight.getFollowPath()!!.first))
+                    .setConstantHeadingInterpolation(Limelight.getFollowPath()!!.second)
+                    .build()
+            )
+        )
+        main.schedule()
     }
 
     override fun onUpdate() {

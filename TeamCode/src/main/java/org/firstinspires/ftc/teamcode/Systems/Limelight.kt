@@ -42,19 +42,14 @@ object Limelight: Subsystem {
             }
         }
     }
-    fun getFollowPath(): Command {
+    fun getFollowPath(): Triple<Pose, Double, Pose>? {
         val result = limelight.latestResult
         if (!result.isValid || result == null) {
-            return NullCommand()
+            return null
         }
         val tx = result.tx
         val ty = result.ty
         val targetPose = follower.pose + Vector((1 / tan(Math.toRadians(-ty))) * LIMELIGHT_HEIGHT, follower.pose.heading - Math.toRadians(tx)).toPose()
-        val path = follower.pathBuilder()
-            .addPath(BezierLine(follower.pose, targetPose))
-            .setConstantHeadingInterpolation(follower.pose.heading - Math.toRadians(tx))
-            .build()
-        ActiveOpMode.telemetry.addData("Pose", "${targetPose.x}, ${targetPose.y}, ${Math.toDegrees(targetPose.heading)}")
-        return FollowPath(path, true, 0.5).setRequirements(Stupid)
+        return Triple(targetPose, (follower.pose.heading - Math.toRadians(tx)), follower.pose)
     }
 }
