@@ -38,10 +38,10 @@ class BlueCollabFar(): NextFTCOpMode() {
     }
     override fun onStartButtonPressed() {
         buildPaths()
-        follower.setStartingPose(Pose(86.750,7.5,Math.toRadians(90.0)).mirror())
+        follower.setStartingPose(Pose(86.4375,7.5,Math.toRadians(90.0)).mirror())
 
         val main = SequentialGroup(
-            Delay(1.5),
+            Delay(1.8),
             Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[0]),
