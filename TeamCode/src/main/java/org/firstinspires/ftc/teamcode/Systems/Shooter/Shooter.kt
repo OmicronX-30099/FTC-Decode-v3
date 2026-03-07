@@ -15,7 +15,7 @@ import kotlin.math.hypot
 object Shooter: SubsystemGroup(Turret, Flywheel) {
     private val shooterFrontRGB: ServoEx = ServoEx("front_light",-0.1)
     private val shooterMiddleRGB: ServoEx = ServoEx("back_light", -0.1)
-    private const val ITERATIONS: Int = 5
+    private const val ITERATIONS: Int = 8
     var flywheelState: FlywheelState = FlywheelState.PREDICTIVE_AUTO_AIM
         private set
 
@@ -59,7 +59,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
             } else {
                 ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.flywheelGoalPose)
             }
-        Flywheel.targetVelocity = calculateFlywheelVelocity(d)
+        Flywheel.targetVelocity = ShooterLUT.getVelocity(d)//calculateFlywheelVelocity(d)
         Flywheel.update()
     }
     private fun calculateFlywheelVelocity(d: Double) = ((0.019454 * d * d) + (2.007 * d) + 1102.62509 + 60.0)

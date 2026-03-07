@@ -20,7 +20,7 @@ object Rollers: Subsystem {
     }
     private val transferMotor: MotorEx = MotorEx("t").reversed()
     private val intakeMotor: MotorEx = MotorEx("i")
-    private val shooterGateServo: ServoEx = ServoEx("sg",-0.1)
+    private val shooterGateServo: ServoEx = ServoEx("shooter_gate",-0.1)
 
     override fun initialize() { lockShooter() }
 

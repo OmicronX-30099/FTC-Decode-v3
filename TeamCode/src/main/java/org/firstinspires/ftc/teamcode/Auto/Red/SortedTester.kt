@@ -13,6 +13,7 @@ import dev.nextftc.core.commands.groups.SequentialGroup
 import dev.nextftc.core.commands.instant
 import dev.nextftc.extensions.pedro.FollowPath
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
+import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.ftc.NextFTCOpMode
 import org.firstinspires.ftc.teamcode.Constants.PedroConstants
 import org.firstinspires.ftc.teamcode.Systems.Limelight
@@ -61,5 +62,6 @@ class SortedTester: NextFTCOpMode() {
     override fun onUpdate() {
         Limelight.getFollowPath()
         telemetry.update()
+        ActiveOpMode.telemetry.update()
     }
 }
