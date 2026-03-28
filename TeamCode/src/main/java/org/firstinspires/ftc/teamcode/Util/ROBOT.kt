@@ -27,7 +27,8 @@ data object ROBOT {
 enum class Alliance {
     BLUE {
         override val resetPoses: ResetPoses  = ResetPoses(Pose(9.5,8.9,-PI).mirror(), Pose(117.0,129.0,-2.448).mirror(), Pose(116.0,130.0,-0.939).mirror())
-        override val turretGoalPose: Pose = Pose(3.62, 137.88)
+        //override val turretGoalPose: Pose = Pose(3.62, 137.88)
+        override val turretGoalPose: Pose = Pose(0.0,137.5)
         override val flywheelGoalPose: Pose = Pose(141.5,141.5).mirror()
     },
     RED{

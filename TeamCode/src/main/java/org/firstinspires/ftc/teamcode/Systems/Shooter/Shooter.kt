@@ -59,7 +59,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
             } else {
                 ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.flywheelGoalPose)
             }
-        Flywheel.targetVelocity = ShooterLUT.getVelocity(d)//calculateFlywheelVelocity(d)
+        Flywheel.targetVelocity = ShooterLUT.getVelocity(follower.pose.x,follower.pose.y)//calculateFlywheelVelocity(d)
         Flywheel.update()
     }
     private fun calculateFlywheelVelocity(d: Double) = ((0.019454 * d * d) + (2.007 * d) + 1102.62509 + 60.0)
