@@ -14,8 +14,8 @@ import kotlin.math.abs
 import kotlin.math.sign
 @Configurable
 object Flywheel: Subsystem {
-    private val flywheelMotor1: MotorEx = MotorEx("fwt")
-    private val flywheelMotor2: MotorEx = MotorEx("fwb")
+    private val flywheelMotor1: MotorEx = MotorEx("fwb")
+    private val flywheelMotor2: MotorEx = MotorEx("fwt")
     private val flywheelMotors: MotorGroup = MotorGroup(flywheelMotor1, flywheelMotor2)
     private val voltageSensor: VoltageSensor by lazy { ActiveOpMode.hardwareMap.get(VoltageSensor::class.java, "Control Hub") }
 
@@ -52,8 +52,8 @@ object Turret: Subsystem {
 
     fun offset(by: Double) { offset += by }
     fun update() {
-        turretServo1.position = (normalizeAngle300(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE) + 0.49) //+ 0.00130571*2.0
-        turretServo2.position = (normalizeAngle300(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE) + 0.51) //- 0.00130571*2.0
+        turretServo1.position = (normalizeAngle300(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE) + 0.495) //+ 0.00130571*2.0
+        turretServo2.position = (normalizeAngle300(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE) + 0.505) //- 0.00130571*2.0
     }
     fun reset() { offset = 0.0; targetAngle = 0.0 }
     fun debug(): String = "Target Angle = $targetAngle \nOffset = $offset \nCurrent Position = ${turretServo1.position - 0.00130571*2.0}"
@@ -68,7 +68,7 @@ internal fun normalizeAngle(angDeg: Double): Double {
 
 internal fun normalizeAngle300(angDeg: Double): Double {
     var normalized = normalizeAngle(angDeg)
-    return (normalized.coerceIn(-150.0,150.0))
+    return (normalized.coerceIn(-180.0,180.0))
 }
 
 enum class FlywheelState {

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Auto.Red
 
+import com.bylazar.gamepad.PanelsGamepad
+import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
@@ -48,20 +50,21 @@ class SortedTester: NextFTCOpMode() {
         Limelight.startBlobDetection()
         val main = SequentialGroup(
             Delay(5.0),
-            WaitUntil { Limelight.getFollowPath() != null },
             FollowPath(
-                follower.pathBuilder()
-                    .addPath(BezierLine(Limelight.getFollowPath()!!.third, Limelight.getFollowPath()!!.first))
-                    .setConstantHeadingInterpolation(Limelight.getFollowPath()!!.second)
-                    .build()
+                (follower.pathBuilder()
+                    .addPath(BezierLine(Limelight.getFollowPath().third, Limelight.getFollowPath().first))
+                    .setConstantHeadingInterpolation(Limelight.getFollowPath().second)
+                    .build())
             )
         )
         main.schedule()
     }
 
     override fun onUpdate() {
-        Limelight.getFollowPath()
-        telemetry.update()
-        ActiveOpMode.telemetry.update()
+        val result = Limelight.getFollowPath()
+        PanelsTelemetry.telemetry.addData("TargetPose", result.first)
+        PanelsTelemetry.telemetry.addData("Heading", result.second)
+        PanelsTelemetry.telemetry.addData("FollowerPose", result.third)
+        PanelsTelemetry.telemetry.update(telemetry)
     }
 }

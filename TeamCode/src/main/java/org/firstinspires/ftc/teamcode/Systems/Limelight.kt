@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Systems
 
+import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
 import com.pedropathing.math.Vector
@@ -45,14 +46,22 @@ object Limelight: Subsystem {
             }
         }
     }
-    fun getFollowPath(): Triple<Pose, Double, Pose>? {
+    fun getFollowPath(): Triple<Pose, Double, Pose> {
         val result = limelight.latestResult
-        if (!result.isValid || result == null) {
-            return null
+        if (result == null || !result.isValid) {
+            if (result == null) {
+                PanelsTelemetry.telemetry.addData("Is detecting?", "Null")
+            } else {
+                PanelsTelemetry.telemetry.addData("Is detecting?", "Invalid")
+            }
+            return Triple(follower.pose, follower.pose.heading, follower.pose)
         }
         val tx = result.tx
         val ty = result.ty
-        val targetPose = follower.pose + Vector((1 / tan(Math.toRadians(-ty))) * LIMELIGHT_HEIGHT, follower.pose.heading - Math.toRadians(tx)).toPose()
+        val d = -8.50 / tan(ty)
+        val a = Vector(d, follower.pose.heading - Math.toRadians(tx)).toPose()
+        val targetPose = follower.pose + a
+        PanelsTelemetry.telemetry.addData("distance", a)
         return Triple(targetPose, (follower.pose.heading - Math.toRadians(tx)), follower.pose)
     }
 }
