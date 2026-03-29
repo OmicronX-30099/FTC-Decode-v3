@@ -14,8 +14,9 @@ data object ROBOT {
     var currAlliance: Alliance = Alliance.BLUE
     var currStage: Stage = Stage.TELEOP
     var teleopStartPose: Pose = Pose(86.2,7.5,Math.toRadians(90.0))
-        get() = field
-        set(value) {field = value.copy()}
+        set(value) {
+            field = value.copy()
+        }
 
     fun shooterPose(): Pose {
         val a: Double = follower.heading
