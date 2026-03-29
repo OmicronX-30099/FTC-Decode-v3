@@ -74,9 +74,9 @@ class BlueTeleOp: NextFTCOpMode() {
         }
         Gamepads .apply {
             gamepad1.dpadLeft.or(gamepad2.dpadLeft)
-                .whenBecomesTrue { Turret.offset(1.0) }
+                .whenBecomesTrue { Turret.offset(2.0) }
             gamepad1.dpadRight.or(gamepad2.dpadRight)
-                .whenBecomesTrue { Turret.offset(-1.0) }
+                .whenBecomesTrue { Turret.offset(-2.0) }
             gamepad1.dpadUp.or(gamepad2.dpadUp)
                 .whenBecomesTrue {
                     if (Shooter.flywheelState == FlywheelState.MANUAL) {

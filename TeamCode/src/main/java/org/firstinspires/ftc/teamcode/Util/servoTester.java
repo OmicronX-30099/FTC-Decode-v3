@@ -11,8 +11,8 @@ public class servoTester extends OpMode {
     
     public static String c_name = "lt";
     public static String b_name = "ft";
-    public static double pos = 0.0;
-    public static double pos1 = 0.0;
+    public static double pos = 0.5;
+    public static double pos1 = 0.5;
     @Override
     public void init() {
 

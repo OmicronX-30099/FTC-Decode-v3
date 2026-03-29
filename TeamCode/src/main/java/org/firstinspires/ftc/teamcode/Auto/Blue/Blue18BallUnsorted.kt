@@ -57,7 +57,7 @@ class Blue18BallUnsorted(): NextFTCOpMode() {
                 FollowPath(paths[3],true,1.0), //intake gate
                 InstantCommand { Rollers.run(1.0, 0.25) }
             ),
-            Delay(0.7),
+            Delay(0.9),
             ParallelGroup(FollowPath(paths[4],true,1.0), //shoot gate
                 InstantCommand { Rollers.run(0.0,0.0)},
             ),
@@ -67,7 +67,7 @@ class Blue18BallUnsorted(): NextFTCOpMode() {
                 FollowPath(paths[3],true,1.0), //intake gate
                 InstantCommand { Rollers.run(1.0, 0.25) }
             ),
-            Delay(.7),
+            Delay(0.9),
             ParallelGroup(
                 FollowPath(paths[4],true,1.0), //shoot gate
                 InstantCommand { Rollers.run(0.0,0.0)},
@@ -131,20 +131,20 @@ class Blue18BallUnsorted(): NextFTCOpMode() {
             BezierLine(
                 Pose(56.000, 73.000),
 
-                Pose(13.438, 59.45)
+                Pose(10.5, 59.5)
             )
-        ).setLinearHeadingInterpolation(Math.toRadians(-157.0), Math.toRadians(148.5))
+        ).setLinearHeadingInterpolation(Math.toRadians(-157.0), Math.toRadians(160.0))
             .addParametricCallback(0.8) {follower.setMaxPower(0.2)}
             .addParametricCallback(0.94) {follower.setMaxPower(1.0)}
             .build()
 
         val shootgate1 = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(13.438, 59.45),
+                Pose(10.5, 59.5),
 
                 Pose(56.000, 73.000)
             )
-        ).setLinearHeadingInterpolation(Math.toRadians(148.5), Math.toRadians(160.0))
+        ).setLinearHeadingInterpolation(Math.toRadians(160.0), Math.toRadians(160.0))
             .addParametricCallback(0.05) {follower.setMaxPower(1.0)}
             .build()
 
@@ -214,6 +214,11 @@ class Blue18BallUnsorted(): NextFTCOpMode() {
     override fun onUpdate() {
         Shooter.update()
         ROBOT.teleopStartPose = follower.pose
+        telemetry.addData("follower", follower.pose)
         telemetry.update()
+    }
+
+    override fun onStop() {
+        ROBOT.teleopStartPose = follower.pose
     }
 }
