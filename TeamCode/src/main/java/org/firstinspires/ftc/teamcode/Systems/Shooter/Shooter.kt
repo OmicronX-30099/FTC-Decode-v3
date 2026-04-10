@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.Util.genVector
 import kotlin.math.atan2
 import kotlin.math.hypot
 
-object Shooter: SubsystemGroup(Turret, Flywheel) {
+object Shooter: SubsystemGroup(Turret, Flywheel, Hood) {
     private val shooterFrontRGB: ServoEx = ServoEx("front_light",-0.1)
     private val shooterMiddleRGB: ServoEx = ServoEx("back_light", -0.1)
     private const val ITERATIONS: Int = 8
@@ -21,9 +21,9 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
 
     fun update() {
         when (flywheelState) {
-            FlywheelState.PREDICTIVE_AUTO_AIM -> { updateFlywheel(true); updateTurret(true); shooterMiddleRGB.position = 0.722 }
-            FlywheelState.AUTO_AIM -> { updateFlywheel(); updateTurret(); shooterMiddleRGB.position = 0.611 }
-            FlywheelState.MANUAL -> { Flywheel.update(); updateTurret(); shooterMiddleRGB.position = 0.0 }
+            FlywheelState.PREDICTIVE_AUTO_AIM -> { updateFlywheel(true); updateTurret(true); updateHood(true); shooterMiddleRGB.position = 0.722 }
+            FlywheelState.AUTO_AIM -> { updateFlywheel(); updateTurret(); updateHood(); shooterMiddleRGB.position = 0.611 }
+            FlywheelState.MANUAL -> { Flywheel.update(); updateTurret(); updateHood(); shooterMiddleRGB.position = 0.0 }
         }
         shooterFrontRGB.position = if (Flywheel.atTarget()) { 0.47 } else { 0.28 }
     }
@@ -35,8 +35,8 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
     fun enablePredictive() { flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM }
     fun enableAutoAim() { flywheelState = FlywheelState.AUTO_AIM }
 
-    fun reset() { Flywheel.reset(); Turret.reset(); flywheelState == FlywheelState.AUTO_AIM }
-    fun debug(): String = "Turret Data: \n${Turret.debug()} \nFlywheel Data: \n${Flywheel.debug()}"
+    fun reset() { Flywheel.reset(); Turret.reset(); Hood.reset(); flywheelState == FlywheelState.AUTO_AIM }
+    fun debug(): String = "Turret Data: \n${Turret.debug()} \nFlywheel Data: \n${Flywheel.debug()} \nHood Data: \n${Hood.debug()}"
 
     private fun updateTurret(predictive: Boolean = false) {
         val vec =
@@ -61,6 +61,18 @@ object Shooter: SubsystemGroup(Turret, Flywheel) {
             }
         Flywheel.targetVelocity = calculateFlywheelVelocity(d)
         Flywheel.update()
+    }
+    private fun updateHood(predictive: Boolean = false) {
+        val d =
+            if (predictive) {
+                getCorrectedVecIterative(ROBOT.shooterPose(), ROBOT.currAlliance.flywheelGoalPose, follower.velocity).magnitude
+            } else {
+                ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.flywheelGoalPose)
+            }
+        
+        // velocityError = target - actual
+        val velocityError = Flywheel.targetVelocity - Flywheel.currentVelocity
+        Hood.update(d, velocityError)
     }
     private fun calculateFlywheelVelocity(d: Double) = ((0.01632 * d * d) + (3.49146 * d) + 985.48178)
     //y=0.01632x^{2}+3.49146x+985.48178

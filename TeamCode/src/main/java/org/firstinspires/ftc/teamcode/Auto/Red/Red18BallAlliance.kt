@@ -214,6 +214,7 @@ class Red18BallAlliance(): NextFTCOpMode() {
     }
     override fun onUpdate() {
         Shooter.update()
+        Rollers.update()
         ROBOT.teleopStartPose = follower.pose
         telemetry.update()
     }

@@ -93,6 +93,7 @@ class RedTeleOp: NextFTCOpMode() {
 
     override fun onUpdate() {
         Shooter.update()
+        Rollers.update()
         telemetry.run {
             addData("Follower", follower.pose)
             addLine(Shooter.debug())

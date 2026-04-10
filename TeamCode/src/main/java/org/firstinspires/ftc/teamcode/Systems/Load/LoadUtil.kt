@@ -22,6 +22,8 @@ object Rollers: Subsystem {
     private val intakeMotor: MotorEx = MotorEx("i")
     private val shooterGateServo: ServoEx = ServoEx("shooter_gate",-0.1)
 
+    var isFeeding: Boolean = false
+
     override fun initialize() { lockShooter() }
 
     fun transfer(tPow: Double) { transferMotor.power = tPow }
@@ -32,44 +34,34 @@ object Rollers: Subsystem {
 
     fun lockShooter() { shooterGateServo.position = 0.5 }
     fun unlockShooter() { shooterGateServo.position = 0.2 }
-}
 
-object BilinearIndexMachine: Subsystem {
-    private val leftModuleServo: ServoEx = ServoEx("lm",-0.1)
-    private val rightModuleServo: ServoEx = ServoEx("rm",-0.1)
-    private val transferGate: ServoEx = ServoEx("transfer_gate",-0.1)
+    fun update() {
+        if (isFeeding) return
 
-    fun unlockTransfer() { transferGate.position = 0.25 }
-    fun lockTransfer() { transferGate.position = 0.6 }
-
-    fun toLeft() {leftModuleServo.position = 0.07 .also { rightModuleServo.position = 0.05 } }
-    fun toRight() {leftModuleServo.position = 0.93 .also { rightModuleServo.position = 0.95 } }
-    fun split() {leftModuleServo.position = 0.07 .also { rightModuleServo.position = 0.95 } }
-    override fun initialize() { unlockTransfer() }
+        if (BreakBeam.isFull) {
+            stop()
+        } else if (BreakBeam.ballCount >= 1) {
+            transfer(0.0)
+        }
+    }
 }
 
 object BreakBeam: Subsystem {
-    val bb: DigitalChannel by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb") }
-    val bbTrigger = button { !bb.state }
+    private val bb1 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb1") }
+    private val bb2 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb2") }
+    private val bb3 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb3") }
+    private val bb4 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb4") }
+    private val bb5 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb5") }
+    private val bb6 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb6") }
 
-    var count = 0.0
-    var ballEntered: Boolean = true
+    val pos1Occupied: Boolean get() = !bb1.state || !bb2.state
+    val pos2Occupied: Boolean get() = !bb3.state || !bb4.state
+    val pos3Occupied: Boolean get() = !bb5.state || !bb6.state
 
-    override fun initialize() {
-        if (ROBOT.currStage == Stage.TELEOP) { return }
-        bbTrigger
-            .whenBecomesTrue {
-                if (ballEntered) {
-                    ballEntered = false
-                    SequentialGroup(
-                        Delay(0.17),
-                        instant { ballEntered = true; count++ }
-                    ).apply {
-                        schedule()
-                    }
-                }
-            }
-    }
+    val ballCount: Int get() = (if (pos1Occupied) 1 else 0) + (if (pos2Occupied) 1 else 0) + (if (pos3Occupied) 1 else 0)
+    val isFull: Boolean get() = ballCount == 3
+
+    override fun initialize() { }
 }
 
 object Stupid {  }

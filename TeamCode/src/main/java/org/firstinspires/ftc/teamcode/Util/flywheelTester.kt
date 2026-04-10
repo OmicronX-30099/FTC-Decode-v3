@@ -33,8 +33,8 @@ class flywheelTester: NextFTCOpMode(){
         @JvmField
         var servoPos = 0.5
     }
-    private val flywheelMotor1: MotorEx = MotorEx("fwt")
-    private val flywheelMotor2: MotorEx = MotorEx("fwb")
+    private val flywheelMotor1: MotorEx = MotorEx("fwl")
+    private val flywheelMotor2: MotorEx = MotorEx("fwr")
     private val transferMotor: MotorEx = MotorEx("t").reversed()
     private val intakeMotor: MotorEx = MotorEx("i")
     private val turretServo1: ServoEx = ServoEx("lt")
