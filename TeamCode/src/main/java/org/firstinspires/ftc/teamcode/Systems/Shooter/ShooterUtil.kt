@@ -37,6 +37,11 @@ object Hood: Subsystem {
         hoodServo.position = targetPosition
     }
 
+    fun reset() {
+        targetPosition = 0.5
+        hoodServo.position = 0.5
+    }
+
     private fun interpolate(distance: Double): Double {
         if (table.isEmpty()) return 0.5
         if (distance <= table.first().first) return table.first().second

@@ -31,7 +31,6 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood) {
         flywheelState = FlywheelState.MANUAL
         Flywheel.targetVelocity = Flywheel.IDLE_VELOCITY
     }
-    fun increaseFlywheelVel(to: Double) { if (flywheelState == FlywheelState.MANUAL) Flywheel.targetVelocity = to }
     fun enablePredictive() { flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM }
     fun enableAutoAim() { flywheelState = FlywheelState.AUTO_AIM }
 
