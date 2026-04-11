@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.Stage
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.includePedro
+import org.firstinspires.ftc.teamcode.Util.resetPinpoint
 
 @Autonomous(name = "18 Ball - BLUE - LANCERS", group = "Collab Auto", preselectTeleOp = "Blue TeleOp")
 class Blue18BallAlliance(): NextFTCOpMode() {
@@ -35,6 +36,7 @@ class Blue18BallAlliance(): NextFTCOpMode() {
         ROBOT.currAlliance = Alliance.BLUE
         Shooter.enableAutoAim()
         ROBOT.currStage = Stage.AUTONOMOUS
+        resetPinpoint()
     }
 
     override fun onStartButtonPressed() {

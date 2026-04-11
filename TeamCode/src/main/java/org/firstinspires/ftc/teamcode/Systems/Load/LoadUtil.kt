@@ -21,8 +21,11 @@ object Rollers: Subsystem {
     private val transferMotor: MotorEx = MotorEx("t").reversed()
     private val intakeMotor: MotorEx = MotorEx("i")
     private val shooterGateServo: ServoEx = ServoEx("shooter_gate",-0.1)
+    private val sideLight1: ServoEx = ServoEx("left_light", -0.1)
+    private val sideLight2: ServoEx = ServoEx("right_light", -0.1)
 
     var isFeeding: Boolean = false
+    private var wasFull: Boolean = false
 
     override fun initialize() { lockShooter() }
 
@@ -36,12 +39,28 @@ object Rollers: Subsystem {
     fun unlockShooter() { shooterGateServo.position = 0.2 }
 
     fun update() {
+        val sidePos = when (BreakBeam.ballCount) {
+            3 -> 0.5
+            2 -> 0.388
+            1 -> 0.277
+            else -> 0.0
+        }
+        sideLight1.position = sidePos
+        sideLight2.position = sidePos
+
         if (isFeeding) return
 
         if (BreakBeam.isFull) {
+            if (!wasFull) {
+                ActiveOpMode.gamepad1.rumble(500)
+                wasFull = true
+            }
             stop()
-        } else if (BreakBeam.ballCount >= 1) {
-            transfer(0.0)
+        } else {
+            wasFull = false
+            if (BreakBeam.ballCount >= 1) {
+                transfer(0.0)
+            }
         }
     }
 }

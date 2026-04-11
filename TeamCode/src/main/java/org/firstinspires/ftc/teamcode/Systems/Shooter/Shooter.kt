@@ -9,23 +9,35 @@ import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.hardware.impl.ServoEx
 import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.genVector
+import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.hypot
 
-object Shooter: SubsystemGroup(Turret, Flywheel, Hood) {
-    private val shooterFrontRGB: ServoEx = ServoEx("front_light",-0.1)
-    private val shooterMiddleRGB: ServoEx = ServoEx("back_light", -0.1)
+object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
     private const val ITERATIONS: Int = 8
+    
     var flywheelState: FlywheelState = FlywheelState.PREDICTIVE_AUTO_AIM
         private set
+    
+    var shooterMethod: ShooterMethod = ShooterMethod.REGRESSION
+
+    override fun initialize() {
+        PhysicsShooter.precomputeField()
+    }
 
     fun update() {
         when (flywheelState) {
-            FlywheelState.PREDICTIVE_AUTO_AIM -> { updateFlywheel(true); updateTurret(true); updateHood(true); shooterMiddleRGB.position = 0.722 }
-            FlywheelState.AUTO_AIM -> { updateFlywheel(); updateTurret(); updateHood(); shooterMiddleRGB.position = 0.611 }
-            FlywheelState.MANUAL -> { Flywheel.update(); updateTurret(); updateHood(); shooterMiddleRGB.position = 0.0 }
+            FlywheelState.PREDICTIVE_AUTO_AIM -> { updateFlywheel(true); updateTurret(true); updateHood(true) }
+            FlywheelState.AUTO_AIM -> { updateFlywheel(); updateTurret(); updateHood() }
+            FlywheelState.MANUAL -> { Flywheel.update(); updateTurret(); updateHood() }
         }
-        shooterFrontRGB.position = if (Flywheel.atTarget()) { 0.47 } else { 0.28 }
+        
+        val error = abs(Flywheel.targetVelocity - Flywheel.currentVelocity)
+        ShooterLights.shooterRGB.position = when {
+            error <= 40.0 -> 0.5
+            error <= 100.0 -> 0.388
+            else -> 0.277
+        }
     }
     fun flywheelManual() {
         flywheelState = FlywheelState.MANUAL
@@ -34,7 +46,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood) {
     fun enablePredictive() { flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM }
     fun enableAutoAim() { flywheelState = FlywheelState.AUTO_AIM }
 
-    fun reset() { Flywheel.reset(); Turret.reset(); Hood.reset(); flywheelState == FlywheelState.AUTO_AIM }
+    fun reset() { Flywheel.reset(); Turret.reset(); Hood.reset(); flywheelState = FlywheelState.AUTO_AIM }
     fun debug(): String = "Turret Data: \n${Turret.debug()} \nFlywheel Data: \n${Flywheel.debug()} \nHood Data: \n${Hood.debug()}"
 
     private fun updateTurret(predictive: Boolean = false) {
@@ -58,7 +70,12 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood) {
             } else {
                 ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.flywheelGoalPose)
             }
-        Flywheel.targetVelocity = calculateFlywheelVelocity(d)
+        
+        Flywheel.targetVelocity = if (shooterMethod == ShooterMethod.PHYSICS) {
+            PhysicsShooter.getTargetParams(d).second
+        } else {
+            calculateFlywheelVelocity(d)
+        }
         Flywheel.update()
     }
     private fun updateHood(predictive: Boolean = false) {
@@ -69,9 +86,14 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood) {
                 ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.flywheelGoalPose)
             }
         
-        // velocityError = target - actual
         val velocityError = Flywheel.targetVelocity - Flywheel.currentVelocity
-        Hood.update(d, velocityError)
+        
+        if (shooterMethod == ShooterMethod.PHYSICS) {
+            val targetAngle = PhysicsShooter.getTargetParams(d).first
+            Hood.updatePhysics(targetAngle, velocityError)
+        } else {
+            Hood.updateRegression(d, velocityError)
+        }
     }
     private fun calculateFlywheelVelocity(d: Double) = ((0.01632 * d * d) + (3.49146 * d) + 985.48178)
     //y=0.01632x^{2}+3.49146x+985.48178
@@ -93,4 +115,9 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood) {
         }
         return c
     }
+}
+
+enum class ShooterMethod {
+    REGRESSION,
+    PHYSICS
 }

@@ -22,8 +22,9 @@ import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.Stage
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.includePedro
+import org.firstinspires.ftc.teamcode.Util.resetPinpoint
 
-@Autonomous(name = "Red Collab Auto", group = "Collab Auto", preselectTeleOp = "Red TeleOp")
+ @Autonomous(name = "Red Collab Auto", group = "Collab Auto", preselectTeleOp = "Red TeleOp")
 class RedCollabFar(): NextFTCOpMode() {
     init {
         addSubsystems(Shooter, Load)
@@ -35,6 +36,7 @@ class RedCollabFar(): NextFTCOpMode() {
         ROBOT.currAlliance = Alliance.RED
         ROBOT.currStage = Stage.TELEOP
         Shooter.enableAutoAim()
+        resetPinpoint()
     }
     override fun onStartButtonPressed() {
         buildPaths()

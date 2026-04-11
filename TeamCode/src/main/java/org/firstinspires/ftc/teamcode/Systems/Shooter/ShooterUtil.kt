@@ -20,6 +20,9 @@ object Hood: Subsystem {
     @JvmField var minHoodPos: Double = 0.0
     @JvmField var maxHoodPos: Double = 1.0
     
+    @JvmField var servoAt15Deg: Double = 0.2
+    @JvmField var servoAt35Deg: Double = 0.8
+    
     // Distance (inches) to Servo Position (0.0 - 1.0)
     private val table = listOf(
         40.0 to 0.4,
@@ -30,8 +33,18 @@ object Hood: Subsystem {
 
     var targetPosition: Double = 0.0
 
-    fun update(distance: Double, velocityError: Double) {
+    fun updateRegression(distance: Double, velocityError: Double) {
         val basePosition = interpolate(distance)
+        val compensation = velocityError * compensationFactor
+        targetPosition = (basePosition - compensation).coerceIn(minHoodPos, maxHoodPos)
+        hoodServo.position = targetPosition
+    }
+
+    fun updatePhysics(targetAngle: Double, velocityError: Double) {
+        // Map targetAngle [15, 35] to servo range
+        val t = (targetAngle - 15.0) / (35.0 - 15.0)
+        val basePosition = servoAt15Deg + t * (servoAt35Deg - servoAt15Deg)
+        
         val compensation = velocityError * compensationFactor
         targetPosition = (basePosition - compensation).coerceIn(minHoodPos, maxHoodPos)
         hoodServo.position = targetPosition
@@ -60,6 +73,11 @@ object Hood: Subsystem {
 
     override fun initialize() { targetPosition = 0.5 }
     fun debug(): String = "Target Position = $targetPosition \nComp Factor = $compensationFactor"
+}
+
+object ShooterLights: Subsystem {
+    val shooterRGB: ServoEx = ServoEx("shooter_light", -0.1)
+    override fun initialize() { }
 }
 
 @Configurable

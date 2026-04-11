@@ -20,5 +20,11 @@ fun NextFTCOpMode.addSubsystems(vararg subsystems: Subsystem) =
     addComponents(BindingsComponent, BulkReadComponent, LoopTimeComponent(), SubsystemComponent(*subsystems))
 fun NextFTCOpMode.includePedro(followerFactory: (HardwareMap) -> Follower) =
     addComponents(PedroComponent(followerFactory))
+
+fun NextFTCOpMode.resetPinpoint() {
+    val pinpoint = hardwareMap.get(com.qualcomm.hardware.gobilda.GoBildaPinpointDriver::class.java, "pp")
+    pinpoint.resetPosAndIMU()
+}
+
 fun Pose.genVector(otherPose: Pose): Vector = Vector(hypot(otherPose.x-this.x, otherPose.y-this.y),atan2(this.y-otherPose.y,this.x-otherPose.x))
 fun Vector.toPose(): Pose = Pose(this.xComponent, this.yComponent)

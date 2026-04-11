@@ -9,7 +9,8 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 data object ROBOT {
-    private const val TURRET_Y_OFFSET: Double = -1.774
+    private const val TURRET_X_OFFSET: Double = -0.96
+    private const val TURRET_Y_OFFSET: Double = 0.0
 
     var currAlliance: Alliance = Alliance.BLUE
     var currStage: Stage = Stage.TELEOP
@@ -19,10 +20,10 @@ data object ROBOT {
         }
 
     fun shooterPose(): Pose {
-        val a: Double = follower.heading
+        val h: Double = follower.pose.heading
         return follower.pose + Pose(
-            TURRET_Y_OFFSET * cos(a),
-            TURRET_Y_OFFSET * sin(a)
+            TURRET_X_OFFSET * cos(h) - TURRET_Y_OFFSET * sin(h),
+            TURRET_X_OFFSET * sin(h) + TURRET_Y_OFFSET * cos(h)
         )
     }
 }
