@@ -16,7 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class PedroConstants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(14.0)
+            .mass(10.2)
             .forwardZeroPowerAcceleration(-34.0)
             .lateralZeroPowerAcceleration(-87.5)
             .predictiveBrakingCoefficients(new PredictiveBrakingCoefficients(0.2,0.048293,0.00191319))
@@ -39,10 +39,10 @@ public class PedroConstants {
             .rightRearMotorName("br")
             .leftRearMotorName("bl")
             .leftFrontMotorName("fl")
-            .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .xVelocity(69.247)
             .yVelocity(52.4)
             .useBrakeModeInTeleOp(true);

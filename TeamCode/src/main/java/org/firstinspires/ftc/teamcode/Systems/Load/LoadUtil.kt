@@ -18,8 +18,8 @@ object Rollers: Subsystem {
     init {
         Log.d("Rollers", "Initializing")
     }
-    private val transferMotor: MotorEx = MotorEx("t").reversed()
-    private val intakeMotor: MotorEx = MotorEx("i")
+    private val transferMotor: MotorEx = MotorEx("i").reversed()
+    private val intakeMotor: MotorEx = MotorEx("t").reversed()
     private val shooterGateServo: ServoEx = ServoEx("shooter_gate",-0.1)
     private val sideLight1: ServoEx = ServoEx("left_light", -0.1)
     private val sideLight2: ServoEx = ServoEx("right_light", -0.1)
