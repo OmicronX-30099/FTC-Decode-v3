@@ -26,5 +26,5 @@ fun NextFTCOpMode.resetPinpoint() {
     pinpoint.resetPosAndIMU()
 }
 
-fun Pose.genVector(otherPose: Pose): Vector = Vector(hypot(otherPose.x-this.x, otherPose.y-this.y),atan2(this.y-otherPose.y,this.x-otherPose.x))
+fun Pose.genVector(otherPose: Pose): Vector = Vector(hypot(otherPose.x-this.x, otherPose.y-this.y),atan2(otherPose.y-this.y,otherPose.x-this.x))
 fun Vector.toPose(): Pose = Pose(this.xComponent, this.yComponent)

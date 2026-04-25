@@ -8,7 +8,7 @@ import dev.nextftc.extensions.pedro.PedroDriverControlled
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.hardware.driving.DriverControlledCommand
-import org.firstinspires.ftc.teamcode.Constants.PedroConstants
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.Systems.Load.Load
 import org.firstinspires.ftc.teamcode.Systems.Load.Rollers
 import org.firstinspires.ftc.teamcode.Systems.Shooter.Flywheel
@@ -20,19 +20,21 @@ import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.Stage
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.includePedro
+import kotlin.math.PI
+import kotlin.math.abs
 
 @TeleOp(name = "Blue TeleOp", group = "Standard TeleOp")
 class BlueTeleOp: NextFTCOpMode() {
     init {
         addSubsystems(Load, Shooter)
-        includePedro(PedroConstants::createFollower)
+        includePedro(Constants::createFollower)
     }
 
     val drivetrain: DriverControlledCommand by lazy {
         PedroDriverControlled(
             -Gamepads.gamepad1.leftStickY,
             -Gamepads.gamepad1.leftStickX,
-            -Gamepads.gamepad1.rightStickX,
+            (-Gamepads.gamepad1.rightStickX).map { (it * abs(it) + it) / 2.0 },
             true
         )
     }
@@ -42,6 +44,7 @@ class BlueTeleOp: NextFTCOpMode() {
     override fun onStartButtonPressed() {
         ROBOT.currStage = Stage.TELEOP
         ROBOT.currAlliance = Alliance.BLUE
+        Shooter.flywheelState = FlywheelState.AUTO_AIM
         follower.setStartingPose(ROBOT.teleopStartPose)
         drivetrain.schedule()
         Gamepads.gamepad1 .apply {

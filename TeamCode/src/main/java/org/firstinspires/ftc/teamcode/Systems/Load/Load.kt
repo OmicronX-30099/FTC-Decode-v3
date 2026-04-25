@@ -12,16 +12,17 @@ import org.firstinspires.ftc.teamcode.Util.ROBOT
 object Load: SubsystemGroup(Rollers, BreakBeam) {
     val shootTripleCommand: Command = IfElseCommand(
         { ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.flywheelGoalPose) > 115.0},
-        shootCommand(1.2,0.55,0.55),
-        shootCommand(0.7, 1.0, 1.0)
+        shootCommand(1.0,0.67,0.67),
+        shootCommand(0.5, 1.0, 1.0)
     ).setRequirements(Stupid)
 
     fun shootCommand(waitTime: Double, tPow: Double, iPow: Double): Command =
         SequentialGroup(
             instant {
                 Rollers.isFeeding = true
-                Rollers.run(tPow,iPow)
                 Rollers.unlockShooter()
+                Delay(0.2)
+                Rollers.run(tPow,iPow)
             },
             Delay(waitTime),
             instant {

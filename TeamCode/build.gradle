@@ -57,11 +57,11 @@ dependencies {
     implementation 'dev.nextftc:control2:0.0.3'
 
     implementation 'dev.nextftc.extensions:pedro:1.0.0'
-    implementation 'com.pedropathing:ftc:2.1.0-beta.1'
+    implementation 'com.pedropathing:ftc:2.1.1'
     implementation 'com.pedropathing:telemetry:1.0.0'
 
-    implementation 'gay.zharel.fateweaver:ftc:0.3.3'
-    implementation 'dev.nextftc.extensions:fateweaver:1.0.0'
+    //implementation 'gay.zharel.fateweaver:ftc:0.3.4'
+    //implementation 'dev.nextftc.extensions:fateweaver:1.0.0'
 
     implementation 'com.bylazar.sloth:fullpanels:0.2.4+1.0.12'
     implementation 'dev.frozenmilk.sinister:Sloth:0.2.4'

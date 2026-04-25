@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Util;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Configurable
@@ -11,17 +12,21 @@ public class servoTester extends OpMode {
     
     public static String c_name = "lt";
     public static String b_name = "ft";
-    public static double pos = 0.5;
-    public static double pos1 = 0.5;
+    public static double pos = 0.505;
+    public static double pos1 = 0.505;
+
     @Override
     public void init() {
-
     }
 
     @Override
     public void loop() {
         Servo test = hardwareMap.get(Servo.class, c_name);
         Servo test1 = hardwareMap.get(Servo.class, b_name);
+        PwmControl pwmServo = (PwmControl) test;
+        PwmControl pwmServo1 = (PwmControl) test1;
+        pwmServo.setPwmRange(new PwmControl.PwmRange(500, 2500));
+        pwmServo1.setPwmRange(new PwmControl.PwmRange(500,2500));
         test.setPosition(pos);
         test1.setPosition(pos1);
     }

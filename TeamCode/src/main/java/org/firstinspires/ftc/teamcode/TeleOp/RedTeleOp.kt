@@ -2,50 +2,57 @@
 
 package org.firstinspires.ftc.teamcode.TeleOp
 
+import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.extensions.pedro.PedroDriverControlled
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.hardware.driving.DriverControlledCommand
-import org.firstinspires.ftc.teamcode.Constants.PedroConstants
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.Systems.Load.Load
 import org.firstinspires.ftc.teamcode.Systems.Load.Rollers
 import org.firstinspires.ftc.teamcode.Systems.Shooter.Flywheel
 import org.firstinspires.ftc.teamcode.Systems.Shooter.FlywheelState
 import org.firstinspires.ftc.teamcode.Systems.Shooter.Shooter
+import org.firstinspires.ftc.teamcode.Systems.Shooter.Shooter.shooterMethod
+import org.firstinspires.ftc.teamcode.Systems.Shooter.ShooterMethod
 import org.firstinspires.ftc.teamcode.Systems.Shooter.Turret
 import org.firstinspires.ftc.teamcode.Util.Alliance
 import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.Stage
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.includePedro
+import kotlin.math.PI
+import kotlin.math.abs
 
 @TeleOp(name = "Red TeleOp", group = "Standard TeleOp")
 class RedTeleOp: NextFTCOpMode() {
     init {
         addSubsystems(Load, Shooter)
-        includePedro(PedroConstants::createFollower)
+        includePedro(Constants::createFollower)
     }
 
     val drivetrain: DriverControlledCommand by lazy {
         PedroDriverControlled(
             -Gamepads.gamepad1.leftStickY,
             -Gamepads.gamepad1.leftStickX,
-            -Gamepads.gamepad1.rightStickX,
+            (-Gamepads.gamepad1.rightStickX).map { (it * abs(it) + it) / 2.0 },
             true
         )
     }
     override fun onInit() { Shooter.reset() }
 
     override fun onStartButtonPressed() {
+        shooterMethod = ShooterMethod.REGRESSION
+        Shooter.flywheelState = FlywheelState.AUTO_AIM
         ROBOT.currStage = Stage.TELEOP
         ROBOT.currAlliance = Alliance.RED
-        follower.setStartingPose(ROBOT.teleopStartPose)
+        follower.setStartingPose(Pose((141.5-23.875-6.23),(141.5-17.25+6.7),Math.toRadians(90.0)))
         drivetrain.schedule()
         Gamepads.gamepad1 .apply {
             rightTrigger.greaterThan(0.0)
-                .whenBecomesTrue { Rollers.run(1.0,0.25) }
+                .whenBecomesTrue { Rollers.run(1.0,0.67) }
                 .whenBecomesFalse { Rollers.stop() }
             leftTrigger.greaterThan(0.0).and(rightTrigger.inRange(0.0..0.0))
                 .whenBecomesTrue { Rollers.run(-1.0,-1.0) }

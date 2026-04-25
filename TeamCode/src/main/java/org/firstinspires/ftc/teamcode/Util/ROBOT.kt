@@ -20,6 +20,7 @@ data object ROBOT {
         }
 
     fun shooterPose(): Pose {
+        if (follower.pose.x == 0.0 && follower.pose.y == 0.0) return follower.pose
         val h: Double = follower.pose.heading
         return follower.pose + Pose(
             TURRET_X_OFFSET * cos(h) - TURRET_Y_OFFSET * sin(h),
