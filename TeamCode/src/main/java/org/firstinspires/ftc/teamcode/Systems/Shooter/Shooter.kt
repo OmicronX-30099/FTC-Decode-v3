@@ -23,7 +23,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
     private var lastTurretUpdateTime = 0L
 
     override fun initialize() {
-        PhysicsShooter.precomputeField()
+        //PhysicsShooter.precomputeField()
     }
 
     fun update() {

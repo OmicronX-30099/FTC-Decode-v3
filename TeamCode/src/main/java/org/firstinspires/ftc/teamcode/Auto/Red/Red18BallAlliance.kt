@@ -34,12 +34,12 @@ class Red18BallAlliance(): NextFTCOpMode() {
 
     override fun onInit() {
         ROBOT.currAlliance = Alliance.RED
-        Shooter.enableAutoAim()
+        Shooter.reset()
         ROBOT.currStage = Stage.AUTONOMOUS
-        resetPinpoint()
+        follower.poseTracker.resetIMU()
     }
     override fun onStartButtonPressed() {
-        follower.setStartingPose(Pose((141.5-23.875-6.23),(141.5-14.0+6.7),Math.toRadians(90.0)))
+        follower.setStartingPose(Pose(112.0,130.75,Math.toRadians(90.0)))
         buildPaths()
         val main = SequentialGroup(
             FollowPath(paths[0]), //shoot preload
@@ -47,50 +47,51 @@ class Red18BallAlliance(): NextFTCOpMode() {
             Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[1]), //intake second spike mark
-                InstantCommand { Rollers.run(1.0,0.25) }
+                InstantCommand { Rollers.run(1.0,0.67) }
             ),
             ParallelGroup(FollowPath(paths[2]), //shoot second spike mark
-                InstantCommand { Rollers.run(0.0,0.0)},
             ),
             Delay(0.2),
             Load . shootTripleCommand,
             ParallelGroup(
-                FollowPath(paths[3],true,1.0), //intake gate
-                InstantCommand { Rollers.run(1.0, 0.25) }
+                FollowPath(paths[3]), //intake gate
+                InstantCommand { Rollers.run(1.0, 0.67) }
             ),
-            Delay(0.7),
+            Delay(1.5),
             ParallelGroup(FollowPath(paths[4],true,1.0), //shoot gate
-                InstantCommand { Rollers.run(0.0,0.0)},
+                Delay(0.5),
+                InstantCommand { Rollers.run(0.0,0.0)}
             ),
             Delay(0.2),
             Load . shootTripleCommand,
             ParallelGroup(
-                FollowPath(paths[3],true,1.0), //intake gate
-                InstantCommand { Rollers.run(1.0, 0.25) }
+                FollowPath(paths[3]), //intake gate
+                InstantCommand { Rollers.run(1.0, 0.67) }
             ),
-            Delay(0.7),
+            Delay(1.5),
             ParallelGroup(
                 FollowPath(paths[4],true,1.0), //shoot gate
-                InstantCommand { Rollers.run(0.0,0.0)},
+                Delay(0.5),
+                InstantCommand { Rollers.run(0.0,0.0)}
             ),
             Delay(0.2),
             Load . shootTripleCommand,
             ParallelGroup(
-                FollowPath(paths[3],true,1.0), //intake gate
-                InstantCommand { Rollers.run(1.0, 0.25) }
+                FollowPath(paths[3]), //intake gate
+                InstantCommand { Rollers.run(1.0, 0.67) }
             ),
-            Delay(0.7),
+            Delay(1.5),
             ParallelGroup(
                 FollowPath(paths[4],true,1.0), //shoot gate
-                InstantCommand { Rollers.run(0.0,0.0)},
+                Delay(0.5),
+                InstantCommand { Rollers.run(0.0,0.0)}
             ),
             Delay(0.2),
             Load . shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[5]), //intake first spike
-                InstantCommand { Rollers.run(1.0, 0.25) }
+                InstantCommand { Rollers.run(1.0, 0.67) }
             ),
-            InstantCommand { Rollers.run(0.0,0.0)},
             FollowPath(paths[6]), //shoot first spike
             Delay(0.2),
             Load . shootTripleCommand,
@@ -102,19 +103,19 @@ class Red18BallAlliance(): NextFTCOpMode() {
 
         val shootpreload = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(34.000, 132.900).mirror(),
+                Pose(30.000, 130.750).mirror(142.0),
 
-                Pose(57.000, 73.000).mirror()
+                Pose(57.000, 73.000).mirror(142.0)
             )
-        ).setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(-23.0))
+        ).setLinearHeadingInterpolation(Math.toRadians(90.0), Math.toRadians(-23.0))
 
             .build()
 
         val intakesecondspike = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(57.000, 73.000).mirror(),
+                Pose(57.000, 73.000).mirror(142.0),
 
-                Pose(15.400, 56.200).mirror()
+                Pose(15.400, 56.200).mirror(142.0)
             )
         ).setTangentHeadingInterpolation()
 
@@ -122,9 +123,9 @@ class Red18BallAlliance(): NextFTCOpMode() {
 
         val shootsecondspike = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(15.400, 56.200).mirror(),
+                Pose(15.400, 56.200).mirror(142.0),
 
-                Pose(57.000, 73.000).mirror()
+                Pose(57.000, 73.000).mirror(142.0)
             )
         ).setTangentHeadingInterpolation()
             .setReversed()
@@ -132,30 +133,29 @@ class Red18BallAlliance(): NextFTCOpMode() {
 
         val gateintake = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(57.000, 73.000).mirror(),
+                Pose(57.000, 73.000).mirror(142.0),
 
-                Pose(10.00, 57.000).mirror()
+                Pose(12.300, 57.500).mirror(142.0)
             )
-        ).setLinearHeadingInterpolation(Math.toRadians(-23.0), Math.toRadians(180.0-147.731))
-            .addParametricCallback(0.8) {follower.setMaxPower(0.2)}
-            .addParametricCallback(0.94) {follower.setMaxPower(1.0)}
+        ).setLinearHeadingInterpolation(Math.toRadians(-23.0), Math.toRadians(180.0-157.0))
+            .addParametricCallback(0.5) {follower.setMaxPower(0.5)}
             .build()
 
         val shootgate1 = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(10.000, 57.000).mirror(),
+                Pose(12.300, 57.500).mirror(142.0),
 
-                Pose(57.000, 73.000).mirror()
+                Pose(57.000, 73.000).mirror(142.0)
             )
-        ).setLinearHeadingInterpolation(Math.toRadians(180-147.731), Math.toRadians(20.0))
+        ).setLinearHeadingInterpolation(Math.toRadians(180-157.0), Math.toRadians(20.0))
             .addParametricCallback(0.05) {follower.setMaxPower(1.0)}
             .build()
 
         val intakefirstspike = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(57.000, 73.000).mirror(),
+                Pose(57.000, 73.000).mirror(142.0),
 
-                Pose(19.000, 85.000).mirror()
+                Pose(19.000, 85.000).mirror(142.0)
             )
         ).setTangentHeadingInterpolation()
 
@@ -163,9 +163,9 @@ class Red18BallAlliance(): NextFTCOpMode() {
 
         val shootfirstspike = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(19.000, 85.000).mirror(),
+                Pose(19.000, 85.000).mirror(142.0),
 
-                Pose(57.000, 73.000).mirror()
+                Pose(57.000, 73.000).mirror(142.0)
             )
         ).setTangentHeadingInterpolation()
             .setReversed()
@@ -173,10 +173,10 @@ class Red18BallAlliance(): NextFTCOpMode() {
 
         val intakethirdspike = follower.pathBuilder().addPath(
             BezierCurve(
-                Pose(57.000, 73.000).mirror(),
-                Pose(55.000, 32.000).mirror(),
-                Pose(45.000, 32.000).mirror(),
-                Pose(17.000, 34.000).mirror()
+                Pose(57.000, 73.000).mirror(142.0),
+                Pose(55.000, 32.000).mirror(142.0),
+                Pose(45.000, 32.000).mirror(142.0),
+                Pose(17.000, 34.000).mirror(142.0)
             )
         ).setLinearHeadingInterpolation(Math.toRadians(18.0), Math.toRadians(0.0))
 
@@ -184,9 +184,9 @@ class Red18BallAlliance(): NextFTCOpMode() {
 
         val shootthirdspike = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(17.000, 34.000).mirror(),
+                Pose(17.000, 34.000).mirror(142.0),
 
-                Pose(57.000, 78.000).mirror()
+                Pose(57.000, 78.000).mirror(142.0)
             )
         ).setTangentHeadingInterpolation()
             .setReversed()
@@ -194,9 +194,9 @@ class Red18BallAlliance(): NextFTCOpMode() {
 
         val leave = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(57.000, 78.000).mirror(),
+                Pose(57.000, 78.000).mirror(142.0),
 
-                Pose(52.500, 72.500).mirror()
+                Pose(52.500, 72.500).mirror(142.0)
             )
         ).setTangentHeadingInterpolation()
 
@@ -216,7 +216,9 @@ class Red18BallAlliance(): NextFTCOpMode() {
     override fun onUpdate() {
         Shooter.update()
         Rollers.update()
-        ROBOT.teleopStartPose = follower.pose
+        if(follower.pose != Pose(0.0,0.0,0.0)){
+            ROBOT.teleopStartPose = follower.pose
+        }
         telemetry.update()
     }
 }

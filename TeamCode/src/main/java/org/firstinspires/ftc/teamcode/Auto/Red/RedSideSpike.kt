@@ -9,7 +9,9 @@ import dev.nextftc.core.commands.groups.ParallelGroup
 import dev.nextftc.core.commands.groups.SequentialGroup
 import dev.nextftc.core.commands.utility.InstantCommand
 import dev.nextftc.extensions.pedro.FollowPath
+import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.ftc.NextFTCOpMode
+import org.firstinspires.ftc.teamcode.Systems.Load.BreakBeam.ballCount
 import org.firstinspires.ftc.teamcode.Systems.Load.Load
 import org.firstinspires.ftc.teamcode.Systems.Load.Rollers
 import org.firstinspires.ftc.teamcode.Systems.Shooter.Shooter
@@ -18,10 +20,7 @@ import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.Stage
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.includePedro
-import org.firstinspires.ftc.teamcode.Util.resetPinpoint
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
-import org.firstinspires.ftc.teamcode.pedroPathing.Tuning
-import org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower
 
 
 @Autonomous(name = "Red Side Spike", group = "Solo Auto", preselectTeleOp = "Red TeleOp")
@@ -37,10 +36,11 @@ class RedSideSpike(): NextFTCOpMode() {
         ROBOT.currAlliance = Alliance.RED
         Shooter.reset()
         ROBOT.currStage = Stage.AUTONOMOUS
-        resetPinpoint()
+        follower.poseTracker.resetIMU()
+        //resetPinpoint()
     }
     override fun onStartButtonPressed() {
-        follower.setStartingPose(Pose(112.0,133.3,Math.toRadians(-90.0)))
+        follower.setStartingPose(Pose(112.000, 133.300, Math.toRadians(-90.0)))
         buildPaths()
         val main = SequentialGroup(
             FollowPath(paths[0]), //shoot preload
@@ -51,6 +51,7 @@ class RedSideSpike(): NextFTCOpMode() {
                 InstantCommand { Rollers.run(1.0,1.0) }
             ),
             FollowPath(paths[2]), //intake first spike
+            Delay(0.2),
             FollowPath(paths[3]), //shoot first spike
             Delay(0.2),
             Load.shootTripleCommand
@@ -64,7 +65,7 @@ class RedSideSpike(): NextFTCOpMode() {
             BezierLine(
                 Pose(112.000, 133.300),
 
-                Pose(115.000, 105.000)
+                Pose(112.000, 100.000)
             )
         ).setConstantHeadingInterpolation(Math.toRadians(-90.0))
 
@@ -72,9 +73,9 @@ class RedSideSpike(): NextFTCOpMode() {
 
         val frontofspike1 = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(115.000, 105.000),
+                Pose(112.000, 100.000),
 
-                Pose(118.500, 99.000)
+                Pose(118.000, 99.000)
             )
         ).setConstantHeadingInterpolation(Math.toRadians(-90.0))
 
@@ -82,9 +83,9 @@ class RedSideSpike(): NextFTCOpMode() {
 
         val intakespike1 = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(118.500, 99.000),
+                Pose(118.000, 99.000),
 
-                Pose(118.500, 90.000)
+                Pose(118.000, 90.000)
             )
         ).setConstantHeadingInterpolation(Math.toRadians(-90.0))
 
@@ -92,12 +93,11 @@ class RedSideSpike(): NextFTCOpMode() {
 
         val shootspike1 = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(118.500, 90.000),
+                Pose(118.000, 90.000),
 
-                Pose(115.000, 105.000)
+                Pose(112.000, 100.000)
             )
-        ).setTangentHeadingInterpolation()
-            .setReversed()
+        ).setConstantHeadingInterpolation(Math.toRadians(-90.0))
             .build()
 
         paths += shootpreload
@@ -113,6 +113,7 @@ class RedSideSpike(): NextFTCOpMode() {
         if(follower.pose != Pose(0.0,0.0,0.0)){
             ROBOT.teleopStartPose = follower.pose
         }
+        telemetry.addData("ballcount: ", ballCount)
         telemetry.update()
     }
 
