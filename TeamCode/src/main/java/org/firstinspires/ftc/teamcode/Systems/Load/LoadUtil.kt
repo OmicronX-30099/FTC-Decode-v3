@@ -81,7 +81,7 @@ object BreakBeam: Subsystem {
     private val bb6 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb6") }
     //map of bb: intake to shooter: bb1,bb2 -> bb4,bb3 -> bb6,bb5
     val pos1Occupied: Boolean get() = !bb1.state || !bb2.state //closest to intake, bb1 broken
-    val pos2Occupied: Boolean get() = !bb3.state && !bb4.state
+    val pos2Occupied: Boolean get() = !bb3.state || !bb4.state
     val pos3Occupied: Boolean get() = !bb5.state || !bb6.state
 
     private var oneStartTime: Long = -1L
@@ -114,9 +114,9 @@ object BreakBeam: Subsystem {
             }
 
             return when {
-                threeStartTime != -1L && now - threeStartTime > 150 -> 3
-                twoStartTime != -1L && now - twoStartTime > 150 -> 2
-                oneStartTime != -1L && now - oneStartTime > 150 -> 1
+                threeStartTime != -1L && now - threeStartTime > 25 -> 3
+                twoStartTime != -1L && now - twoStartTime > 25 -> 2
+                oneStartTime != -1L && now - oneStartTime > 25 -> 1
                 else -> 0
             }
         }

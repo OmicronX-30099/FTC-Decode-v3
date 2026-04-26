@@ -87,7 +87,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
         var targetVel = if (shooterMethod == ShooterMethod.PHYSICS) {
             PhysicsShooter.getTargetParams(d).second
         } else {
-            calculateFlywheelVelocity(d)
+            Flywheel.calculateVelocity(d)
         }
 
         // Farzone velocity lock: y < 32 inches -> minimum velocity 1660
@@ -115,8 +115,8 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
             Hood.updateRegression(d, velocityError)
         }
     }
-    private fun calculateFlywheelVelocity(d: Double) = ((0.0118933 * d * d) + (4.02429 * d) + 937.20105)
-    //y=0.0118933x^{2}+4.02429x+937.20105
+    //y=0.0118933x^{2}+4.02429x+937.20105 old
+    //y=0.0101171x^2+4.20298x+945.28294
     private fun calculateTurretAngle(vec: Vector): Double {
         val angleToGoal = Math.toDegrees(atan2(vec.yComponent, vec.xComponent))
         val headingDeg = Math.toDegrees(follower.pose.heading)
@@ -124,8 +124,13 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
     }
 
     private fun getFlyTime(d: Double): Double {
-        val t = (-0.0000251859 * d * d) + (0.00940245 * d) - 0.111539
-        return t//max(0.05, min(t, 0.7))
+        return if (shooterMethod == ShooterMethod.PHYSICS) {
+            PhysicsShooter.getFlyTime(d)
+        } else {
+            val tps = Flywheel.calculateVelocity(d)
+            val angle = Hood.getAngle(d)
+            PhysicsShooter.getFlyTime(d, angle, tps)
+        }
     }
     private fun getCorrectedVecIterative(botPose: Pose, targetPose: Pose, velocity: Vector): Vector {
         val r = Vector(
@@ -135,7 +140,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
         var c = r
         repeat(ITERATIONS) {
             val t = getFlyTime(c.magnitude)
-            c = r.plus(velocity.times(t))
+            c = r.minus(velocity.times(t))
         }
         return c
     }

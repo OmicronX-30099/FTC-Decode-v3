@@ -50,7 +50,7 @@ class flywheelTester: NextFTCOpMode(){
     fun calculatePow(): Double = ((flywheelCoeffs.kP * (targetVelocity - flywheelMotors.velocity)) + (flywheelCoeffs.kV * targetVelocity) + (flywheelCoeffs.kS * sign(targetVelocity)))
 
     override fun onStartButtonPressed() {
-        follower.setStartingPose(Pose((141.5-23.875-6.23),(141.5-14.0+6.7),Math.toRadians(90.0)))
+        follower.setStartingPose(Pose(112.0,130.75,Math.toRadians(90.0)))
     }
     override fun onUpdate() {
         if (gamepad1.rightBumperWasPressed()) {

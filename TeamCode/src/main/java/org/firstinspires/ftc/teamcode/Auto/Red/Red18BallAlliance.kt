@@ -12,7 +12,6 @@ import dev.nextftc.core.commands.utility.InstantCommand
 import dev.nextftc.extensions.pedro.FollowPath
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.ftc.NextFTCOpMode
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.Systems.Load.Load
 import org.firstinspires.ftc.teamcode.Systems.Load.Rollers
 import org.firstinspires.ftc.teamcode.Systems.Shooter.Shooter
@@ -21,7 +20,8 @@ import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.Stage
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.includePedro
-import org.firstinspires.ftc.teamcode.Util.resetPinpoint
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants
+
 
 @Autonomous(name = "18 Ball - RED - LANCERS", group = "Collab Auto", preselectTeleOp = "Red TeleOp")
 class Red18BallAlliance(): NextFTCOpMode() {
@@ -49,7 +49,8 @@ class Red18BallAlliance(): NextFTCOpMode() {
                 FollowPath(paths[1]), //intake second spike mark
                 InstantCommand { Rollers.run(1.0,0.67) }
             ),
-            ParallelGroup(FollowPath(paths[2]), //shoot second spike mark
+            ParallelGroup(
+                FollowPath(paths[2]), //shoot second spike mark
             ),
             Delay(0.2),
             Load . shootTripleCommand,
@@ -58,21 +59,9 @@ class Red18BallAlliance(): NextFTCOpMode() {
                 InstantCommand { Rollers.run(1.0, 0.67) }
             ),
             Delay(1.5),
-            ParallelGroup(FollowPath(paths[4],true,1.0), //shoot gate
-                Delay(0.5),
-                InstantCommand { Rollers.run(0.0,0.0)}
-            ),
-            Delay(0.2),
-            Load . shootTripleCommand,
-            ParallelGroup(
-                FollowPath(paths[3]), //intake gate
-                InstantCommand { Rollers.run(1.0, 0.67) }
-            ),
-            Delay(1.5),
-            ParallelGroup(
-                FollowPath(paths[4],true,1.0), //shoot gate
-                Delay(0.5),
-                InstantCommand { Rollers.run(0.0,0.0)}
+            ParallelGroup(FollowPath(paths[4]), //shoot gate
+                //Delay(0.5),
+                //InstantCommand { Rollers.run(0.0,0.0)}
             ),
             Delay(0.2),
             Load . shootTripleCommand,
@@ -82,9 +71,21 @@ class Red18BallAlliance(): NextFTCOpMode() {
             ),
             Delay(1.5),
             ParallelGroup(
-                FollowPath(paths[4],true,1.0), //shoot gate
-                Delay(0.5),
-                InstantCommand { Rollers.run(0.0,0.0)}
+                FollowPath(paths[4]), //shoot gate
+                //Delay(0.5),
+                //InstantCommand { Rollers.run(0.0,0.0)}
+            ),
+            Delay(0.2),
+            Load . shootTripleCommand,
+            ParallelGroup(
+                FollowPath(paths[3]), //intake gate
+                InstantCommand { Rollers.run(1.0, 0.67) }
+            ),
+            Delay(1.5),
+            ParallelGroup(
+                FollowPath(paths[4]), //shoot gate
+                //Delay(0.5),
+                //InstantCommand { Rollers.run(0.0,0.0)}
             ),
             Delay(0.2),
             Load . shootTripleCommand,
@@ -95,6 +96,7 @@ class Red18BallAlliance(): NextFTCOpMode() {
             FollowPath(paths[6]), //shoot first spike
             Delay(0.2),
             Load . shootTripleCommand,
+            FollowPath(paths[7])
         )
         main.schedule()
     }
@@ -103,115 +105,91 @@ class Red18BallAlliance(): NextFTCOpMode() {
 
         val shootpreload = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(30.000, 130.750).mirror(142.0),
+                Pose(112.000, 130.750),
 
-                Pose(57.000, 73.000).mirror(142.0)
-            )
-        ).setLinearHeadingInterpolation(Math.toRadians(90.0), Math.toRadians(-23.0))
-
-            .build()
-
-        val intakesecondspike = follower.pathBuilder().addPath(
-            BezierLine(
-                Pose(57.000, 73.000).mirror(142.0),
-
-                Pose(15.400, 56.200).mirror(142.0)
-            )
-        ).setTangentHeadingInterpolation()
-
-            .build()
-
-        val shootsecondspike = follower.pathBuilder().addPath(
-            BezierLine(
-                Pose(15.400, 56.200).mirror(142.0),
-
-                Pose(57.000, 73.000).mirror(142.0)
+                Pose(87.000, 78.000)
             )
         ).setTangentHeadingInterpolation()
             .setReversed()
             .build()
 
-        val gateintake = follower.pathBuilder().addPath(
-            BezierLine(
-                Pose(57.000, 73.000).mirror(142.0),
-
-                Pose(12.300, 57.500).mirror(142.0)
-            )
-        ).setLinearHeadingInterpolation(Math.toRadians(-23.0), Math.toRadians(180.0-157.0))
-            .addParametricCallback(0.5) {follower.setMaxPower(0.5)}
-            .build()
-
-        val shootgate1 = follower.pathBuilder().addPath(
-            BezierLine(
-                Pose(12.300, 57.500).mirror(142.0),
-
-                Pose(57.000, 73.000).mirror(142.0)
-            )
-        ).setLinearHeadingInterpolation(Math.toRadians(180-157.0), Math.toRadians(20.0))
-            .addParametricCallback(0.05) {follower.setMaxPower(1.0)}
-            .build()
-
-        val intakefirstspike = follower.pathBuilder().addPath(
-            BezierLine(
-                Pose(57.000, 73.000).mirror(142.0),
-
-                Pose(19.000, 85.000).mirror(142.0)
-            )
-        ).setTangentHeadingInterpolation()
-
-            .build()
-
-        val shootfirstspike = follower.pathBuilder().addPath(
-            BezierLine(
-                Pose(19.000, 85.000).mirror(142.0),
-
-                Pose(57.000, 73.000).mirror(142.0)
-            )
-        ).setTangentHeadingInterpolation()
-            .setReversed()
-            .build()
-
-        val intakethirdspike = follower.pathBuilder().addPath(
+        val intakespike2 = follower.pathBuilder().addPath(
             BezierCurve(
-                Pose(57.000, 73.000).mirror(142.0),
-                Pose(55.000, 32.000).mirror(142.0),
-                Pose(45.000, 32.000).mirror(142.0),
-                Pose(17.000, 34.000).mirror(142.0)
+                Pose(87.000, 78.000),
+                Pose(100.000, 58.000),
+                Pose(130.000, 60.000)
             )
-        ).setLinearHeadingInterpolation(Math.toRadians(18.0), Math.toRadians(0.0))
+        ).setTangentHeadingInterpolation()
 
             .build()
 
-        val shootthirdspike = follower.pathBuilder().addPath(
+        val shootspike2 = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(17.000, 34.000).mirror(142.0),
+                Pose(130.000, 60.000),
 
-                Pose(57.000, 78.000).mirror(142.0)
+                Pose(87.000, 78.000)
             )
         ).setTangentHeadingInterpolation()
             .setReversed()
             .build()
 
-        val leave = follower.pathBuilder().addPath(
-            BezierLine(
-                Pose(57.000, 78.000).mirror(142.0),
+        val intakegate = follower.pathBuilder().addPath(
+            BezierCurve(
+                Pose(87.000, 78.000),
+                Pose(90.000, 59.000),
+                Pose(129.700, 59.000)
+            )
+        ).setConstantHeadingInterpolation(Math.toRadians(23.0))
 
-                Pose(52.500, 72.500).mirror(142.0)
+            .build()
+
+        val shootgate = follower.pathBuilder().addPath(
+            BezierLine(
+                Pose(129.700, 59.000),
+
+                Pose(87.000, 78.000)
             )
         ).setTangentHeadingInterpolation()
+            .setReversed()
+            .build()
+
+        val intakespike1 = follower.pathBuilder().addPath(
+            BezierCurve(
+                Pose(87.000, 78.000),
+                Pose(105.500, 84.000),
+                Pose(126.000, 84.000)
+            )
+        ).setTangentHeadingInterpolation()
+
+            .build()
+
+        val shootspike1 = follower.pathBuilder().addPath(
+            BezierLine(
+                Pose(126.000, 84.000),
+
+                Pose(87.000, 78.000)
+            )
+        ).setTangentHeadingInterpolation()
+            .setReversed()
+            .build()
+
+        val park = follower.pathBuilder().addPath(
+            BezierLine(
+                Pose(87.000, 78.000),
+
+                Pose(128.000, 78.000)
+            )
+        ).setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(0.0))
 
             .build()
         paths += shootpreload
-        paths += intakesecondspike
-        paths += shootsecondspike
-        paths += gateintake
-        paths += shootgate1
-        paths += intakefirstspike
-        paths += shootfirstspike
-        paths += intakethirdspike
-        paths += shootthirdspike
-        paths += leave
-
+        paths += intakespike2
+        paths += shootspike2
+        paths += intakegate
+        paths += shootgate
+        paths += intakespike1
+        paths += shootspike1
+        paths += park
     }
     override fun onUpdate() {
         Shooter.update()

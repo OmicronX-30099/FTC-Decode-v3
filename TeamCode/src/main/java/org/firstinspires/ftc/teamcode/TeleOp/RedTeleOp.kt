@@ -37,7 +37,7 @@ class RedTeleOp: NextFTCOpMode() {
         PedroDriverControlled(
             -Gamepads.gamepad1.leftStickY,
             -Gamepads.gamepad1.leftStickX,
-            (-Gamepads.gamepad1.rightStickX).map { (it * abs(it) + it) / 2.0 },
+            (-Gamepads.gamepad1.rightStickX).map { it * 0.5 },
             true
         )
     }
@@ -45,7 +45,7 @@ class RedTeleOp: NextFTCOpMode() {
 
     override fun onStartButtonPressed() {
         shooterMethod = ShooterMethod.REGRESSION
-        Shooter.flywheelState = FlywheelState.AUTO_AIM
+        Shooter.flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM
         ROBOT.currStage = Stage.TELEOP
         ROBOT.currAlliance = Alliance.RED
         follower.setStartingPose(ROBOT.teleopStartPose)

@@ -20,14 +20,14 @@ public class Constants {
             .forwardZeroPowerAcceleration(-28.107)
             .lateralZeroPowerAcceleration(-65.110)
             .predictiveBrakingCoefficients(new PredictiveBrakingCoefficients(0.2,0.0631124410091517,0.0018534083262576235))
-            .headingPIDFCoefficients(new PIDFCoefficients(1.1,0.0,0.02,0.02))
+            .headingPIDFCoefficients(new PIDFCoefficients(1.0,0.0,0.02,0.02))
             .centripetalScaling(0);
 
     public static PathConstraints pathConstraints = new PathConstraints(0.95, 100, 1, 1);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
             .forwardPodY(-2.20472)
-            .strafePodX(-5.74803)
+            .strafePodX(-5.74803+0.96)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pp")
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)

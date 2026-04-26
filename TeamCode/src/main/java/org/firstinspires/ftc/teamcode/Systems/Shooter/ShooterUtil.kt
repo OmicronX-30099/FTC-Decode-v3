@@ -29,19 +29,19 @@ object Hood: Subsystem {
         30.700163 to 0.96,
         35.362409 to 0.92,
         40.354678 to 0.84,
-        45.918406 to 0.65,
-        50.916598 to 0.55,
-        55.339859 to 0.50,
-        60.336556 to 0.45,
-        66.155121 to 0.40,
-        70.586826 to 0.35,
-        75.581082 to 0.30,
-        80.576051 to 0.25,
-        85.571607 to 0.20,
-        90.567654 to 0.20,
-        95.501309 to 0.20,
-        100.43157 to 0.20,
-        105.3684 to 0.20,
+        45.918406 to 0.8,
+        50.916598 to 0.7,
+        55.339859 to 0.65,
+        60.336556 to 0.6,
+        66.155121 to 0.55,
+        70.586826 to 0.5,
+        75.581082 to 0.45,
+        80.576051 to 0.4,
+        85.571607 to 0.35,
+        90.567654 to 0.3,
+        95.501309 to 0.25,
+        100.43157 to 0.25,
+        105.3684 to 0.25,
         110.69101 to 0.20,
         115.42313 to 0.20,
         121.1301 to 0.20,
@@ -57,8 +57,14 @@ object Hood: Subsystem {
 
     var targetPosition: Double = 0.0
 
+    fun getAngle(distance: Double): Double {
+        val pos = getPosition(distance)
+        // Reverse the mapping: pos = servoAt15Deg + (angle - 15) / (35 - 15) * (servoAt35Deg - servoAt15Deg)
+        return 15.0 + (pos - servoAt15Deg) / (servoAt35Deg - servoAt15Deg) * (35.0 - 15.0)
+    }
+
     fun updateRegression(distance: Double, velocityError: Double) {
-        val basePosition = interpolate(distance)
+        val basePosition = getPosition(distance)
         val compensation = velocityError * compensationFactor
         targetPosition = (basePosition - compensation).coerceIn(minHoodPos, maxHoodPos)
         hoodServo.position = targetPosition
@@ -79,7 +85,7 @@ object Hood: Subsystem {
         //hoodServo.position = 0.5
     }
 
-    private fun interpolate(distance: Double): Double {
+    fun getPosition(distance: Double): Double {
         if (table.isEmpty()) return 0.20
         if (distance <= table.first().first) return table.first().second
         if (distance >= table.last().first) return table.last().second
@@ -121,6 +127,7 @@ object Flywheel: Subsystem {
     var targetVelocity: Double = 0.0
     val currentVelocity: Double get() = flywheelMotors.velocity
 
+    fun calculateVelocity(d: Double) = ((0.0101171 * d * d) + (4.20298 * d) + 945.28294)
 
     fun calculatePow(): Double {
         val compensatedTarget = targetVelocity * velocityGain
@@ -157,8 +164,8 @@ object Turret: Subsystem {
 
     fun offset(by: Double) { offset += by }
     fun update() {
-        turretServo1.position = (normalizeAngle300(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE)+0.500) //middle is 0.505
-        turretServo2.position = (normalizeAngle300(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE)+0.510) //
+        turretServo1.position = (normalizeAngle300(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE)+0.505) //middle is 0.5
+        turretServo2.position = (normalizeAngle300(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE)+0.515) //
     }
     fun reset() { offset = 0.0; targetAngle = 0.0 }
     fun debug(): String = "Target Angle = $targetAngle \nOffset = $offset \nCurrent Pos ition = ${turretServo1.position - 0.00130571*2.0}"
