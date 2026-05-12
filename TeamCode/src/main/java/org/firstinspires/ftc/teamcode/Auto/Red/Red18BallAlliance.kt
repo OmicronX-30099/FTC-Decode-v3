@@ -117,7 +117,7 @@ class Red18BallAlliance(): NextFTCOpMode() {
             BezierCurve(
                 Pose(87.000, 78.000),
                 Pose(100.000, 58.000),
-                Pose(130.000, 60.000)
+                Pose(130.000, 58.000)
             )
         ).setTangentHeadingInterpolation()
 
@@ -125,7 +125,7 @@ class Red18BallAlliance(): NextFTCOpMode() {
 
         val shootspike2 = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(130.000, 60.000),
+                Pose(130.000, 58.000),
 
                 Pose(87.000, 78.000)
             )
@@ -134,6 +134,20 @@ class Red18BallAlliance(): NextFTCOpMode() {
             .build()
 
         val intakegate = follower.pathBuilder().addPath(
+            BezierLine(
+                Pose(87.000, 78.000),
+                Pose(108.350, 68.500)
+            )
+        ).setConstantHeadingInterpolation(Math.toRadians(0.0))
+            .addPath(
+                BezierLine(
+                    Pose(108.350, 68.500),
+                    Pose(129.700,59.000)
+                )
+            ).setLinearHeadingInterpolation(Math.toRadians(0.0),Math.toRadians(23.0))
+            .build()
+
+        /*val intakegate = follower.pathBuilder().addPath(
             BezierCurve(
                 Pose(87.000, 78.000),
                 Pose(90.000, 59.000),
@@ -141,7 +155,7 @@ class Red18BallAlliance(): NextFTCOpMode() {
             )
         ).setConstantHeadingInterpolation(Math.toRadians(23.0))
 
-            .build()
+            .build()*/
 
         val shootgate = follower.pathBuilder().addPath(
             BezierLine(

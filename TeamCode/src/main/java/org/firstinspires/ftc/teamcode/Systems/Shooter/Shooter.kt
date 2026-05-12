@@ -7,6 +7,7 @@ import com.pedropathing.geometry.Pose
 import com.pedropathing.math.Vector
 import dev.nextftc.core.subsystems.SubsystemGroup
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
+import dev.nextftc.ftc.ActiveOpMode
 import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.genVector
 import kotlin.math.abs
@@ -17,9 +18,11 @@ import kotlin.math.hypot
 object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
     private const val ITERATIONS: Int = 8
 
-    @JvmField var RESPONSE_LATENCY_SECONDS: Double = 0.03
-    @JvmField var ACCELERATION_GAIN: Double = 1.0
-    @JvmField var ACCELERATION_FILTER_ALPHA: Double = 0.35
+    @JvmField var RESPONSE_LATENCY_SECONDS: Double = 0.035
+    @JvmField var ACCELERATION_GAIN: Double = 0.5
+    @JvmField var ACCELERATION_FILTER_ALPHA: Double = 0.1
+    @JvmField var JOYSTICK_STILL_DEADBAND: Double = 0.1
+    @JvmField var STILL_PREDICTION_SCALE: Double = 0.6
     
     var flywheelState: FlywheelState = FlywheelState.AUTO_AIM
 
@@ -202,7 +205,19 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
                 .minus(velocity.times(lookaheadTime))
                 .minus(accelerationDisplacement)
         }
-        return c
+        return if (isDriverTranslationIdle()) {
+            val scale = STILL_PREDICTION_SCALE.coerceIn(0.0, 1.0)
+            r.plus(c.minus(r).times(scale))
+        } else {
+            c
+        }
+    }
+
+    private fun isDriverTranslationIdle(): Boolean {
+        val gamepad = ActiveOpMode.it?.gamepad1 ?: return false
+        val deadband = JOYSTICK_STILL_DEADBAND.coerceAtLeast(0.0)
+        return abs(gamepad.left_stick_x.toDouble()) < deadband &&
+            abs(gamepad.left_stick_y.toDouble()) < deadband
     }
 }
 

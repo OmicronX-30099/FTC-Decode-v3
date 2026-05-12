@@ -2,18 +2,22 @@
 
 package org.firstinspires.ftc.teamcode.TeleOp
 
+import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.extensions.pedro.PedroDriverControlled
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.hardware.driving.DriverControlledCommand
+import org.firstinspires.ftc.teamcode.Systems.Load.BreakBeam.ballCount
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.Systems.Load.Load
 import org.firstinspires.ftc.teamcode.Systems.Load.Rollers
 import org.firstinspires.ftc.teamcode.Systems.Shooter.Flywheel
 import org.firstinspires.ftc.teamcode.Systems.Shooter.FlywheelState
 import org.firstinspires.ftc.teamcode.Systems.Shooter.Shooter
+import org.firstinspires.ftc.teamcode.Systems.Shooter.Shooter.shooterMethod
+import org.firstinspires.ftc.teamcode.Systems.Shooter.ShooterMethod
 import org.firstinspires.ftc.teamcode.Systems.Shooter.Turret
 import org.firstinspires.ftc.teamcode.Util.Alliance
 import org.firstinspires.ftc.teamcode.Util.ROBOT
@@ -34,22 +38,22 @@ class BlueTeleOp: NextFTCOpMode() {
         PedroDriverControlled(
             -Gamepads.gamepad1.leftStickY,
             -Gamepads.gamepad1.leftStickX,
-            (-Gamepads.gamepad1.rightStickX).map { (it * abs(it) + it) / 2.0 },
+            (-Gamepads.gamepad1.rightStickX).map { it * 0.5 },
             true
         )
     }
-
     override fun onInit() { Shooter.reset() }
 
     override fun onStartButtonPressed() {
+        shooterMethod = ShooterMethod.REGRESSION
+        Shooter.flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM
         ROBOT.currStage = Stage.TELEOP
         ROBOT.currAlliance = Alliance.BLUE
-        Shooter.flywheelState = FlywheelState.AUTO_AIM
-        follower.setStartingPose(ROBOT.teleopStartPose)
+        follower.setStartingPose(ROBOT.teleopStartPose.mirror(142.0))
         drivetrain.schedule()
         Gamepads.gamepad1 .apply {
             rightTrigger.greaterThan(0.0)
-                .whenBecomesTrue { Rollers.run(1.0,0.25) }
+                .whenBecomesTrue { Rollers.run(1.0,0.67) }
                 .whenBecomesFalse { Rollers.stop() }
             leftTrigger.greaterThan(0.0).and(rightTrigger.inRange(0.0..0.0))
                 .whenBecomesTrue { Rollers.run(-1.0,-1.0) }
@@ -77,9 +81,9 @@ class BlueTeleOp: NextFTCOpMode() {
         }
         Gamepads .apply {
             gamepad1.dpadLeft.or(gamepad2.dpadLeft)
-                .whenBecomesTrue { Turret.offset(2.0) }
+                .whenBecomesTrue { Turret.offset(1.0) }
             gamepad1.dpadRight.or(gamepad2.dpadRight)
-                .whenBecomesTrue { Turret.offset(-2.0) }
+                .whenBecomesTrue { Turret.offset(-1.0) }
             gamepad1.dpadUp.or(gamepad2.dpadUp)
                 .whenBecomesTrue {
                     if (Shooter.flywheelState == FlywheelState.MANUAL) {
@@ -95,12 +99,12 @@ class BlueTeleOp: NextFTCOpMode() {
         }
     }
 
-
     override fun onUpdate() {
         Shooter.update()
         Rollers.update()
         telemetry.run {
             addData("Follower", follower.pose)
+            addData("balls: ", ballCount)
             addLine(Shooter.debug())
             update()
         }

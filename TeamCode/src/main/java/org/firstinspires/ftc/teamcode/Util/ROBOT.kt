@@ -9,7 +9,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 data object ROBOT {
-    private const val TURRET_X_OFFSET: Double = 0.0//-0.96
+    private const val TURRET_X_OFFSET: Double = -0.96
     private const val TURRET_Y_OFFSET: Double = 0.0
 
     var currAlliance: Alliance = Alliance.BLUE
@@ -22,11 +22,10 @@ data object ROBOT {
     fun shooterPose(): Pose {
         if (follower.pose.x == 0.0 && follower.pose.y == 0.0) return follower.pose
         val h: Double = follower.pose.heading
-        return follower.pose
-        /*return follower.pose + Pose(
+        return follower.pose + Pose(
             TURRET_X_OFFSET * cos(h) - TURRET_Y_OFFSET * sin(h),
             TURRET_X_OFFSET * sin(h) + TURRET_Y_OFFSET * cos(h)
-        )*/
+        )
     }
 }
 
@@ -39,7 +38,7 @@ enum class Alliance {
     },
     RED{
         override val resetPoses: ResetPoses  = ResetPoses(Pose(9.5,8.9,-PI), Pose(117.0,129.0,-2.448), Pose(116.0,130.0,-0.939))
-        override val turretGoalPose: Pose = Pose(3.62,137.8).mirror()
+        override val turretGoalPose: Pose = Pose(3.62,137.88).mirror()
         override val flywheelGoalPose: Pose = Pose(141.5,141.5)
     };
     abstract val resetPoses: ResetPoses

@@ -164,8 +164,8 @@ object Turret: Subsystem {
 
     fun offset(by: Double) { offset += by }
     fun update() {
-        turretServo1.position = (normalizeAngle300(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE)+0.505) //middle is 0.5
-        turretServo2.position = (normalizeAngle300(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE)+0.515) //
+        turretServo1.position = (normalizeAngle300(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE)+0.495) //middle is 0.5
+        turretServo2.position = (normalizeAngle300(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE)+0.505) //
     }
     fun reset() { offset = 0.0; targetAngle = 0.0 }
     fun debug(): String = "Target Angle = $targetAngle \nOffset = $offset \nCurrent Pos ition = ${turretServo1.position - 0.00130571*2.0}"

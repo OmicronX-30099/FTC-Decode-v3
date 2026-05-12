@@ -9,6 +9,7 @@ import dev.nextftc.extensions.pedro.PedroDriverControlled
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.hardware.driving.DriverControlledCommand
+import org.firstinspires.ftc.teamcode.Systems.Load.BreakBeam.ballCount
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.Systems.Load.Load
 import org.firstinspires.ftc.teamcode.Systems.Load.Rollers
@@ -35,7 +36,7 @@ class RedTeleOp: NextFTCOpMode() {
 
     val drivetrain: DriverControlledCommand by lazy {
         PedroDriverControlled(
-            -Gamepads.gamepad1.leftStickY,
+            -Gamepads.gamepad1.leftStickY.map { it * 0.8 },
             -Gamepads.gamepad1.leftStickX,
             (-Gamepads.gamepad1.rightStickX).map { it * 0.5 },
             true
@@ -103,6 +104,7 @@ class RedTeleOp: NextFTCOpMode() {
         Rollers.update()
         telemetry.run {
             addData("Follower", follower.pose)
+            addData("balls: ", ballCount)
             addLine(Shooter.debug())
             update()
         }
