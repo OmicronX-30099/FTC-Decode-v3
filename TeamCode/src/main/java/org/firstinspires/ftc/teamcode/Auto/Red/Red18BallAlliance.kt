@@ -43,7 +43,7 @@ class Red18BallAlliance(): NextFTCOpMode() {
         buildPaths()
         val main = SequentialGroup(
             FollowPath(paths[0]), //shoot preload
-            Delay(0.2),
+            //Delay(0.2),
             Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[1]), //intake second spike mark
@@ -52,49 +52,61 @@ class Red18BallAlliance(): NextFTCOpMode() {
             ParallelGroup(
                 FollowPath(paths[2]), //shoot second spike mark
             ),
-            Delay(0.2),
+            //Delay(0.2),
             Load . shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[3]), //intake gate
                 InstantCommand { Rollers.run(1.0, 0.67) }
             ),
-            Delay(1.5),
+            Delay(1.0),
             ParallelGroup(FollowPath(paths[4]), //shoot gate
                 //Delay(0.5),
                 //InstantCommand { Rollers.run(0.0,0.0)}
             ),
-            Delay(0.2),
+            //Delay(0.2),
             Load . shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[3]), //intake gate
                 InstantCommand { Rollers.run(1.0, 0.67) }
             ),
-            Delay(1.5),
+            Delay(1.0),
             ParallelGroup(
                 FollowPath(paths[4]), //shoot gate
                 //Delay(0.5),
                 //InstantCommand { Rollers.run(0.0,0.0)}
             ),
-            Delay(0.2),
+            //Delay(0.2),
             Load . shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[3]), //intake gate
                 InstantCommand { Rollers.run(1.0, 0.67) }
             ),
-            Delay(1.5),
+            Delay(1.0),
             ParallelGroup(
                 FollowPath(paths[4]), //shoot gate
                 //Delay(0.5),
                 //InstantCommand { Rollers.run(0.0,0.0)}
             ),
-            Delay(0.2),
+            //Delay(0.2),
+            Load . shootTripleCommand,
+            ParallelGroup(
+                FollowPath(paths[3]), //intake gate
+                InstantCommand { Rollers.run(1.0, 0.67) }
+            ),
+            Delay(1.0),
+            ParallelGroup(
+                FollowPath(paths[4]), //shoot gate
+                //Delay(0.5),
+                //InstantCommand { Rollers.run(0.0,0.0)}
+            ),
+            //Delay(0.2),
             Load . shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths[5]), //intake first spike
                 InstantCommand { Rollers.run(1.0, 0.67) }
             ),
             FollowPath(paths[6]), //shoot first spike
-            Delay(0.2),
+            //Delay(0.2),
             Load . shootTripleCommand,
             FollowPath(paths[7])
         )
@@ -191,7 +203,7 @@ class Red18BallAlliance(): NextFTCOpMode() {
             BezierLine(
                 Pose(87.000, 78.000),
 
-                Pose(128.000, 78.000)
+                Pose(126.000, 78.000)
             )
         ).setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(0.0))
 
