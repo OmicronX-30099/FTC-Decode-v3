@@ -69,7 +69,7 @@ class Red18BallAlliance(): NextFTCOpMode() {
                 FollowPath(paths[3]), //intake gate
                 InstantCommand { Rollers.run(1.0, 0.67) }
             ),
-            Delay(1.0),
+            Delay(1.5),
             ParallelGroup(
                 FollowPath(paths[4]), //shoot gate
                 //Delay(0.5),
@@ -81,7 +81,7 @@ class Red18BallAlliance(): NextFTCOpMode() {
                 FollowPath(paths[3]), //intake gate
                 InstantCommand { Rollers.run(1.0, 0.67) }
             ),
-            Delay(1.0),
+            Delay(1.5),
             ParallelGroup(
                 FollowPath(paths[4]), //shoot gate
                 //Delay(0.5),
@@ -93,7 +93,7 @@ class Red18BallAlliance(): NextFTCOpMode() {
                 FollowPath(paths[3]), //intake gate
                 InstantCommand { Rollers.run(1.0, 0.67) }
             ),
-            Delay(1.0),
+            Delay(1.5),
             ParallelGroup(
                 FollowPath(paths[4]), //shoot gate
                 //Delay(0.5),
