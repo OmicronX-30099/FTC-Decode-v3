@@ -59,7 +59,7 @@ class HeadingLockTurnController {
         lastHeadingError = headingError
         lastUpdateTimeNanos = now
 
-        return (headingError * coeffs.P + errorDerivative * coeffs.D + turnDirection * coeffs.F)
+        return (headingError * (coeffs.P-0.3) + errorDerivative * coeffs.D + turnDirection * coeffs.F)
             .coerceIn(-HeadingLockTurnTuning.MAX_TURN_POWER, HeadingLockTurnTuning.MAX_TURN_POWER)
     }
 

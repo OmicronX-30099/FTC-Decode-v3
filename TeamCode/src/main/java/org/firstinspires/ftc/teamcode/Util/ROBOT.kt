@@ -37,7 +37,7 @@ enum class Alliance {
         override val flywheelGoalPose: Pose = Pose(141.5,141.5).mirror()
     },
     RED{
-        override val resetPoses: ResetPoses  = ResetPoses(Pose(9.5,8.9,-PI), Pose(117.0,129.0,-2.448), Pose(116.0,130.0,-0.939))
+        override val resetPoses: ResetPoses  = ResetPoses(Pose(124.9,76.0,Math.toRadians(0.0)), Pose(117.0,129.0,-2.448), Pose(116.0,130.0,-0.939))
         override val turretGoalPose: Pose = Pose(3.62,137.88).mirror()
         override val flywheelGoalPose: Pose = Pose(141.5,141.5)
     };

@@ -2,7 +2,6 @@
 
 package org.firstinspires.ftc.teamcode.TeleOp
 
-import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.extensions.pedro.PedroDriverControlled
@@ -25,8 +24,6 @@ import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.Stage
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.includePedro
-import kotlin.math.PI
-import kotlin.math.abs
 
 @TeleOp(name = "Blue TeleOp", group = "Standard TeleOp")
 class BlueTeleOp: NextFTCOpMode() {
