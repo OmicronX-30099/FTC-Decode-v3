@@ -34,11 +34,13 @@ class RedTeleOp: NextFTCOpMode() {
         includePedro(Constants::createFollower)
     }
 
+    private val headingLock = HeadingLockTurnController()
+
     val drivetrain: DriverControlledCommand by lazy {
         PedroDriverControlled(
             -Gamepads.gamepad1.leftStickY.map { it * 0.8 },
             -Gamepads.gamepad1.leftStickX,
-            (-Gamepads.gamepad1.rightStickX).map { it * 0.5 },
+            { headingLock.turnPower(Gamepads.gamepad1.rightStickX.get()) },
             true
         )
     }
@@ -68,6 +70,8 @@ class RedTeleOp: NextFTCOpMode() {
                 .whenBecomesTrue { Shooter.flywheelManual() }
             cross
                 .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose1 }
+            square
+                .whenBecomesTrue { headingLock.enableIfTurnStickCentered(rightStickX.get()) }
             triangle
                 .toggleOnBecomesTrue()
                 .whenBecomesTrue { Shooter.enableAutoAim() }
