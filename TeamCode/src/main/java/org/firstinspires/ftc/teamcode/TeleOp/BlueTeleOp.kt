@@ -6,6 +6,7 @@ import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.extensions.pedro.PedroDriverControlled
+import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.hardware.driving.DriverControlledCommand
@@ -40,7 +41,7 @@ class BlueTeleOp: NextFTCOpMode() {
         PedroDriverControlled(
             -Gamepads.gamepad1.leftStickY,
             -Gamepads.gamepad1.leftStickX,
-            { headingLock.turnPower(Gamepads.gamepad1.rightStickX.get()) },
+            { headingLock.turnPower(ActiveOpMode.gamepad1.right_stick_x.toDouble()) },
             true
         )
     }
@@ -71,7 +72,7 @@ class BlueTeleOp: NextFTCOpMode() {
             cross
                 .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose1 }
             square
-                .whenBecomesTrue { headingLock.enableIfTurnStickCentered(rightStickX.get()) }
+                .whenBecomesTrue { headingLock.enableIfTurnStickCentered(ActiveOpMode.gamepad1.right_stick_x.toDouble()) }
             triangle
                 .toggleOnBecomesTrue()
                 .whenBecomesTrue { Shooter.enableAutoAim() }
