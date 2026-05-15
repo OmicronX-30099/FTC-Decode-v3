@@ -24,7 +24,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
     @JvmField var JOYSTICK_STILL_DEADBAND: Double = 0.1
     @JvmField var STILL_PREDICTION_SCALE: Double = 0.6
     
-    var flywheelState: FlywheelState = FlywheelState.AUTO_AIM
+    var flywheelState: FlywheelState = FlywheelState.PREDICTIVE_AUTO_AIM
 
     var shooterMethod: ShooterMethod = ShooterMethod.REGRESSION
 
@@ -60,7 +60,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
     fun enablePredictive() { flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM }
     fun enableAutoAim() { flywheelState = FlywheelState.AUTO_AIM }
 
-    fun reset() { Flywheel.reset(); Turret.reset(); Hood.reset(); resetMotionPrediction(); flywheelState = FlywheelState.AUTO_AIM }
+    fun reset() { Flywheel.reset(); Turret.reset(); Hood.reset(); resetMotionPrediction(); flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM }
     fun debug(): String = "Turret Data: \n${Turret.debug()} \nFlywheel Data: \n${Flywheel.debug()} \nHood Data: \n${Hood.debug()}"
 
     private fun updateTurret(predictive: Boolean = false) {

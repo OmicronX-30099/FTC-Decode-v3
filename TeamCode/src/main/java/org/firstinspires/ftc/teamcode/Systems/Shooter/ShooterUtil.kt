@@ -122,7 +122,7 @@ object Flywheel: Subsystem {
     @JvmField
     var IDLE_VELOCITY = 1500.0
     @JvmField
-    var velocityGain = 1.01
+    var velocityGain = 1.03
     
     var targetVelocity: Double = 0.0
     val currentVelocity: Double get() = flywheelMotors.velocity
