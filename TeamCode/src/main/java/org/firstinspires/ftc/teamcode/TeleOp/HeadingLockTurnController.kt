@@ -11,6 +11,7 @@ import kotlin.math.abs
 @Configurable
 object HeadingLockTurnTuning {
     @JvmField var TARGET_HEADING_DEGREES: Double = 23.0
+    @JvmField var SECONDARY_PIDF_THRESHOLD_DEGREES: Double = 9.0
     @JvmField var MAX_TURN_POWER: Double = 1.0
     @JvmField var MANUAL_TURN_SCALE: Double = 0.5
     @JvmField var TURN_STICK_DEADBAND: Double = 0.0
@@ -54,12 +55,17 @@ class HeadingLockTurnController {
         val dt = ((now - lastUpdateTimeNanos) / 1_000_000_000.0).takeIf { it > 0.0 } ?: 0.0
         val errorDerivative = if (dt > 0.0) (headingError - lastHeadingError) / dt else 0.0
         val turnDirection = MathFunctions.getTurnDirection(follower.pose.heading, targetHeading)
-        val coeffs = Constants.followerConstants.coefficientsHeadingPIDF
+        val secondaryPidfThreshold = Math.toRadians(HeadingLockTurnTuning.SECONDARY_PIDF_THRESHOLD_DEGREES)
+        val coeffs = if (abs(headingError) < secondaryPidfThreshold) {
+            Constants.followerConstants.coefficientsSecondaryHeadingPIDF
+        } else {
+            Constants.followerConstants.coefficientsHeadingPIDF
+        }
 
         lastHeadingError = headingError
         lastUpdateTimeNanos = now
 
-        return (headingError * (coeffs.P-0.3) + errorDerivative * coeffs.D + turnDirection * coeffs.F)
+        return (headingError * (coeffs.P) + errorDerivative * coeffs.D + turnDirection * coeffs.F)
             .coerceIn(-HeadingLockTurnTuning.MAX_TURN_POWER, HeadingLockTurnTuning.MAX_TURN_POWER)
     }
 

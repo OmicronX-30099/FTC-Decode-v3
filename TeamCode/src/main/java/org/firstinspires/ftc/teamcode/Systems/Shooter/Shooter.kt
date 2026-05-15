@@ -35,6 +35,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
 
     override fun initialize() {
         //PhysicsShooter.precomputeField()
+        reset()
     }
 
     fun update() {

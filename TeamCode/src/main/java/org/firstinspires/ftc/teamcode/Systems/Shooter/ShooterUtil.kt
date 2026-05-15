@@ -147,7 +147,12 @@ object Flywheel: Subsystem {
         //flywheelMotors.power = calculatePow() * (12.7 / currVoltage.coerceAtLeast(8.0))
         flywheelMotors.power = calculatePow()
     }
-    fun reset() { targetVelocity = 0.0 }
+    fun reset() {
+        targetVelocity = 0.0
+        flywheelMotor1.motor.power = 0.0
+        flywheelMotor2.motor.power = 0.0
+        flywheelMotors.power = 0.0
+    }
     fun debug(): String = "Target Velocity = $targetVelocity \nCurrent Velocity = ${-flywheelMotors.velocity} \nCoeffs = $flywheelCoeffs \nPower = ${flywheelMotors.power}"
 }
 
