@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>YAML Web Manager</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1 >Web Manager</h1>
+        <div class="toolbar">
+            <!--suppress HtmlFormInputWithoutLabel -->
+            <select id="file-select" onchange="loadFile()"></select>
+            <button onclick="createFile()" id="create" >Create New File</button>
+            <button onclick="saveCurrentFile(false)" id="save" >Save & Send to Robot</button>
+            <button onclick="deleteCurrentFile()" id="delete" >Delete this file</button>
+            <span id="status" style="margin-left: 10px; color: #666; line-height: 38px;"></span>
+        </div>
+        <!--suppress HtmlFormInputWithoutLabel -->
+        <textarea id="editor" placeholder="Select or create a file to start editing..."></textarea>
+
+        <script src="index.js"></script>
+    </body>
+</html>
