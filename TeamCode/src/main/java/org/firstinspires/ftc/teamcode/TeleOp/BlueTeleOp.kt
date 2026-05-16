@@ -43,7 +43,7 @@ class BlueTeleOp: NextFTCOpMode() {
         )
     }
 /*
-    val drivetrain: DriverControlledCommand by lazy {
+    val drivetrain: HeadingLockDriveCommand by lazy {
         HeadingLockDriveCommand(
             -Gamepads.gamepad1.leftStickY,
             -Gamepads.gamepad1.leftStickX,
