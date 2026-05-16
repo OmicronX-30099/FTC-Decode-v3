@@ -10,5 +10,6 @@ class TestOpMode: NextFTCOpMode() {
 
     override fun onUpdate() {
         telemetry.addLine(YAMLWebHandler.getRawData("test.txt"))
+        telemetry.update()
     }
 }
