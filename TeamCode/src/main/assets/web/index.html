@@ -3,7 +3,43 @@
     <head>
         <title>YAML Web Manager</title>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
-        <link rel="stylesheet" href="style.css">
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 20px;
+                background: #f4f4f9;
+            }
+            .toolbar {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 15px;
+                flex-wrap: wrap;
+            }
+            select, button, input {
+                padding: 8px 12px;
+                font-size: 16px;
+                border-radius: 4px;
+                border: 1px solid #ccc;
+            }
+            button {
+                color: white;
+                cursor: pointer;
+                border: none;
+            }
+
+            button#create { background: #007bff; }
+            button#create:hover { background: #0056b3;  }
+            button#save { background: #28a745; }
+            button#save:hover { background: #1e7e34; }
+            button#delete { background: #f24646 }
+            button#delete:hover { background: #cc1010 }
+
+            textarea {
+                width: 100%; min-height: 300px; padding: 10px; font-family: monospace;
+                font-size: 16px; border: 1px solid #ccc; border-radius: 4px;
+                resize: none; overflow: hidden; box-sizing: border-box;
+            }
+        </style>
     </head>
     <body>
         <h1 >Web Manager</h1>
@@ -18,6 +54,115 @@
         <!--suppress HtmlFormInputWithoutLabel -->
         <textarea id="editor" placeholder="Select or create a file to start editing..."></textarea>
 
-        <script src="index.js"></script>
+        <script>
+            const fileEditor = document.getElementById('editor');
+            const fileSelector = document.getElementById('file-select');
+            const statusTxt = document.getElementById('status');
+
+            // Editor auto-resize
+            fileEditor.addEventListener(
+                'input',
+                function() {
+                    this.style.height = 'auto';
+                    this.style.height = (this.scrollHeight) + 'px';
+                }
+            );
+
+            // Display action status
+            function showStatus(msg) {
+                statusTxt.innerText = msg;
+                setTimeout(() => statusTxt.innerText = '', 5000);
+            }
+
+            // Initial file load
+            async function loadFiles() {
+                const fileList = await fetch('/yaml/api/fileList');
+                const files = await fileList.json();
+
+                fileSelector.innerHTML = '<option value="">--- Select a file ---</option>';
+                files.forEach(
+                    fileName => {
+                        const selectOption = document.createElement('option');
+                        selectOption.value = fileName;
+                        selectOption.innerText = fileName;
+                        fileSelector.appendChild(selectOption)
+                    }
+                );
+            }
+
+            // File creation
+            async function createFile() {
+                const illegalCharsRegex = /^(?!\.)[^\x00-\x1f\\?*:"<>|/]+(?<!\s)$/;
+                const extCheckRegex = /\.[0-9a-z]+$/i;
+
+                let fileName = prompt("Enter new file name (e.g. paths or paths.yaml)");
+                console.log(`Received fileName: ${fileName}`);
+
+                if (!fileName || !(illegalCharsRegex.test(fileName))) {
+                    console.log("No fileName or illegal fileName entered: Canceling creation")
+                    return;
+                }
+                if (!(extCheckRegex.test(fileName))) { fileName = fileName + '.yaml' }
+                console.log(`Creating file with name: ${fileName}`)
+
+                const selectorOption = document.createElement('option');
+                selectorOption.value = fileName;
+                selectorOption.innerText = fileName;
+
+                fileSelector.appendChild(selectorOption);
+                fileSelector.value = fileName;
+
+                fileEditor.value = "---\n# Type your information here";
+                fileEditor.dispatchEvent(new Event('input'));
+                saveCurrentFile(true);
+            }
+
+            // Open file data for existing file
+            async function loadFile() {
+                const fileName = fileSelector.value;
+                if (!fileName) {
+                    fileEditor.value = '';
+                    return;
+                }
+                const fileContent = await fetch('/yaml/api/load?file=' + encodeURIComponent(fileName));
+
+                fileEditor.value = await fileContent.text();
+                fileEditor.dispatchEvent(new Event('input'));
+
+                console.log(`Loading file with name: ${fileName}`);
+                showStatus(`Loaded File: ${fileName}`);
+            }
+
+            // Save file to C-hub storage
+            async function saveCurrentFile(create) {
+                const fileName = fileSelector.value;
+                if (!fileName) { return alert("No file selected, please select or create one first!!"); }
+
+                await fetch(
+                    '/yaml/api/save?file=' + encodeURIComponent(fileName),
+                    {
+                        method: 'POST',
+                        body: fileEditor.value
+                    }
+                );
+                console.log(create ? `File ${fileName} created on robot storage` : `Data from File ${fileName} transmitted and saved to robot`)
+                showStatus(create ? 'Successfully Created File!' : 'Saved and Sent to Robot!')
+            }
+
+            async function deleteCurrentFile() {
+                const fileName = fileSelector.value
+                if (!fileName) { return alert("Cannot delete a file that isn't selected, please select or create a file first!"); }
+                if (!(confirm(`Are you sure you want to delete file: ${fileName}`))) { return; }
+
+                await fetch('/yaml/api/delete?file=' + encodeURIComponent(fileName))
+                await loadFiles();
+                fileEditor.value = ""
+
+                console.log(`Deleted file: ${fileName}`)
+                showStatus('Successfully deleted file!')
+            }
+
+            window.onload = loadFiles;
+        </script>
     </body>
 </html>

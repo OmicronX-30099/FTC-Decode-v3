@@ -21,8 +21,6 @@ object YAMLWebHandler {
         if (!storageDir.exists()) storageDir.mkdirs()
 
         webManager.register("/yaml") { session -> webHTML(session, context) }
-        webManager.register("/yaml/style.css") { session -> webCSS(session, context) }
-        webManager.register("/yaml/index.js") { session -> webJS(session, context) }
         webManager.register("/yaml/api/fileList", WebHandler(::handleFileList))
         webManager.register("/yaml/api/load", WebHandler(::getFileContents))
         webManager.register("/yaml/api/save", WebHandler(::handleWrite))
@@ -41,36 +39,6 @@ object YAMLWebHandler {
             NanoHTTPD.Response.Status.OK,
             NanoHTTPD.MIME_HTML,
             webHTML
-        )
-    }
-
-    private fun webCSS(session: IHTTPSession, c: Context): NanoHTTPD.Response {
-        val androidAssetManager: AssetManager = c.assets
-        val webCSS: String
-            = androidAssetManager.open("web/style.css")
-                .bufferedReader()
-                .use { it.readText() }
-                .trimIndent()
-
-        return NanoHTTPD.newFixedLengthResponse(
-            NanoHTTPD.Response.Status.OK,
-            NanoHTTPD.MIME_HTML,
-            webCSS
-        )
-    }
-
-    private fun webJS(session: IHTTPSession, c: Context): NanoHTTPD.Response {
-        val androidAssetManager: AssetManager = c.assets
-        val webJS: String
-            = androidAssetManager.open("web/index.js")
-                .bufferedReader()
-                .use { it.readText() }
-                .trimIndent()
-
-        return NanoHTTPD.newFixedLengthResponse(
-            NanoHTTPD.Response.Status.OK,
-            NanoHTTPD.MIME_HTML,
-            webJS
         )
     }
 
