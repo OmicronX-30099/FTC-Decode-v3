@@ -49,6 +49,7 @@ class RedTeleOp: NextFTCOpMode() {
             -Gamepads.gamepad1.leftStickX,
             -Gamepads.gamepad1.rightStickX,
             // Change this value based on teleop, what u wanna do, etc.
+            // U could also do a supplier, which will allow it to auto update the heading goal
             30.0
         )
     }
