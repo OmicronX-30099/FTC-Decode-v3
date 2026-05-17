@@ -19,7 +19,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
 
     @JvmField var RESPONSE_LATENCY_SECONDS: Double = 0.035
     @JvmField var ACCELERATION_GAIN: Double = 0.5
-    @JvmField var ACCELERATION_FILTER_ALPHA: Double = 0.1
+    @JvmField var TURRET_ANGULAR_VELOCITY_COMPENSATION_SECONDS: Double = 0.08
     @JvmField var TRANSLATION_STILL_VELOCITY: Double = 20.0
     @JvmField var STILL_PREDICTION_SCALE: Double = 0.7
     
@@ -28,9 +28,6 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
     var shooterMethod: ShooterMethod = ShooterMethod.REGRESSION
 
     private var lastTurretUpdateTime = 0L
-    private var lastVelocity: Vector? = null
-    private var lastVelocityTimeNanos: Long = 0L
-    private var accelerationEstimate: Vector = Vector()
 
     override fun initialize() {
         //PhysicsShooter.precomputeField()
@@ -39,7 +36,6 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
 
     fun update() {
         if (follower.pose.x == 0.0 && follower.pose.y == 0.0) return
-        updateAccelerationEstimate(follower.velocity)
         when (flywheelState) {
             FlywheelState.PREDICTIVE_AUTO_AIM -> { updateFlywheel(true); updateTurret(true); updateHood(true) }
             FlywheelState.AUTO_AIM -> { updateFlywheel(); updateTurret(); updateHood() }
@@ -60,7 +56,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
     fun enablePredictive() { flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM }
     fun enableAutoAim() { flywheelState = FlywheelState.AUTO_AIM }
 
-    fun reset() { Flywheel.reset(); Turret.reset(); Hood.reset(); resetMotionPrediction(); flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM }
+    fun reset() { Flywheel.reset(); Turret.reset(); Hood.reset(); flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM }
     fun debug(): String = "Turret Data: \n${Turret.debug()} \nFlywheel Data: \n${Flywheel.debug()} \nHood Data: \n${Hood.debug()}"
 
     private fun updateTurret(predictive: Boolean = false) {
@@ -70,7 +66,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
                     ROBOT.shooterPose(),
                     ROBOT.currAlliance.turretGoalPose,
                     follower.velocity,
-                    accelerationEstimate
+                    follower.acceleration
                 )
             } else {
                 ROBOT.shooterPose().genVector(ROBOT.currAlliance.turretGoalPose)
@@ -96,7 +92,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
                     ROBOT.shooterPose(),
                     ROBOT.currAlliance.flywheelGoalPose,
                     follower.velocity,
-                    accelerationEstimate
+                    follower.acceleration
                 ).magnitude
             } else {
                 ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.flywheelGoalPose)
@@ -124,7 +120,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
                     ROBOT.shooterPose(),
                     ROBOT.currAlliance.flywheelGoalPose,
                     follower.velocity,
-                    accelerationEstimate
+                    follower.acceleration
                 ).magnitude
             } else {
                 ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.flywheelGoalPose)
@@ -144,7 +140,9 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
     private fun calculateTurretAngle(vec: Vector): Double {
         val angleToGoal = Math.toDegrees(atan2(vec.yComponent, vec.xComponent))
         val headingDeg = Math.toDegrees(follower.pose.heading)
-        return angleToGoal - headingDeg
+        val angularVelocityCompensation = Math.toDegrees(follower.angularVelocity) *
+            TURRET_ANGULAR_VELOCITY_COMPENSATION_SECONDS
+        return angleToGoal - headingDeg - angularVelocityCompensation
     }
 
     private fun getFlyTime(d: Double): Double {
@@ -155,39 +153,6 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
             val angle = Hood.getAngle(d)
             PhysicsShooter.getFlyTime(d, angle, tps)
         }
-    }
-
-    private fun updateAccelerationEstimate(velocity: Vector) {
-        val now = System.nanoTime()
-        val previousVelocity = lastVelocity
-
-        if (previousVelocity == null || lastVelocityTimeNanos == 0L) {
-            lastVelocity = velocity.copy()
-            lastVelocityTimeNanos = now
-            accelerationEstimate = Vector()
-            return
-        }
-
-        val dt = (now - lastVelocityTimeNanos) / 1_000_000_000.0
-        lastVelocity = velocity.copy()
-        lastVelocityTimeNanos = now
-
-        if (dt <= 0.0 || dt > 0.25) {
-            accelerationEstimate = Vector()
-            return
-        }
-
-        val measuredAcceleration = velocity.minus(previousVelocity).times(1.0 / dt)
-        val alpha = ACCELERATION_FILTER_ALPHA.coerceIn(0.0, 1.0)
-        accelerationEstimate = accelerationEstimate
-            .times(1.0 - alpha)
-            .plus(measuredAcceleration.times(alpha))
-    }
-
-    private fun resetMotionPrediction() {
-        lastVelocity = null
-        lastVelocityTimeNanos = 0L
-        accelerationEstimate = Vector()
     }
 
     private fun getCorrectedVecIterative(botPose: Pose, targetPose: Pose, velocity: Vector, acceleration: Vector): Vector {
