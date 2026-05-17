@@ -125,9 +125,12 @@ object Flywheel: Subsystem {
     var velocityGain = 1.03
     
     var targetVelocity: Double = 0.0
+    var velocityOffset: Double = 0.0
+        private set
     val currentVelocity: Double get() = flywheelMotors.velocity
 
     fun calculateVelocity(d: Double) = ((0.0101171 * d * d) + (4.20298 * d) + 945.28294)
+    fun offsetVelocity(by: Double) { velocityOffset += by }
 
     fun calculatePow(): Double {
         val compensatedTarget = targetVelocity * velocityGain
@@ -149,11 +152,12 @@ object Flywheel: Subsystem {
     }
     fun reset() {
         targetVelocity = 0.0
+        velocityOffset = 0.0
         flywheelMotor1.motor.power = 0.0
         flywheelMotor2.motor.power = 0.0
         flywheelMotors.power = 0.0
     }
-    fun debug(): String = "Target Velocity = $targetVelocity \nCurrent Velocity = ${-flywheelMotors.velocity} \nCoeffs = $flywheelCoeffs \nPower = ${flywheelMotors.power}"
+    fun debug(): String = "Target Velocity = $targetVelocity \nVelocity Offset = $velocityOffset \nCurrent Velocity = ${-flywheelMotors.velocity} \nCoeffs = $flywheelCoeffs \nPower = ${flywheelMotors.power}"
 }
 
 object Turret: Subsystem {
