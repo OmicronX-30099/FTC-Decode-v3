@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.WebTest
+/*package org.firstinspires.ftc.teamcode.WebTest
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.ftc.NextFTCOpMode
@@ -14,4 +14,4 @@ class TestOpMode: NextFTCOpMode() {
         telemetry.addLine(YAMLWebHandler.getRawData("test.txt"))
         telemetry.update()
     }
-}
+}*/
