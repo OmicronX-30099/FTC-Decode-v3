@@ -105,13 +105,17 @@ class RedTeleOp: NextFTCOpMode() {
             gamepad1.dpadUp.or(gamepad2.dpadUp)
                 .whenBecomesTrue {
                     if (Shooter.flywheelState == FlywheelState.MANUAL) {
-                        Flywheel.targetVelocity += 40.0
+                        Flywheel.targetVelocity += 20.0
+                    } else {
+                        Flywheel.offsetVelocity(20.0)
                     }
                 }
             gamepad1.dpadDown.or(gamepad2.dpadDown)
                 .whenBecomesTrue {
                     if (Shooter.flywheelState == FlywheelState.MANUAL) {
-                        Flywheel.targetVelocity -= 40.0
+                        Flywheel.targetVelocity -= 20.0
+                    } else {
+                        Flywheel.offsetVelocity(-20.0)
                     }
                 }
         }
