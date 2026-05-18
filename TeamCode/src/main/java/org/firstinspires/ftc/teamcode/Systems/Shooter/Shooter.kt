@@ -18,11 +18,11 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
     private const val ITERATIONS: Int = 8
 
     @JvmField var RESPONSE_LATENCY_SECONDS: Double = 0.035
-    @JvmField var ACCELERATION_GAIN: Double = 0.5
+    @JvmField var ACCELERATION_GAIN: Double = 0.4
     @JvmField var ACCELERATION_FILTER_ALPHA: Double = 0.1
-    @JvmField var TURRET_ANGULAR_VELOCITY_COMPENSATION_SECONDS: Double = 0.08
-    @JvmField var TRANSLATION_STILL_VELOCITY: Double = 20.0
-    @JvmField var STILL_PREDICTION_SCALE: Double = 0.7
+    @JvmField var TURRET_ANGULAR_VELOCITY_COMPENSATION_SECONDS: Double = 0.1
+    @JvmField var TRANSLATION_STILL_VELOCITY: Double = 15.0
+    @JvmField var STILL_PREDICTION_SCALE: Double = 0.5
     
     var flywheelState: FlywheelState = FlywheelState.PREDICTIVE_AUTO_AIM
 
@@ -37,20 +37,55 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
     }
 
     fun update() {
-        if (follower.pose.x == 0.0 && follower.pose.y == 0.0) return
+        val robotPose = follower.pose
+        if (robotPose.x == 0.0 && robotPose.y == 0.0) return
+
+        val velocity = follower.velocity
+        val currentFlywheelVelocity = Flywheel.refreshVelocity()
         updateFilteredAcceleration(follower.acceleration)
+
+        val shooterPose = ROBOT.shooterPose()
+        val flywheelVec = if (flywheelState == FlywheelState.PREDICTIVE_AUTO_AIM) {
+            getCorrectedVecIterative(
+                shooterPose,
+                ROBOT.currAlliance.flywheelGoalPose,
+                velocity,
+                filteredAcceleration
+            )
+        } else {
+            shooterPose.genVector(ROBOT.currAlliance.flywheelGoalPose)
+        }
+        val turretVec = if (flywheelState == FlywheelState.PREDICTIVE_AUTO_AIM) {
+            getCorrectedVecIterative(
+                shooterPose,
+                ROBOT.currAlliance.turretGoalPose,
+                velocity,
+                filteredAcceleration
+            )
+        } else {
+            shooterPose.genVector(ROBOT.currAlliance.turretGoalPose)
+        }
+
         when (flywheelState) {
-            FlywheelState.PREDICTIVE_AUTO_AIM -> { updateFlywheel(true); updateTurret(true); updateHood(true) }
-            FlywheelState.AUTO_AIM -> { updateFlywheel(); updateTurret(); updateHood() }
-            FlywheelState.MANUAL -> { Flywheel.update(); updateTurret(); updateHood() }
+            FlywheelState.PREDICTIVE_AUTO_AIM,
+            FlywheelState.AUTO_AIM -> {
+                updateFlywheel(flywheelVec.magnitude)
+                updateTurret(turretVec)
+                updateHood(flywheelVec.magnitude, currentFlywheelVelocity)
+            }
+            FlywheelState.MANUAL -> {
+                Flywheel.update(shouldRefreshVelocity = false)
+                updateTurret(turretVec)
+                updateHood(flywheelVec.magnitude, currentFlywheelVelocity)
+            }
         }
         
-        val error = abs(Flywheel.targetVelocity - Flywheel.currentVelocity)
-        ShooterLights.shooterRGB.position = when {
+        val error = abs(Flywheel.targetVelocity - currentFlywheelVelocity)
+        ShooterLights.setPosition(when {
             error <= 40.0 -> 0.5
             error <= 100.0 -> 0.388
             else -> 0.277
-        }
+        })
     }
     fun flywheelManual() {
         flywheelState = FlywheelState.MANUAL
@@ -59,22 +94,10 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
     fun enablePredictive() { flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM }
     fun enableAutoAim() { flywheelState = FlywheelState.AUTO_AIM }
 
-    fun reset() { Flywheel.reset(); Turret.reset(); Hood.reset(); filteredAcceleration = Vector(); flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM }
+    fun reset() { Flywheel.reset(); Turret.reset(); Hood.reset(); ShooterLights.resetCache(); filteredAcceleration = Vector(); flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM }
     fun debug(): String = "Turret Data: \n${Turret.debug()} \nFlywheel Data: \n${Flywheel.debug()} \nHood Data: \n${Hood.debug()}"
 
-    private fun updateTurret(predictive: Boolean = false) {
-        val vec =
-            if (predictive) {
-                getCorrectedVecIterative(
-                    ROBOT.shooterPose(),
-                    ROBOT.currAlliance.turretGoalPose,
-                    follower.velocity,
-                    filteredAcceleration
-                )
-            } else {
-                ROBOT.shooterPose().genVector(ROBOT.currAlliance.turretGoalPose)
-            }
-        
+    private fun updateTurret(vec: Vector) {
         val newTarget = calculateTurretAngle(vec)
         val normalized = normalizeAngle(newTarget + Turret.offset)
 
@@ -88,19 +111,7 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
         }
         Turret.update()
     }
-    private fun updateFlywheel(predictive: Boolean = false) {
-        val d =
-            if (predictive) {
-                getCorrectedVecIterative(
-                    ROBOT.shooterPose(),
-                    ROBOT.currAlliance.flywheelGoalPose,
-                    follower.velocity,
-                    filteredAcceleration
-                ).magnitude
-            } else {
-                ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.flywheelGoalPose)
-            }
-        
+    private fun updateFlywheel(d: Double) {
         var targetVel = if (shooterMethod == ShooterMethod.PHYSICS) {
             PhysicsShooter.getTargetParams(d).second
         } else {
@@ -114,22 +125,10 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
 
         targetVel += Flywheel.velocityOffset
         Flywheel.targetVelocity = targetVel
-        Flywheel.update()
+        Flywheel.update(shouldRefreshVelocity = false)
     }
-    private fun updateHood(predictive: Boolean = false) {
-        val d =
-            if (predictive) {
-                getCorrectedVecIterative(
-                    ROBOT.shooterPose(),
-                    ROBOT.currAlliance.flywheelGoalPose,
-                    follower.velocity,
-                    filteredAcceleration
-                ).magnitude
-            } else {
-                ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.flywheelGoalPose)
-            }
-        
-        val velocityError = Flywheel.targetVelocity - Flywheel.currentVelocity
+    private fun updateHood(d: Double, currentFlywheelVelocity: Double) {
+        val velocityError = Flywheel.targetVelocity - currentFlywheelVelocity
         
         if (shooterMethod == ShooterMethod.PHYSICS) {
             val targetAngle = PhysicsShooter.getTargetParams(d).first

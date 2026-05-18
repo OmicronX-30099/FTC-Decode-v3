@@ -4,15 +4,11 @@ package org.firstinspires.ftc.teamcode.Systems.Load
 
 import android.util.Log
 import com.qualcomm.robotcore.hardware.DigitalChannel
-import dev.nextftc.bindings.button
-import dev.nextftc.core.commands.delays.Delay
-import dev.nextftc.core.commands.groups.SequentialGroup
 import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.hardware.impl.MotorEx
 import dev.nextftc.hardware.impl.ServoEx
-import org.firstinspires.ftc.teamcode.Util.ROBOT
-import org.firstinspires.ftc.teamcode.Util.Stage
+import kotlin.math.abs
 
 object Rollers: Subsystem {
     init {
@@ -26,8 +22,12 @@ object Rollers: Subsystem {
 
     var isFeeding: Boolean = false
     private var fullStartTime: Long = -1
+    private var lastSideLightPosition: Double = Double.NaN
 
-    override fun initialize() { lockShooter() }
+    override fun initialize() {
+        lockShooter()
+        lastSideLightPosition = Double.NaN
+    }
 
     fun transfer(tPow: Double) { transferMotor.power = tPow }
     fun intake(iPow: Double) { intakeMotor.power = iPow }
@@ -38,19 +38,22 @@ object Rollers: Subsystem {
     fun lockShooter() { shooterGateServo.position = 0.32 }
     fun unlockShooter() { shooterGateServo.position = 0.475 }
 
-    fun update() {
-        val sidePos = when (BreakBeam.ballCount) {
+    fun update(ballCount: Int = BreakBeam.refreshBallCount()) {
+        val sidePos = when (ballCount) {
             3 -> 0.5
             2 -> 0.388
             1 -> 0.277
             else -> 0.0
         }
-        sideLight1.position = sidePos
-        sideLight2.position = sidePos
+        if (lastSideLightPosition.isNaN() || abs(sidePos - lastSideLightPosition) > 0.001) {
+            sideLight1.position = sidePos
+            sideLight2.position = sidePos
+            lastSideLightPosition = sidePos
+        }
 
         if (isFeeding) return
 
-        if (BreakBeam.isFull) {
+        if (ballCount == 3) {
             if (fullStartTime == -1L) {
                 ActiveOpMode.gamepad1.rumble(200)
                 fullStartTime = System.currentTimeMillis()
@@ -60,12 +63,12 @@ object Rollers: Subsystem {
         if (fullStartTime != -1L) {
             if (System.currentTimeMillis() - fullStartTime > 10) {
                 stop()
-                if (!BreakBeam.isFull) {
+                if (ballCount < 3) {
                     fullStartTime = -1L
                 }
             }
         } else {
-            if (BreakBeam.ballCount >= 1) {
+            if (ballCount >= 1) {
                 transfer(0.0)
             }
         }
@@ -87,46 +90,50 @@ object BreakBeam: Subsystem {
     private var oneStartTime: Long = -1L
     private var twoStartTime: Long = -1L
     private var threeStartTime: Long = -1L
+    var cachedBallCount: Int = 0
+        private set
+    val ballCount: Int get() = refreshBallCount()
 
-    val ballCount: Int
-        get() {
-            val p1 = pos1Occupied
-            val p2 = pos2Occupied
-            val p3 = pos3Occupied
-            val now = System.currentTimeMillis()
+    fun refreshBallCount(): Int {
+        val p1 = pos1Occupied
+        val p2 = pos2Occupied
+        val p3 = pos3Occupied
+        val now = System.currentTimeMillis()
 
-            if (p3) {
-                if (oneStartTime == -1L) oneStartTime = now
-            } else {
-                oneStartTime = -1L
-            }
-
-            if (p2 && p3) {
-                if (twoStartTime == -1L) twoStartTime = now
-            } else {
-                twoStartTime = -1L
-            }
-
-            if (p1 && p2 && p3) {
-                if (threeStartTime == -1L) threeStartTime = now
-            } else {
-                threeStartTime = -1L
-            }
-
-            return when {
-                threeStartTime != -1L && now - threeStartTime > 25 -> 3
-                twoStartTime != -1L && now - twoStartTime > 25 -> 2
-                oneStartTime != -1L && now - oneStartTime > 25 -> 1
-                else -> 0
-            }
+        if (p3) {
+            if (oneStartTime == -1L) oneStartTime = now
+        } else {
+            oneStartTime = -1L
         }
 
-    val isFull: Boolean get() = ballCount == 3
+        if (p2 && p3) {
+            if (twoStartTime == -1L) twoStartTime = now
+        } else {
+            twoStartTime = -1L
+        }
+
+        if (p1 && p2 && p3) {
+            if (threeStartTime == -1L) threeStartTime = now
+        } else {
+            threeStartTime = -1L
+        }
+
+        cachedBallCount = when {
+            threeStartTime != -1L && now - threeStartTime > 25 -> 3
+            twoStartTime != -1L && now - twoStartTime > 25 -> 2
+            oneStartTime != -1L && now - oneStartTime > 25 -> 1
+            else -> 0
+        }
+        return cachedBallCount
+    }
+
+    val isFull: Boolean get() = refreshBallCount() == 3
 
     override fun initialize() {
         oneStartTime = -1L
         twoStartTime = -1L
         threeStartTime = -1L
+        cachedBallCount = 0
     }
 }
 

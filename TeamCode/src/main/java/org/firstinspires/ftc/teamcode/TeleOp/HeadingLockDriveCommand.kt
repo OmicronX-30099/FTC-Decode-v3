@@ -47,7 +47,7 @@ class HeadingLockDriveCommand
     override fun calculateAndSetPowers(powers: DoubleArray) {
         val (drive, strafe, turn) = powers
 
-        if ((turn > JOYSTICK_DEADBAND) || (!lockHeading)) {
+        if ((abs(turn) > JOYSTICK_DEADBAND) || (!lockHeading)) {
             f.setTeleOpDrive(drive, strafe, turn * turnScalar, robotCentric)
             lockHeading = false
         } else {
@@ -60,8 +60,8 @@ class HeadingLockDriveCommand
             mf.getTurnDirection(f.pose.heading, headingGoal.get()) * mf.getSmallestAngleDifference(f.pose.heading, headingGoal.get())
 
         controller.coefficients =
-            if (abs(error) < SECONDARY_THRESHOLD) { f.constants.coefficientsHeadingPIDF }
-            else { f.constants.coefficientsSecondaryHeadingPIDF }
+            if (abs(error) < SECONDARY_THRESHOLD) { f.constants.coefficientsSecondaryHeadingPIDF }
+            else { f.constants.coefficientsHeadingPIDF}
 
         controller.updateError(error)
         return controller.run()

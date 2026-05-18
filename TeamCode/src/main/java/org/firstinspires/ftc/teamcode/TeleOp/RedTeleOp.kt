@@ -9,7 +9,7 @@ import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.hardware.driving.DriverControlledCommand
-import org.firstinspires.ftc.teamcode.Systems.Load.BreakBeam.ballCount
+import org.firstinspires.ftc.teamcode.Systems.Load.BreakBeam
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.Systems.Load.Load
 import org.firstinspires.ftc.teamcode.Systems.Load.Rollers
@@ -33,6 +33,7 @@ class RedTeleOp: NextFTCOpMode() {
     }
 
     private val headingLock = HeadingLockTurnController()
+    private var lastTelemetryUpdateTime = 0L
 
     val drivetrain: DriverControlledCommand by lazy {
         PedroDriverControlled(
@@ -42,18 +43,18 @@ class RedTeleOp: NextFTCOpMode() {
             true
         )
     }
-/*
-    val drivetrain: HeadingLockDriveCommand by lazy {
+
+    /*val drivetrain: HeadingLockDriveCommand by lazy {
         HeadingLockDriveCommand(
             -Gamepads.gamepad1.leftStickY,
             -Gamepads.gamepad1.leftStickX,
             -Gamepads.gamepad1.rightStickX,
             // Change this value based on teleop, what u wanna do, etc.
             // U could also do a supplier, which will allow it to auto update the heading goal
-            30.0
+            Math.toRadians(30.0)
         )
-    }
-*/
+    }*/
+
     override fun onInit() { Shooter.reset() }
 
     override fun onStartButtonPressed() {
@@ -82,10 +83,10 @@ class RedTeleOp: NextFTCOpMode() {
                 .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose1 }
             square
                 .whenBecomesTrue { headingLock.enableIfTurnStickCentered(ActiveOpMode.gamepad1.right_stick_x.toDouble()) }
-        /*
-            square
-                .whenBecomesTrue { drivetrain.lockHeading = true }
-        */
+
+            /*square
+                .whenBecomesTrue { drivetrain.lockHeading = true }*/
+
             triangle
                 .toggleOnBecomesTrue()
                 .whenBecomesTrue { Shooter.enableAutoAim() }
@@ -122,13 +123,20 @@ class RedTeleOp: NextFTCOpMode() {
     }
 
     override fun onUpdate() {
+        val currentBallCount = BreakBeam.refreshBallCount()
         Shooter.update()
-        Rollers.update()
-        telemetry.run {
-            addData("Follower", follower.pose)
-            addData("balls: ", ballCount)
-            addLine(Shooter.debug())
-            update()
+        Rollers.update(currentBallCount)
+
+        val now = System.currentTimeMillis()
+        if (now - lastTelemetryUpdateTime >= 200) {
+            telemetry.run {
+                addData("Follower", follower.pose)
+                addData("balls: ", currentBallCount)
+                addData("Velocity", follower.velocity)
+                addLine(Shooter.debug())
+                update()
+            }
+            lastTelemetryUpdateTime = now
         }
     }
 }
