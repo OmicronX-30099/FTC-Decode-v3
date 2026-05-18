@@ -3,16 +3,16 @@
 package org.firstinspires.ftc.teamcode.Systems.Shooter
 
 import com.bylazar.configurables.annotations.Configurable
-import com.qualcomm.robotcore.hardware.VoltageSensor
-import dev.frozenmilk.util.graph.rule.dependsOn
 import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.hardware.controllable.MotorGroup
 import dev.nextftc.hardware.impl.MotorEx
 import dev.nextftc.hardware.impl.ServoEx
-import dev.nextftc.hardware.positionable.ServoGroup
 import kotlin.math.abs
 import kotlin.math.sign
+
+private const val SERVO_WRITE_EPSILON = 0.001
+
 @Configurable
 object Hood: Subsystem {
     private val hoodServo: ServoEx = ServoEx("hood", -0.1)
@@ -56,6 +56,7 @@ object Hood: Subsystem {
     )
 
     var targetPosition: Double = 0.0
+    private var lastWrittenPosition: Double = Double.NaN
 
     fun getAngle(distance: Double): Double {
         val pos = getPosition(distance)
@@ -67,7 +68,7 @@ object Hood: Subsystem {
         val basePosition = getPosition(distance)
         val compensation = velocityError * compensationFactor
         targetPosition = (basePosition - compensation).coerceIn(minHoodPos, maxHoodPos)
-        hoodServo.position = targetPosition
+        writePositionIfChanged(targetPosition)
     }
 
     fun updatePhysics(targetAngle: Double, velocityError: Double) {
@@ -77,11 +78,12 @@ object Hood: Subsystem {
         
         val compensation = velocityError * compensationFactor
         targetPosition = (basePosition - compensation).coerceIn(minHoodPos, maxHoodPos)
-        hoodServo.position = targetPosition
+        writePositionIfChanged(targetPosition)
     }
 
     fun reset() {
         targetPosition = 0.5
+        lastWrittenPosition = Double.NaN
         //hoodServo.position = 0.5
     }
 
@@ -104,11 +106,31 @@ object Hood: Subsystem {
     }
 
     fun debug(): String = "Target Position = $targetPosition \nComp Factor = $compensationFactor"
+
+    private fun writePositionIfChanged(position: Double) {
+        if (lastWrittenPosition.isNaN() || abs(position - lastWrittenPosition) > SERVO_WRITE_EPSILON) {
+            hoodServo.position = position
+            lastWrittenPosition = position
+        }
+    }
 }
 
 object ShooterLights: Subsystem {
     val shooterRGB: ServoEx = ServoEx("shooter_light", -0.1)
+    private var lastPosition: Double = Double.NaN
+
     override fun initialize() { }
+
+    fun setPosition(position: Double) {
+        if (lastPosition.isNaN() || abs(position - lastPosition) > SERVO_WRITE_EPSILON) {
+            shooterRGB.position = position
+            lastPosition = position
+        }
+    }
+
+    fun resetCache() {
+        lastPosition = Double.NaN
+    }
 }
 
 @Configurable
@@ -116,7 +138,6 @@ object Flywheel: Subsystem {
     private val flywheelMotor1: MotorEx = MotorEx("fwl").reversed().floatMode()
     private val flywheelMotor2: MotorEx = MotorEx("fwr").reversed().floatMode()
     private val flywheelMotors: MotorGroup = MotorGroup(flywheelMotor1, flywheelMotor2)
-    private val voltageSensor: VoltageSensor by lazy { ActiveOpMode.hardwareMap.get(VoltageSensor::class.java, "Control Hub") }
 
     private val flywheelCoeffs: PSVCoeffs = PSVCoeffs(0.003, 0.09, 0.0004)
     @JvmField
@@ -127,12 +148,17 @@ object Flywheel: Subsystem {
     var targetVelocity: Double = 0.0
     var velocityOffset: Double = 0.0
         private set
-    val currentVelocity: Double get() = flywheelMotors.velocity
+    var currentVelocity: Double = 0.0
+        private set
 
     fun calculateVelocity(d: Double) = ((0.0101171 * d * d) + (4.20298 * d) + 945.28294)
     fun offsetVelocity(by: Double) { velocityOffset += by }
+    fun refreshVelocity(): Double {
+        currentVelocity = flywheelMotors.velocity
+        return currentVelocity
+    }
 
-    fun calculatePow(): Double {
+    fun calculatePow(currentVelocity: Double = this.currentVelocity): Double {
         val compensatedTarget = targetVelocity * velocityGain
         if (abs(compensatedTarget) < 1.0) return 0.0
         
@@ -144,20 +170,19 @@ object Flywheel: Subsystem {
         
         return (ff + p).coerceIn(0.0, 1.0)
     }
-    fun update() {
-        val currVoltage: Double = voltageSensor.voltage
-        // Normalize power output to 12V to compensate for voltage sag from other components
-        //flywheelMotors.power = calculatePow() * (12.7 / currVoltage.coerceAtLeast(8.0))
-        flywheelMotors.power = calculatePow()
+    fun update(shouldRefreshVelocity: Boolean = true) {
+        if (shouldRefreshVelocity) refreshVelocity()
+        flywheelMotors.power = calculatePow(currentVelocity)
     }
     fun reset() {
         targetVelocity = 0.0
         velocityOffset = 0.0
+        currentVelocity = 0.0
         flywheelMotor1.motor.power = 0.0
         flywheelMotor2.motor.power = 0.0
         flywheelMotors.power = 0.0
     }
-    fun debug(): String = "Target Velocity = $targetVelocity \nVelocity Offset = $velocityOffset \nCurrent Velocity = ${-flywheelMotors.velocity} \nCoeffs = $flywheelCoeffs \nPower = ${flywheelMotors.power}"
+    fun debug(): String = "Target Velocity = $targetVelocity \nVelocity Offset = $velocityOffset \nCurrent Velocity = ${-currentVelocity} \nCoeffs = $flywheelCoeffs \nPower = ${flywheelMotors.power}"
 }
 
 object Turret: Subsystem {
@@ -170,14 +195,30 @@ object Turret: Subsystem {
     var offset: Double = 0.0
         private set
     var targetAngle: Double = 0.0
+    private var lastServo1Position: Double = Double.NaN
+    private var lastServo2Position: Double = Double.NaN
 
     fun offset(by: Double) { offset += by }
     fun update() {
-        turretServo1.position = (normalizeAngle300(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE)+0.495) //middle is 0.5
-        turretServo2.position = (normalizeAngle300(targetAngle + offset) * (GEAR_RATIO / SERVO_RANGE)+0.505) //
+        val normalized = normalizeAngle300(targetAngle + offset)
+        val servo1Position = normalized * (GEAR_RATIO / SERVO_RANGE) + 0.495
+        val servo2Position = normalized * (GEAR_RATIO / SERVO_RANGE) + 0.505
+        if (lastServo1Position.isNaN() || abs(servo1Position - lastServo1Position) > SERVO_WRITE_EPSILON) {
+            turretServo1.position = servo1Position
+            lastServo1Position = servo1Position
+        }
+        if (lastServo2Position.isNaN() || abs(servo2Position - lastServo2Position) > SERVO_WRITE_EPSILON) {
+            turretServo2.position = servo2Position
+            lastServo2Position = servo2Position
+        }
     }
-    fun reset() { offset = 0.0; targetAngle = 0.0 }
-    fun debug(): String = "Target Angle = $targetAngle \nOffset = $offset \nCurrent Pos ition = ${turretServo1.position - 0.00130571*2.0}"
+    fun reset() {
+        offset = 0.0
+        targetAngle = 0.0
+        lastServo1Position = Double.NaN
+        lastServo2Position = Double.NaN
+    }
+    fun debug(): String = "Target Angle = $targetAngle \nOffset = $offset \nLast Position = $lastServo1Position"
 
     override fun initialize() {
         val lt = ActiveOpMode.hardwareMap.get(com.qualcomm.robotcore.hardware.Servo::class.java, "lt")
