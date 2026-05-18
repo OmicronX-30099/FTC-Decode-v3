@@ -18,11 +18,11 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
     private const val ITERATIONS: Int = 8
 
     @JvmField var RESPONSE_LATENCY_SECONDS: Double = 0.035
-    @JvmField var ACCELERATION_GAIN: Double = 0.5
+    @JvmField var ACCELERATION_GAIN: Double = 0.4
     @JvmField var ACCELERATION_FILTER_ALPHA: Double = 0.1
-    @JvmField var TURRET_ANGULAR_VELOCITY_COMPENSATION_SECONDS: Double = 0.08
-    @JvmField var TRANSLATION_STILL_VELOCITY: Double = 20.0
-    @JvmField var STILL_PREDICTION_SCALE: Double = 0.7
+    @JvmField var TURRET_ANGULAR_VELOCITY_COMPENSATION_SECONDS: Double = 0.1
+    @JvmField var TRANSLATION_STILL_VELOCITY: Double = 15.0
+    @JvmField var STILL_PREDICTION_SCALE: Double = 0.5
     
     var flywheelState: FlywheelState = FlywheelState.PREDICTIVE_AUTO_AIM
 

@@ -122,7 +122,7 @@ object Flywheel: Subsystem {
     @JvmField
     var IDLE_VELOCITY = 1500.0
     @JvmField
-    var velocityGain = 1.03
+    var velocityGain = 1.02
     
     var targetVelocity: Double = 0.0
     var velocityOffset: Double = 0.0

@@ -1,4 +1,4 @@
-/*@file:Suppress("unused")
+@file:Suppress("unused")
 
 package org.firstinspires.ftc.teamcode.WebTest
 
@@ -30,7 +30,7 @@ object YAMLWebHandler {
     private fun webHTML(session: IHTTPSession, c: Context): NanoHTTPD.Response {
         val androidAssetManager: AssetManager = c.assets
         val webHTML: String
-            = androidAssetManager.open("web/index.html")
+            = androidAssetManager.open("dash/index.html")
                 .bufferedReader()
                 .use { it.readText() }
                 .trimIndent()
@@ -121,4 +121,3 @@ object YAMLWebHandler {
     fun getRawData(fileName: String): String
         = File(storageDir, fileName).readText()
 }
-*/
