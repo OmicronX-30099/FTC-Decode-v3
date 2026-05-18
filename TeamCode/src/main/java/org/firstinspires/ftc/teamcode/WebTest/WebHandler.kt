@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil
 import org.firstinspires.ftc.robotcore.internal.webserver.WebHandler
 import java.io.File
 
-object YAMLWebHandler {
+object WebHandler {
     private val storageDir = File(AppUtil.FIRST_FOLDER, "yaml_files")
 
     @JvmStatic
@@ -30,7 +30,7 @@ object YAMLWebHandler {
     private fun webHTML(session: IHTTPSession, c: Context): NanoHTTPD.Response {
         val androidAssetManager: AssetManager = c.assets
         val webHTML: String
-            = androidAssetManager.open("dash/index.html")
+            = androidAssetManager.open("yaml/index.html")
                 .bufferedReader()
                 .use { it.readText() }
                 .trimIndent()
