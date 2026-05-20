@@ -105,7 +105,7 @@ object Hood: Subsystem {
         return value
     }
 
-    fun debug(): String = "Target Position = $targetPosition \nComp Factor = $compensationFactor"
+    fun debug(): String = "Target Position = $targetPosition"
 
     private fun writePositionIfChanged(position: Double) {
         if (lastWrittenPosition.isNaN() || abs(position - lastWrittenPosition) > SERVO_WRITE_EPSILON) {
@@ -182,7 +182,7 @@ object Flywheel: Subsystem {
         flywheelMotor2.motor.power = 0.0
         flywheelMotors.power = 0.0
     }
-    fun debug(): String = "Target Velocity = $targetVelocity \nVelocity Offset = $velocityOffset \nCurrent Velocity = ${-currentVelocity} \nCoeffs = $flywheelCoeffs \nPower = ${flywheelMotors.power}"
+    fun debug(): String = "Target Velocity = $targetVelocity \nVelocity Offset = $velocityOffset \nCurrent Velocity = ${-currentVelocity} \nPower = ${flywheelMotors.power}"
 }
 
 object Turret: Subsystem {

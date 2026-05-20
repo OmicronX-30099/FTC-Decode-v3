@@ -134,9 +134,9 @@ class RedTeleOp: NextFTCOpMode() {
                 addData("balls: ", currentBallCount)
                 addData("Velocity", follower.velocity)
                 addLine(Shooter.debug())
-                update()
             }
             lastTelemetryUpdateTime = now
         }
+        telemetry.update()
     }
 }
