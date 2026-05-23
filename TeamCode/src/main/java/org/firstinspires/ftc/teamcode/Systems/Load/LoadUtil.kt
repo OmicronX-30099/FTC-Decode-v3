@@ -90,15 +90,20 @@ object BreakBeam: Subsystem {
     private var oneStartTime: Long = -1L
     private var twoStartTime: Long = -1L
     private var threeStartTime: Long = -1L
+    private var lastRefreshTime: Long = 0L
     var cachedBallCount: Int = 0
         private set
     val ballCount: Int get() = refreshBallCount()
 
-    fun refreshBallCount(): Int {
+    fun refreshBallCount(minIntervalMs: Long = 0L): Int {
+        val now = System.currentTimeMillis()
+        if (minIntervalMs > 0L && now - lastRefreshTime < minIntervalMs) {
+            return cachedBallCount
+        }
+
         val p1 = pos1Occupied
         val p2 = pos2Occupied
         val p3 = pos3Occupied
-        val now = System.currentTimeMillis()
 
         if (p3) {
             if (oneStartTime == -1L) oneStartTime = now
@@ -124,6 +129,7 @@ object BreakBeam: Subsystem {
             oneStartTime != -1L && now - oneStartTime > 25 -> 1
             else -> 0
         }
+        lastRefreshTime = now
         return cachedBallCount
     }
 
@@ -133,6 +139,7 @@ object BreakBeam: Subsystem {
         oneStartTime = -1L
         twoStartTime = -1L
         threeStartTime = -1L
+        lastRefreshTime = 0L
         cachedBallCount = 0
     }
 }

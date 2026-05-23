@@ -9,6 +9,7 @@ import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.hardware.driving.DriverControlledCommand
+import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcode.Systems.Load.BreakBeam
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.Systems.Load.Load
@@ -34,6 +35,10 @@ class RedTeleOp: NextFTCOpMode() {
 
     private val headingLock = HeadingLockTurnController()
     private var lastTelemetryUpdateTime = 0L
+    private lateinit var followerTelemetryItem: Telemetry.Item
+    private lateinit var ballTelemetryItem: Telemetry.Item
+    private lateinit var velocityTelemetryItem: Telemetry.Item
+    private lateinit var shooterTelemetryItem: Telemetry.Item
 
     val drivetrain: DriverControlledCommand by lazy {
         PedroDriverControlled(
@@ -64,6 +69,10 @@ class RedTeleOp: NextFTCOpMode() {
         ROBOT.currAlliance = Alliance.RED
         follower.setStartingPose(ROBOT.teleopStartPose)
         drivetrain.schedule()
+        followerTelemetryItem = telemetry.addData("Follower", "").setRetained(true)
+        ballTelemetryItem = telemetry.addData("balls: ", 0).setRetained(true)
+        velocityTelemetryItem = telemetry.addData("Velocity", "").setRetained(true)
+        shooterTelemetryItem = telemetry.addData("Shooter", "").setRetained(true)
         Gamepads.gamepad1 .apply {
             rightTrigger.greaterThan(0.0)
                 .whenBecomesTrue { Rollers.run(1.0,0.67) }
@@ -123,18 +132,16 @@ class RedTeleOp: NextFTCOpMode() {
     }
 
     override fun onUpdate() {
-        val currentBallCount = BreakBeam.refreshBallCount()
+        val currentBallCount = BreakBeam.refreshBallCount(minIntervalMs = 20L)
         Shooter.update()
         Rollers.update(currentBallCount)
 
         val now = System.currentTimeMillis()
         if (now - lastTelemetryUpdateTime >= 200) {
-            telemetry.run {
-                addData("Follower", follower.pose)
-                addData("balls: ", currentBallCount)
-                addData("Velocity", follower.velocity)
-                addLine(Shooter.debug())
-            }
+            followerTelemetryItem.setValue(follower.pose.toString())
+            ballTelemetryItem.setValue(currentBallCount)
+            velocityTelemetryItem.setValue(follower.velocity.toString())
+            shooterTelemetryItem.setValue(Shooter.debug())
             lastTelemetryUpdateTime = now
         }
         telemetry.update()

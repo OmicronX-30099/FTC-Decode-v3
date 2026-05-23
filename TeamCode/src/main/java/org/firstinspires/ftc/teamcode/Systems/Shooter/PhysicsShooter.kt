@@ -123,7 +123,7 @@ object PhysicsShooter {
      * Calculates flight time based on horizontal distance, launch angle, and flywheel TPS.
      */
     fun getFlyTime(distance: Double, hoodAngle: Double, tps: Double): Double {
-        val x = distance.coerceIn(20.0, 170.0)
+        val x = distance.coerceIn(27.0, 170.0)
         val launchAngle = 90.0 - hoodAngle
         val angleRad = Math.toRadians(launchAngle)
 

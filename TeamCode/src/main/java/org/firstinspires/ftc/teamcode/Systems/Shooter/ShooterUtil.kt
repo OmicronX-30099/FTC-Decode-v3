@@ -25,34 +25,17 @@ object Hood: Subsystem {
     @JvmField var servoAt35Deg: Double = 0.3274
     
     // Distance (inches) to Servo Position (0.0 - 1.0)
-    private val table = listOf(
-        30.700163 to 0.96,
-        35.362409 to 0.92,
-        40.354678 to 0.84,
-        45.918406 to 0.8,
-        50.916598 to 0.7,
-        55.339859 to 0.65,
-        60.336556 to 0.6,
-        66.155121 to 0.55,
-        70.586826 to 0.5,
-        75.581082 to 0.45,
-        80.576051 to 0.4,
-        85.571607 to 0.35,
-        90.567654 to 0.3,
-        95.501309 to 0.25,
-        100.43157 to 0.25,
-        105.3684 to 0.25,
-        110.69101 to 0.20,
-        115.42313 to 0.20,
-        121.1301 to 0.20,
-        125.26971 to 0.20,
-        130.86061 to 0.20,
-        135.83998 to 0.20,
-        140.29433 to 0.20,
-        146.12495 to 0.20,
-        150.58054 to 0.20,
-        156.01442 to 0.20,
-        160.77469 to 0.20
+    private val distanceTable = doubleArrayOf(
+        30.700163, 35.362409, 40.354678, 45.918406, 50.916598, 55.339859,
+        60.336556, 66.155121, 70.586826, 75.581082, 80.576051, 85.571607,
+        90.567654, 95.501309, 100.43157, 105.3684, 110.69101, 115.42313,
+        121.1301, 125.26971, 130.86061, 135.83998, 140.29433, 146.12495,
+        150.58054, 156.01442, 160.77469
+    )
+    private val positionTable = doubleArrayOf(
+        0.96, 0.92, 0.84, 0.8, 0.7, 0.65, 0.6, 0.55, 0.5, 0.45, 0.4,
+        0.35, 0.3, 0.25, 0.25, 0.25, 0.20, 0.20, 0.20, 0.20, 0.20,
+        0.20, 0.20, 0.20, 0.20, 0.20, 0.20
     )
 
     var targetPosition: Double = 0.0
@@ -88,21 +71,21 @@ object Hood: Subsystem {
     }
 
     fun getPosition(distance: Double): Double {
-        if (table.isEmpty()) return 0.20
-        if (distance <= table.first().first) return table.first().second
-        if (distance >= table.last().first) return table.last().second
+        if (distance <= distanceTable[0]) return positionTable[0]
+        val lastIndex = distanceTable.lastIndex
+        if (distance >= distanceTable[lastIndex]) return positionTable[lastIndex]
 
-        var value = 0.20
-        for (i in 0 until table.size - 1) {
-            val (d1, p1) = table[i]
-            val (d2, p2) = table[i+1]
+        for (i in 0 until lastIndex) {
+            val d1 = distanceTable[i]
+            val d2 = distanceTable[i + 1]
             if (distance in d1..d2) {
+                val p1 = positionTable[i]
+                val p2 = positionTable[i + 1]
                 val t = (distance - d1) / (d2 - d1)
-                value = p1 + t * (p2 - p1)
-                break
+                return p1 + t * (p2 - p1)
             }
         }
-        return value
+        return positionTable[lastIndex]
     }
 
     fun debug(): String = "Target Position = $targetPosition"
