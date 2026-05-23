@@ -126,6 +126,8 @@ object Flywheel: Subsystem {
     @JvmField
     var IDLE_VELOCITY = 1500.0
     @JvmField
+    var MANUAL_VELOCITY = 1500.0
+    @JvmField
     var velocityGain = 1.02
     
     var targetVelocity: Double = 0.0
@@ -136,6 +138,7 @@ object Flywheel: Subsystem {
 
     fun calculateVelocity(d: Double) = ((0.0101171 * d * d) + (4.20298 * d) + 945.28294)
     fun offsetVelocity(by: Double) { velocityOffset += by }
+    fun resetVelocityOffset() { velocityOffset = 0.0 }
     fun refreshVelocity(): Double {
         currentVelocity = flywheelMotors.velocity
         return currentVelocity
@@ -182,6 +185,7 @@ object Turret: Subsystem {
     private var lastServo2Position: Double = Double.NaN
 
     fun offset(by: Double) { offset += by }
+    fun resetOffset() { offset = 0.0 }
     fun update() {
         val normalized = normalizeAngle300(targetAngle + offset)
         val servo1Position = normalized * (GEAR_RATIO / SERVO_RANGE) + 0.495

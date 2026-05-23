@@ -77,7 +77,7 @@ class BlueTeleOp: NextFTCOpMode() {
                 .whenBecomesTrue { drivetrain.scalar = 0.2 }
                 .whenBecomesFalse { drivetrain.scalar = 1.0 }
             circle
-                .whenBecomesTrue { Shooter.flywheelManual() }
+                .whenBecomesTrue { Shooter.cycleFlywheelMode() }
             cross
                 .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose1 }
             square
@@ -87,9 +87,7 @@ class BlueTeleOp: NextFTCOpMode() {
                 .whenBecomesTrue { drivetrain.lockHeading = true }
         */
             triangle
-                .toggleOnBecomesTrue()
-                .whenBecomesTrue { Shooter.enableAutoAim() }
-                .whenBecomesFalse { Shooter.enablePredictive() }
+                .whenBecomesTrue { Shooter.resetOffsets() }
         }
         Gamepads.gamepad2 .apply {
             triangle

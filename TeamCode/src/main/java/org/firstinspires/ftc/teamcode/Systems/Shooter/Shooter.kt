@@ -83,12 +83,23 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
             else -> 0.277
         })
     }
-    fun flywheelManual() {
+    fun flywheelManual(velocity: Double = Flywheel.MANUAL_VELOCITY) {
         flywheelState = FlywheelState.MANUAL
-        Flywheel.targetVelocity = Flywheel.IDLE_VELOCITY
+        Flywheel.targetVelocity = velocity
     }
     fun enablePredictive() { flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM }
     fun enableAutoAim() { flywheelState = FlywheelState.AUTO_AIM }
+    fun cycleFlywheelMode() {
+        when (flywheelState) {
+            FlywheelState.PREDICTIVE_AUTO_AIM -> flywheelManual()
+            FlywheelState.MANUAL -> enableAutoAim()
+            FlywheelState.AUTO_AIM -> enablePredictive()
+        }
+    }
+    fun resetOffsets() {
+        Turret.resetOffset()
+        Flywheel.resetVelocityOffset()
+    }
 
     fun reset() { Flywheel.reset(); Turret.reset(); Hood.reset(); ShooterLights.resetCache(); flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM }
     fun debug(): String = "Turret Data: \n${Turret.debug()} \nFlywheel Data: \n${Flywheel.debug()} \nHood Data: \n${Hood.debug()}"

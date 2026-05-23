@@ -84,10 +84,10 @@ class RedTeleOp: NextFTCOpMode() {
                 .whenBecomesTrue ( Load.shootTripleCommand )
             leftBumper
                 .toggleOnBecomesTrue()
-                .whenBecomesTrue { drivetrain.scalar = 0.2 }
+                .whenBecomesTrue { drivetrain.scalar = 0.3 }
                 .whenBecomesFalse { drivetrain.scalar = 1.0 }
             circle
-                .whenBecomesTrue { Shooter.flywheelManual() }
+                .whenBecomesTrue { Shooter.cycleFlywheelMode() }
             cross
                 .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose1 }
             square
@@ -97,9 +97,7 @@ class RedTeleOp: NextFTCOpMode() {
                 .whenBecomesTrue { drivetrain.lockHeading = true }*/
 
             triangle
-                .toggleOnBecomesTrue()
-                .whenBecomesTrue { Shooter.enableAutoAim() }
-                .whenBecomesFalse { Shooter.enablePredictive() }
+                .whenBecomesTrue { Shooter.resetOffsets() }
         }
         Gamepads.gamepad2 .apply {
             triangle

@@ -23,8 +23,8 @@ import org.firstinspires.ftc.teamcode.Util.includePedro
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 
 
-@Autonomous(name = "18 Ball - RED - LANCERS", group = "Collab Auto", preselectTeleOp = "Red TeleOp")
-class Red18BallAlliance(): NextFTCOpMode() {
+@Autonomous(name = "Red 21 Ball", group = "Collab Auto", preselectTeleOp = "Red TeleOp")
+class Red21Ball(): NextFTCOpMode() {
     init {
         addSubsystems(Load, Shooter)
         includePedro(Constants::createFollower)
@@ -41,6 +41,7 @@ class Red18BallAlliance(): NextFTCOpMode() {
     override fun onStartButtonPressed() {
         follower.setStartingPose(Pose(112.0,130.75,Math.toRadians(90.0)))
         buildPaths()
+        Shooter.flywheelManual(1400.0)
         val main = SequentialGroup(
             FollowPath(paths[0]), //shoot preload
             //Delay(0.2),
