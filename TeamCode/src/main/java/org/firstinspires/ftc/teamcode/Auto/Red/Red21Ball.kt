@@ -41,7 +41,7 @@ class Red21Ball(): NextFTCOpMode() {
     override fun onStartButtonPressed() {
         follower.setStartingPose(Pose(112.0,130.75,Math.toRadians(90.0)))
         buildPaths()
-        Shooter.flywheelManual(1400.0)
+        Shooter.flywheelManual(1420.0)
         val main = SequentialGroup(
             FollowPath(paths[0]), //shoot preload
             //Delay(0.2),
@@ -155,9 +155,9 @@ class Red21Ball(): NextFTCOpMode() {
             .addPath(
                 BezierLine(
                     Pose(108.350, 68.500),
-                    Pose(129.700,59.000)
+                    Pose(130.700,59.000)
                 )
-            ).setLinearHeadingInterpolation(Math.toRadians(0.0),Math.toRadians(23.0))
+            ).setLinearHeadingInterpolation(Math.toRadians(0.0),Math.toRadians(27.0))
             .build()
 
         /*val intakegate = follower.pathBuilder().addPath(
@@ -172,7 +172,7 @@ class Red21Ball(): NextFTCOpMode() {
 
         val shootgate = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(129.700, 59.000),
+                Pose(130.700, 59.000),
 
                 Pose(87.000, 78.000)
             )
@@ -183,8 +183,8 @@ class Red21Ball(): NextFTCOpMode() {
         val intakespike1 = follower.pathBuilder().addPath(
             BezierCurve(
                 Pose(87.000, 78.000),
-                Pose(105.500, 84.000),
-                Pose(126.000, 84.000)
+                Pose(105.500, 80.000),
+                Pose(126.000, 80.000)
             )
         ).setTangentHeadingInterpolation()
 
@@ -192,7 +192,7 @@ class Red21Ball(): NextFTCOpMode() {
 
         val shootspike1 = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(126.000, 84.000),
+                Pose(126.000, 80.000),
 
                 Pose(87.000, 78.000)
             )
@@ -204,7 +204,7 @@ class Red21Ball(): NextFTCOpMode() {
             BezierLine(
                 Pose(87.000, 78.000),
 
-                Pose(126.000, 78.000)
+                Pose(125.5,78.000)
             )
         ).setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(0.0))
 

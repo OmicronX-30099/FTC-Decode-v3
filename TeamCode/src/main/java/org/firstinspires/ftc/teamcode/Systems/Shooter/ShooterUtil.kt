@@ -11,7 +11,7 @@ import dev.nextftc.hardware.impl.ServoEx
 import kotlin.math.abs
 import kotlin.math.sign
 
-private const val SERVO_WRITE_EPSILON = 0.001
+private const val SERVO_WRITE_EPSILON = 0.0028
 
 @Configurable
 object Hood: Subsystem {
@@ -145,7 +145,7 @@ object Flywheel: Subsystem {
     }
 
     fun calculatePow(currentVelocity: Double = this.currentVelocity): Double {
-        val compensatedTarget = targetVelocity * velocityGain
+        val compensatedTarget = targetVelocity
         if (abs(compensatedTarget) < 1.0) return 0.0
         
         val error = compensatedTarget - currentVelocity

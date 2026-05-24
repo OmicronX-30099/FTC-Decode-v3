@@ -24,13 +24,14 @@ class flywheelTester: NextFTCOpMode(){
     }
     companion object {
         @JvmField
-        var targetVelocity = 0.0
+        var targetVelocity = 2000.0
         @JvmField
         var turret = 0.5
         @JvmField
         var hoodpose = 0.92
         @JvmField
         var flywheelCoeffs: PSVCoeffs = PSVCoeffs(0.003, 0.09, 0.0004)
+        //var flywheelCoeffs: PSVCoeffs = PSVCoeffs(0.003, 0.09, 0.0004)
     }
     private val flywheelMotor1: MotorEx = MotorEx("fwl").reversed()
     private val flywheelMotor2: MotorEx = MotorEx("fwr").reversed()

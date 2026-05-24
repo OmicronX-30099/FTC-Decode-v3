@@ -9,7 +9,8 @@ import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.hardware.driving.DriverControlledCommand
-import org.firstinspires.ftc.teamcode.Systems.Load.BreakBeam.ballCount
+import org.firstinspires.ftc.robotcore.external.Telemetry
+import org.firstinspires.ftc.teamcode.Systems.Load.BreakBeam
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.Systems.Load.Load
 import org.firstinspires.ftc.teamcode.Systems.Load.Rollers
@@ -33,36 +34,46 @@ class BlueTeleOp: NextFTCOpMode() {
     }
 
     private val headingLock = HeadingLockTurnController()
+    private var lastTelemetryUpdateTime = 0L
+    private lateinit var followerTelemetryItem: Telemetry.Item
+    private lateinit var ballTelemetryItem: Telemetry.Item
+    private lateinit var velocityTelemetryItem: Telemetry.Item
+    private lateinit var shooterTelemetryItem: Telemetry.Item
 
     val drivetrain: DriverControlledCommand by lazy {
         PedroDriverControlled(
-            -Gamepads.gamepad1.leftStickY,
+            -Gamepads.gamepad1.leftStickY.map { it * 0.8 },
             -Gamepads.gamepad1.leftStickX,
             { headingLock.turnPower(ActiveOpMode.gamepad1.right_stick_x.toDouble()) },
             true
         )
     }
-/*
-    val drivetrain: HeadingLockDriveCommand by lazy {
+
+    /*val drivetrain: HeadingLockDriveCommand by lazy {
         HeadingLockDriveCommand(
             -Gamepads.gamepad1.leftStickY,
             -Gamepads.gamepad1.leftStickX,
             -Gamepads.gamepad1.rightStickX,
             // Change this value based on teleop, what u wanna do, etc.
             // U could also do a supplier, which will allow it to auto update the heading goal
-            30.0
+            Math.toRadians(30.0)
         )
-    }
-*/
+    }*/
+
     override fun onInit() { Shooter.reset() }
 
     override fun onStartButtonPressed() {
+        HeadingLockTurnTuning.TARGET_HEADING_DEGREES = 150.0;
         shooterMethod = ShooterMethod.REGRESSION
         Shooter.flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM
         ROBOT.currStage = Stage.TELEOP
         ROBOT.currAlliance = Alliance.BLUE
-        follower.setStartingPose(ROBOT.teleopStartPose.mirror(142.0))
+        follower.setStartingPose(ROBOT.teleopStartPose)
         drivetrain.schedule()
+        followerTelemetryItem = telemetry.addData("Follower", "").setRetained(true)
+        ballTelemetryItem = telemetry.addData("balls: ", 0).setRetained(true)
+        velocityTelemetryItem = telemetry.addData("Velocity", "").setRetained(true)
+        shooterTelemetryItem = telemetry.addData("Shooter", "").setRetained(true)
         Gamepads.gamepad1 .apply {
             rightTrigger.greaterThan(0.0)
                 .whenBecomesTrue { Rollers.run(1.0,0.67) }
@@ -74,7 +85,7 @@ class BlueTeleOp: NextFTCOpMode() {
                 .whenBecomesTrue ( Load.shootTripleCommand )
             leftBumper
                 .toggleOnBecomesTrue()
-                .whenBecomesTrue { drivetrain.scalar = 0.2 }
+                .whenBecomesTrue { drivetrain.scalar = 0.3 }
                 .whenBecomesFalse { drivetrain.scalar = 1.0 }
             circle
                 .whenBecomesTrue { Shooter.cycleFlywheelMode() }
@@ -82,15 +93,17 @@ class BlueTeleOp: NextFTCOpMode() {
                 .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose1 }
             square
                 .whenBecomesTrue { headingLock.enableIfTurnStickCentered(ActiveOpMode.gamepad1.right_stick_x.toDouble()) }
-        /*
-            square
-                .whenBecomesTrue { drivetrain.lockHeading = true }
-        */
+
+            /*square
+                .whenBecomesTrue { drivetrain.lockHeading = true }*/
+
             triangle
                 .whenBecomesTrue { Shooter.resetOffsets() }
         }
         Gamepads.gamepad2 .apply {
             triangle
+                .whenBecomesTrue { Shooter.resetOffsets() }
+            cross
                 .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose2 }
             square
                 .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose3 }
@@ -120,13 +133,18 @@ class BlueTeleOp: NextFTCOpMode() {
     }
 
     override fun onUpdate() {
+        val currentBallCount = BreakBeam.refreshBallCount(minIntervalMs = 20L)
         Shooter.update()
-        Rollers.update()
-        telemetry.run {
-            addData("Follower", follower.pose)
-            addData("balls: ", ballCount)
-            addLine(Shooter.debug())
-            update()
+        Rollers.update(currentBallCount)
+
+        val now = System.currentTimeMillis()
+        if (now - lastTelemetryUpdateTime >= 200) {
+            followerTelemetryItem.setValue(follower.pose.toString())
+            ballTelemetryItem.setValue(currentBallCount)
+            velocityTelemetryItem.setValue(follower.velocity.toString())
+            shooterTelemetryItem.setValue(Shooter.debug())
+            lastTelemetryUpdateTime = now
         }
+        telemetry.update()
     }
 }

@@ -101,6 +101,8 @@ class RedTeleOp: NextFTCOpMode() {
         }
         Gamepads.gamepad2 .apply {
             triangle
+                .whenBecomesTrue { Shooter.resetOffsets() }
+            cross
                 .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose2 }
             square
                 .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose3 }
