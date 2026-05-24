@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Util.ROBOT
 
 @Configurable
 object Load: SubsystemGroup(Rollers, BreakBeam) {
-    @JvmField var MAX_SHOT_READY_WAIT_SECONDS: Double = 0.35
+    @JvmField var MAX_SHOT_READY_WAIT_SECONDS: Double = 0.2
     @JvmField var GATE_SETTLE_SECONDS: Double = 0.12
 
     var shotRequestCount: Int = 0
@@ -38,8 +38,8 @@ object Load: SubsystemGroup(Rollers, BreakBeam) {
 
     val shootTripleCommand: Command = IfElseCommand(
         { ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.flywheelGoalPose) > 115.0},
-        shootCommand(1.0,0.67,0.67),
-        shootCommand(0.5, 0.78, 0.78)
+        shootCommand(0.5,0.67,0.67),
+        shootCommand(0.4, 0.84, 0.84)
     ).setRequirements(Stupid)
 
     fun shootCommand(waitTime: Double, tPow: Double, iPow: Double): Command =

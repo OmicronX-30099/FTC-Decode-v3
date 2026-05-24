@@ -16,14 +16,14 @@ import kotlin.math.sin
 
 @Configurable
 object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
-    private const val ITERATIONS: Int = 3
+    private const val ITERATIONS: Int = 4
     private const val TURRET_X_OFFSET: Double = -0.96
     private const val TURRET_Y_OFFSET: Double = 0.0
 
     @JvmField var RESPONSE_LATENCY_SECONDS: Double = 0.015
     @JvmField var TURRET_ANGULAR_VELOCITY_COMPENSATION_SECONDS: Double = 0.1
-    @JvmField var FEED_READY_TOLERANCE_TPS: Double = 100.0
-    @JvmField var FEED_READY_STABLE_MS: Long = 120L
+    @JvmField var FEED_READY_TOLERANCE_TPS: Double = 40.0
+    @JvmField var FEED_READY_STABLE_MS: Long = 30L
     
     var flywheelState: FlywheelState = FlywheelState.PREDICTIVE_AUTO_AIM
 
