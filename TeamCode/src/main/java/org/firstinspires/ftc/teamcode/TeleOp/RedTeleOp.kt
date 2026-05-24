@@ -23,7 +23,6 @@ import org.firstinspires.ftc.teamcode.Systems.Shooter.Turret
 import org.firstinspires.ftc.teamcode.Util.Alliance
 import org.firstinspires.ftc.teamcode.Util.DrivePowerLimiter
 import org.firstinspires.ftc.teamcode.Util.ROBOT
-import org.firstinspires.ftc.teamcode.Util.RobotRunLogger
 import org.firstinspires.ftc.teamcode.Util.Stage
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.includePedro
@@ -41,7 +40,6 @@ class RedTeleOp: NextFTCOpMode() {
     private lateinit var ballTelemetryItem: Telemetry.Item
     private lateinit var velocityTelemetryItem: Telemetry.Item
     private lateinit var shooterTelemetryItem: Telemetry.Item
-    private lateinit var loggerTelemetryItem: Telemetry.Item
     private var driverRequestedScalar = 1.0
 
     val drivetrain: DriverControlledCommand by lazy {
@@ -76,12 +74,10 @@ class RedTeleOp: NextFTCOpMode() {
         DrivePowerLimiter.reset()
         driverRequestedScalar = 1.0
         drivetrain.schedule()
-        RobotRunLogger.start(hardwareMap, "RedTeleOp")
         followerTelemetryItem = telemetry.addData("Follower", "").setRetained(true)
         ballTelemetryItem = telemetry.addData("balls: ", 0).setRetained(true)
         velocityTelemetryItem = telemetry.addData("Velocity", "").setRetained(true)
         shooterTelemetryItem = telemetry.addData("Shooter", "").setRetained(true)
-        loggerTelemetryItem = telemetry.addData("Log", RobotRunLogger.filePath).setRetained(true)
         Gamepads.gamepad1 .apply {
             rightTrigger.greaterThan(0.0)
                 .whenBecomesTrue { Rollers.run(1.0,0.67) }
@@ -145,7 +141,6 @@ class RedTeleOp: NextFTCOpMode() {
         Shooter.update()
         Rollers.update(currentBallCount)
         drivetrain.scalar = DrivePowerLimiter.limit(driverRequestedScalar)
-        RobotRunLogger.sample(currentBallCount, drivetrain.scalar)
 
         val now = System.currentTimeMillis()
         if (now - lastTelemetryUpdateTime >= 200) {
@@ -153,13 +148,8 @@ class RedTeleOp: NextFTCOpMode() {
             ballTelemetryItem.setValue(currentBallCount)
             velocityTelemetryItem.setValue(follower.velocity.toString())
             shooterTelemetryItem.setValue(Shooter.debug())
-            loggerTelemetryItem.setValue(RobotRunLogger.filePath)
             lastTelemetryUpdateTime = now
         }
         telemetry.update()
-    }
-
-    override fun onStop() {
-        RobotRunLogger.stop()
     }
 }
