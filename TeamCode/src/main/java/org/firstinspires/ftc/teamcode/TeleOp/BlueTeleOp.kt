@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.Systems.Shooter.Shooter.shooterMethod
 import org.firstinspires.ftc.teamcode.Systems.Shooter.ShooterMethod
 import org.firstinspires.ftc.teamcode.Systems.Shooter.Turret
 import org.firstinspires.ftc.teamcode.Util.Alliance
+import org.firstinspires.ftc.teamcode.Util.DrivePowerLimiter
 import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.Stage
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
@@ -39,6 +40,7 @@ class BlueTeleOp: NextFTCOpMode() {
     private lateinit var ballTelemetryItem: Telemetry.Item
     private lateinit var velocityTelemetryItem: Telemetry.Item
     private lateinit var shooterTelemetryItem: Telemetry.Item
+    private var driverRequestedScalar = 1.0
 
     val drivetrain: DriverControlledCommand by lazy {
         PedroDriverControlled(
@@ -69,6 +71,9 @@ class BlueTeleOp: NextFTCOpMode() {
         ROBOT.currStage = Stage.TELEOP
         ROBOT.currAlliance = Alliance.BLUE
         follower.setStartingPose(ROBOT.teleopStartPose)
+        Load.resetShotStats()
+        DrivePowerLimiter.reset()
+        driverRequestedScalar = 1.0
         drivetrain.schedule()
         followerTelemetryItem = telemetry.addData("Follower", "").setRetained(true)
         ballTelemetryItem = telemetry.addData("balls: ", 0).setRetained(true)
@@ -85,8 +90,8 @@ class BlueTeleOp: NextFTCOpMode() {
                 .whenBecomesTrue ( Load.shootTripleCommand )
             leftBumper
                 .toggleOnBecomesTrue()
-                .whenBecomesTrue { drivetrain.scalar = 0.3 }
-                .whenBecomesFalse { drivetrain.scalar = 1.0 }
+                .whenBecomesTrue { driverRequestedScalar = 0.3 }
+                .whenBecomesFalse { driverRequestedScalar = 1.0 }
             circle
                 .whenBecomesTrue { Shooter.cycleFlywheelMode() }
             cross
@@ -136,6 +141,7 @@ class BlueTeleOp: NextFTCOpMode() {
         val currentBallCount = BreakBeam.refreshBallCount(minIntervalMs = 20L)
         Shooter.update()
         Rollers.update(currentBallCount)
+        drivetrain.scalar = DrivePowerLimiter.limit(driverRequestedScalar)
 
         val now = System.currentTimeMillis()
         if (now - lastTelemetryUpdateTime >= 200) {

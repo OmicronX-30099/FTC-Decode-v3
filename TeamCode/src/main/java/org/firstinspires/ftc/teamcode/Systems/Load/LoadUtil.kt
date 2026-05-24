@@ -3,6 +3,7 @@
 package org.firstinspires.ftc.teamcode.Systems.Load
 
 import android.util.Log
+import com.bylazar.configurables.annotations.Configurable
 import com.qualcomm.robotcore.hardware.DigitalChannel
 import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.ftc.ActiveOpMode
@@ -21,16 +22,28 @@ object Rollers: Subsystem {
     private val sideLight2: ServoEx = ServoEx("right_light", -0.1)
 
     var isFeeding: Boolean = false
+    var intakePower: Double = 0.0
+        private set
+    var transferPower: Double = 0.0
+        private set
     private var fullStartTime: Long = -1
     private var lastSideLightPosition: Double = Double.NaN
 
     override fun initialize() {
         lockShooter()
+        intakePower = 0.0
+        transferPower = 0.0
         lastSideLightPosition = Double.NaN
     }
 
-    fun transfer(tPow: Double) { transferMotor.power = tPow }
-    fun intake(iPow: Double) { intakeMotor.power = iPow }
+    fun transfer(tPow: Double) {
+        transferPower = tPow
+        transferMotor.power = tPow
+    }
+    fun intake(iPow: Double) {
+        intakePower = iPow
+        intakeMotor.power = iPow
+    }
 
     fun run(iPow: Double, tPow: Double) = transfer(tPow) .also { intake(iPow) }
     fun stop() = run(0.0,0.0)
@@ -75,7 +88,10 @@ object Rollers: Subsystem {
     }
 }
 
+@Configurable
 object BreakBeam: Subsystem {
+    @JvmField var OCCUPANCY_STABLE_MS: Long = 45L
+
     private val bb1 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb1") }
     private val bb2 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb2") }
     private val bb3 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb3") }
@@ -99,6 +115,18 @@ object BreakBeam: Subsystem {
         private set
     var cachedPos3Occupied: Boolean = false
         private set
+    var cachedBb1State: Boolean = true
+        private set
+    var cachedBb2State: Boolean = true
+        private set
+    var cachedBb3State: Boolean = true
+        private set
+    var cachedBb4State: Boolean = true
+        private set
+    var cachedBb5State: Boolean = true
+        private set
+    var cachedBb6State: Boolean = true
+        private set
     val ballCount: Int get() = refreshBallCount()
 
     fun refreshBallCount(minIntervalMs: Long = 0L): Int {
@@ -107,9 +135,16 @@ object BreakBeam: Subsystem {
             return cachedBallCount
         }
 
-        val p1 = pos1Occupied
-        val p2 = pos2Occupied
-        val p3 = pos3Occupied
+        cachedBb1State = bb1.state
+        cachedBb2State = bb2.state
+        cachedBb3State = bb3.state
+        cachedBb4State = bb4.state
+        cachedBb5State = bb5.state
+        cachedBb6State = bb6.state
+
+        val p1 = !cachedBb1State || !cachedBb2State
+        val p2 = !cachedBb3State || !cachedBb4State
+        val p3 = !cachedBb5State || !cachedBb6State
         cachedPos1Occupied = p1
         cachedPos2Occupied = p2
         cachedPos3Occupied = p3
@@ -133,9 +168,9 @@ object BreakBeam: Subsystem {
         }
 
         cachedBallCount = when {
-            threeStartTime != -1L && now - threeStartTime > 25 -> 3
-            twoStartTime != -1L && now - twoStartTime > 25 -> 2
-            oneStartTime != -1L && now - oneStartTime > 25 -> 1
+            threeStartTime != -1L && now - threeStartTime > OCCUPANCY_STABLE_MS -> 3
+            twoStartTime != -1L && now - twoStartTime > OCCUPANCY_STABLE_MS -> 2
+            oneStartTime != -1L && now - oneStartTime > OCCUPANCY_STABLE_MS -> 1
             else -> 0
         }
         lastRefreshTime = now
@@ -153,6 +188,12 @@ object BreakBeam: Subsystem {
         cachedPos1Occupied = false
         cachedPos2Occupied = false
         cachedPos3Occupied = false
+        cachedBb1State = true
+        cachedBb2State = true
+        cachedBb3State = true
+        cachedBb4State = true
+        cachedBb5State = true
+        cachedBb6State = true
     }
 }
 

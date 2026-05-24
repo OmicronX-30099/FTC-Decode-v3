@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil
 import org.firstinspires.ftc.teamcode.Systems.Load.BreakBeam
+import org.firstinspires.ftc.teamcode.Systems.Load.Load
 import org.firstinspires.ftc.teamcode.Systems.Load.Rollers
 import org.firstinspires.ftc.teamcode.Systems.Shooter.Flywheel
 import org.firstinspires.ftc.teamcode.Systems.Shooter.Hood
@@ -52,6 +53,11 @@ object RobotRunLogger {
     private var crServos: List<CRServoEntry> = emptyList()
     private var digitalChannels: List<DigitalEntry> = emptyList()
     private var voltageSensors: List<Pair<String, VoltageSensor>> = emptyList()
+    private var motorEncoderCache: MutableList<String> = mutableListOf()
+    private var motorTargetCache: MutableList<String> = mutableListOf()
+    private var motorModeCache: MutableList<String> = mutableListOf()
+    private var motorZeroPowerCache: MutableList<String> = mutableListOf()
+    private var motorVelocityCache: MutableList<String> = mutableListOf()
     private var motorCurrentAmpsCache: MutableList<String> = mutableListOf()
     private var motorOverCurrentCache: MutableList<String> = mutableListOf()
     private var voltageCache: MutableList<String> = mutableListOf()
@@ -81,6 +87,11 @@ object RobotRunLogger {
         voltageSensors = hardwareMap.voltageSensor.entrySet()
             .map { cleanName(it.key) to it.value }
             .sortedBy { it.first }
+        motorEncoderCache = MutableList(motors.size) { "" }
+        motorTargetCache = MutableList(motors.size) { "" }
+        motorModeCache = MutableList(motors.size) { "" }
+        motorZeroPowerCache = MutableList(motors.size) { "" }
+        motorVelocityCache = MutableList(motors.size) { "" }
         motorCurrentAmpsCache = MutableList(motors.size) { "" }
         motorOverCurrentCache = MutableList(motors.size) { "" }
         voltageCache = MutableList(voltageSensors.size) { "" }
@@ -146,17 +157,31 @@ object RobotRunLogger {
         values += bool(BreakBeam.cachedPos1Occupied)
         values += bool(BreakBeam.cachedPos2Occupied)
         values += bool(BreakBeam.cachedPos3Occupied)
+        values += bool(BreakBeam.cachedBb1State)
+        values += bool(BreakBeam.cachedBb2State)
+        values += bool(BreakBeam.cachedBb3State)
+        values += bool(BreakBeam.cachedBb4State)
+        values += bool(BreakBeam.cachedBb5State)
+        values += bool(BreakBeam.cachedBb6State)
         values += bool(Rollers.isFeeding)
+        values += bool(Load.isWaitingForShooter)
+        values += Load.shotRequestCount.toString()
+        values += Load.shotStartCount.toString()
+        values += Load.lastShotWaitMs.toString()
         values += Shooter.flywheelState.name
         values += Shooter.shooterMethod.name
         values += finite(Flywheel.targetVelocity)
         values += finite(Flywheel.currentVelocity)
+        values += finite(Shooter.flywheelVelocityError)
+        values += bool(Shooter.flywheelReadyToFeed)
         values += finite(Flywheel.velocityOffset)
         values += finite(Flywheel.calculatePow(Flywheel.currentVelocity))
         values += finite(Turret.targetAngle)
         values += finite(Turret.offset)
         values += finite(Hood.targetPosition)
         values += finite(drivetrainScalar)
+        values += finite(DrivePowerLimiter.currentCap)
+        values += DrivePowerLimiter.currentReason
         values += gamepadValues(dev.nextftc.ftc.ActiveOpMode.gamepad1)
         values += gamepadValues(dev.nextftc.ftc.ActiveOpMode.gamepad2)
 
@@ -164,12 +189,12 @@ object RobotRunLogger {
         motors.forEachIndexed { index, entry ->
             val motor = entry.motor
             values += safe { finite(motor.power) }
-            values += safe { motor.currentPosition.toString() }
-            values += safe { motor.targetPosition.toString() }
-            values += safe { motor.mode.name }
-            values += safe { motor.zeroPowerBehavior.name }
+            values += motorEncoderCache.getOrElse(index) { "" }
+            values += motorTargetCache.getOrElse(index) { "" }
+            values += motorModeCache.getOrElse(index) { "" }
+            values += motorZeroPowerCache.getOrElse(index) { "" }
             if (motor is DcMotorEx) {
-                values += safe { finite(motor.velocity) }
+                values += motorVelocityCache.getOrElse(index) { "" }
                 values += motorCurrentAmpsCache.getOrElse(index) { "" }
                 values += motorOverCurrentCache.getOrElse(index) { "" }
             } else {
@@ -224,17 +249,31 @@ object RobotRunLogger {
             "beam_pos1_occupied",
             "beam_pos2_occupied",
             "beam_pos3_occupied",
+            "beam_bb1_state",
+            "beam_bb2_state",
+            "beam_bb3_state",
+            "beam_bb4_state",
+            "beam_bb5_state",
+            "beam_bb6_state",
             "rollers_is_feeding",
+            "load_waiting_for_shooter",
+            "shot_request_count",
+            "shot_start_count",
+            "last_shot_wait_ms",
             "flywheel_state",
             "shooter_method",
             "flywheel_target_tps",
             "flywheel_current_tps",
+            "flywheel_error_tps",
+            "flywheel_ready_to_feed",
             "flywheel_velocity_offset_tps",
             "flywheel_commanded_power",
             "turret_target_angle_deg",
             "turret_offset_deg",
             "hood_target_position",
-            "drivetrain_scalar"
+            "drivetrain_scalar",
+            "drive_current_limit_cap",
+            "drive_current_limit_reason"
         )
 
         columns += gamepadHeaders("g1")
@@ -312,7 +351,12 @@ object RobotRunLogger {
         if (motors.isNotEmpty()) {
             val index = nextSlowMotorIndex % motors.size
             val motor = motors[index].motor
+            motorEncoderCache[index] = safe { motor.currentPosition.toString() }
+            motorTargetCache[index] = safe { motor.targetPosition.toString() }
+            motorModeCache[index] = safe { motor.mode.name }
+            motorZeroPowerCache[index] = safe { motor.zeroPowerBehavior.name }
             if (motor is DcMotorEx) {
+                motorVelocityCache[index] = safe { finite(motor.velocity) }
                 motorCurrentAmpsCache[index] = safe { finite(motor.getCurrent(CurrentUnit.AMPS)) }
                 motorOverCurrentCache[index] = safe { bool(motor.isOverCurrent) }
             }
