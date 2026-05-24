@@ -93,6 +93,12 @@ object BreakBeam: Subsystem {
     private var lastRefreshTime: Long = 0L
     var cachedBallCount: Int = 0
         private set
+    var cachedPos1Occupied: Boolean = false
+        private set
+    var cachedPos2Occupied: Boolean = false
+        private set
+    var cachedPos3Occupied: Boolean = false
+        private set
     val ballCount: Int get() = refreshBallCount()
 
     fun refreshBallCount(minIntervalMs: Long = 0L): Int {
@@ -104,6 +110,9 @@ object BreakBeam: Subsystem {
         val p1 = pos1Occupied
         val p2 = pos2Occupied
         val p3 = pos3Occupied
+        cachedPos1Occupied = p1
+        cachedPos2Occupied = p2
+        cachedPos3Occupied = p3
 
         if (p3) {
             if (oneStartTime == -1L) oneStartTime = now
@@ -141,6 +150,9 @@ object BreakBeam: Subsystem {
         threeStartTime = -1L
         lastRefreshTime = 0L
         cachedBallCount = 0
+        cachedPos1Occupied = false
+        cachedPos2Occupied = false
+        cachedPos3Occupied = false
     }
 }
 

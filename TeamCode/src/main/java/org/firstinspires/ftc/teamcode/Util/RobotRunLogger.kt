@@ -52,6 +52,13 @@ object RobotRunLogger {
     private var crServos: List<CRServoEntry> = emptyList()
     private var digitalChannels: List<DigitalEntry> = emptyList()
     private var voltageSensors: List<Pair<String, VoltageSensor>> = emptyList()
+    private var motorCurrentAmpsCache: MutableList<String> = mutableListOf()
+    private var motorOverCurrentCache: MutableList<String> = mutableListOf()
+    private var voltageCache: MutableList<String> = mutableListOf()
+    private var digitalStateCache: MutableList<String> = mutableListOf()
+    private var nextSlowMotorIndex: Int = 0
+    private var nextSlowVoltageIndex: Int = 0
+    private var nextSlowDigitalIndex: Int = 0
 
     val filePath: String
         get() = logFile?.absolutePath ?: "not logging"
@@ -74,6 +81,13 @@ object RobotRunLogger {
         voltageSensors = hardwareMap.voltageSensor.entrySet()
             .map { cleanName(it.key) to it.value }
             .sortedBy { it.first }
+        motorCurrentAmpsCache = MutableList(motors.size) { "" }
+        motorOverCurrentCache = MutableList(motors.size) { "" }
+        voltageCache = MutableList(voltageSensors.size) { "" }
+        digitalStateCache = MutableList(digitalChannels.size) { "" }
+        nextSlowMotorIndex = 0
+        nextSlowVoltageIndex = 0
+        nextSlowDigitalIndex = 0
 
         val directory = File(AppUtil.FIRST_FOLDER, LOG_DIR_NAME)
         if (!directory.exists()) directory.mkdirs()
@@ -101,10 +115,12 @@ object RobotRunLogger {
         lastSampleMs = now
         val loggedSampleDeltaMs = if (lastLoggedSampleMs == Long.MIN_VALUE) 0L else now - lastLoggedSampleMs
         lastLoggedSampleMs = now
+        refreshOneSlowHardwareRead()
 
         val pose = dev.nextftc.extensions.pedro.PedroComponent.follower.pose
         val velocity = dev.nextftc.extensions.pedro.PedroComponent.follower.velocity
         val angularVelocity = dev.nextftc.extensions.pedro.PedroComponent.follower.angularVelocity
+        val shooterPose = ROBOT.shooterPose()
 
         val values = mutableListOf<String>()
         values += now.toString()
@@ -124,12 +140,12 @@ object RobotRunLogger {
         values += finite(velocity.magnitude)
         values += finite(angularVelocity)
         values += finite(Math.toDegrees(angularVelocity))
-        values += finite(ROBOT.shooterPose().x)
-        values += finite(ROBOT.shooterPose().y)
+        values += finite(shooterPose.x)
+        values += finite(shooterPose.y)
         values += ballCount.toString()
-        values += bool(BreakBeam.pos1Occupied)
-        values += bool(BreakBeam.pos2Occupied)
-        values += bool(BreakBeam.pos3Occupied)
+        values += bool(BreakBeam.cachedPos1Occupied)
+        values += bool(BreakBeam.cachedPos2Occupied)
+        values += bool(BreakBeam.cachedPos3Occupied)
         values += bool(Rollers.isFeeding)
         values += Shooter.flywheelState.name
         values += Shooter.shooterMethod.name
@@ -144,8 +160,8 @@ object RobotRunLogger {
         values += gamepadValues(dev.nextftc.ftc.ActiveOpMode.gamepad1)
         values += gamepadValues(dev.nextftc.ftc.ActiveOpMode.gamepad2)
 
-        voltageSensors.forEach { (_, sensor) -> values += safe { finite(sensor.voltage) } }
-        motors.forEach { entry ->
+        voltageCache.forEach { values += it }
+        motors.forEachIndexed { index, entry ->
             val motor = entry.motor
             values += safe { finite(motor.power) }
             values += safe { motor.currentPosition.toString() }
@@ -154,8 +170,8 @@ object RobotRunLogger {
             values += safe { motor.zeroPowerBehavior.name }
             if (motor is DcMotorEx) {
                 values += safe { finite(motor.velocity) }
-                values += safe { finite(motor.getCurrent(CurrentUnit.AMPS)) }
-                values += safe { bool(motor.isOverCurrent) }
+                values += motorCurrentAmpsCache.getOrElse(index) { "" }
+                values += motorOverCurrentCache.getOrElse(index) { "" }
             } else {
                 values += ""
                 values += ""
@@ -164,13 +180,13 @@ object RobotRunLogger {
         }
         servos.forEach { entry -> values += safe { finite(entry.servo.position) } }
         crServos.forEach { entry -> values += safe { finite(entry.servo.power) } }
-        digitalChannels.forEach { entry -> values += safe { bool(entry.channel.state) } }
+        digitalStateCache.forEach { values += it }
 
         activeWriter.write(values.joinToString(",") { csv(it) })
         activeWriter.newLine()
         rowCount++
 
-        if (rowCount % 20L == 0L) {
+        if (rowCount % 100L == 0L) {
             activeWriter.flush()
         }
     }
@@ -291,6 +307,30 @@ object RobotRunLogger {
 
     private fun vectorX(vector: Vector): String = finite(vector.xComponent)
     private fun vectorY(vector: Vector): String = finite(vector.yComponent)
+
+    private fun refreshOneSlowHardwareRead() {
+        if (motors.isNotEmpty()) {
+            val index = nextSlowMotorIndex % motors.size
+            val motor = motors[index].motor
+            if (motor is DcMotorEx) {
+                motorCurrentAmpsCache[index] = safe { finite(motor.getCurrent(CurrentUnit.AMPS)) }
+                motorOverCurrentCache[index] = safe { bool(motor.isOverCurrent) }
+            }
+            nextSlowMotorIndex = (index + 1) % motors.size
+        }
+
+        if (voltageSensors.isNotEmpty()) {
+            val index = nextSlowVoltageIndex % voltageSensors.size
+            voltageCache[index] = safe { finite(voltageSensors[index].second.voltage) }
+            nextSlowVoltageIndex = (index + 1) % voltageSensors.size
+        }
+
+        if (digitalChannels.isNotEmpty()) {
+            val index = nextSlowDigitalIndex % digitalChannels.size
+            digitalStateCache[index] = safe { bool(digitalChannels[index].channel.state) }
+            nextSlowDigitalIndex = (index + 1) % digitalChannels.size
+        }
+    }
 
     private fun cleanName(name: String): String =
         name.trim().replace(Regex("[^A-Za-z0-9_]+"), "_").trim('_').ifEmpty { "unnamed" }
