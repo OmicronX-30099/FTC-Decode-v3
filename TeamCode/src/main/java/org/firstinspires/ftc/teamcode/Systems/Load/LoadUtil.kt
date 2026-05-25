@@ -52,7 +52,7 @@ object Rollers: Subsystem {
     fun unlockShooter() { shooterGateServo.position = 0.475 }
 
     fun update(ballCount: Int = BreakBeam.refreshBallCount()) {
-        val sidePos = when (ballCount) {
+        /*val sidePos = when (ballCount) {
             3 -> 0.5
             2 -> 0.388
             1 -> 0.277
@@ -62,7 +62,7 @@ object Rollers: Subsystem {
             sideLight1.position = sidePos
             sideLight2.position = sidePos
             lastSideLightPosition = sidePos
-        }
+        }*/
 
         if (isFeeding) return
 
@@ -90,7 +90,7 @@ object Rollers: Subsystem {
 
 @Configurable
 object BreakBeam: Subsystem {
-    @JvmField var OCCUPANCY_STABLE_MS: Long = 45L
+    @JvmField var OCCUPANCY_STABLE_MS: Long = 25L
 
     private val bb1 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb1") }
     private val bb2 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb2") }
@@ -99,9 +99,9 @@ object BreakBeam: Subsystem {
     private val bb5 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb5") }
     private val bb6 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb6") }
     //map of bb: intake to shooter: bb1,bb2 -> bb4,bb3 -> bb6,bb5
-    val pos1Occupied: Boolean get() = !bb1.state || !bb2.state //closest to intake, bb1 broken
-    val pos2Occupied: Boolean get() = !bb3.state || !bb4.state
-    val pos3Occupied: Boolean get() = !bb5.state || !bb6.state
+    //val pos1Occupied: Boolean get() = !bb1.state || !bb2.state //closest to intake, bb1 broken
+    //val pos2Occupied: Boolean get() = !bb3.state || !bb4.state
+    //val pos3Occupied: Boolean get() = !bb5.state || !bb6.state
 
     private var oneStartTime: Long = -1L
     private var twoStartTime: Long = -1L
@@ -177,7 +177,7 @@ object BreakBeam: Subsystem {
         return cachedBallCount
     }
 
-    val isFull: Boolean get() = refreshBallCount() == 3
+    //val isFull: Boolean get() = refreshBallCount() == 3
 
     override fun initialize() {
         oneStartTime = -1L

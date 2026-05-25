@@ -16,21 +16,19 @@ import kotlin.math.sin
 
 @Configurable
 object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
-    private const val ITERATIONS: Int = 4
+    private const val ITERATIONS: Int = 3
     private const val TURRET_X_OFFSET: Double = -0.96
     private const val TURRET_Y_OFFSET: Double = 0.0
 
     @JvmField var RESPONSE_LATENCY_SECONDS: Double = 0.015
     @JvmField var TURRET_ANGULAR_VELOCITY_COMPENSATION_SECONDS: Double = 0.1
     @JvmField var FEED_READY_TOLERANCE_TPS: Double = 40.0
-    @JvmField var FEED_READY_STABLE_MS: Long = 30L
     
     var flywheelState: FlywheelState = FlywheelState.PREDICTIVE_AUTO_AIM
 
     var shooterMethod: ShooterMethod = ShooterMethod.REGRESSION
 
     private var lastTurretUpdateTime = 0L
-    private var flywheelReadySinceMs = -1L
     var flywheelVelocityError: Double = 0.0
         private set
     var flywheelReadyToFeed: Boolean = false
@@ -83,7 +81,9 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
             }
         }
         
-        updateFlywheelReadiness(currentFlywheelVelocity)
+        flywheelVelocityError = Flywheel.targetVelocity - currentFlywheelVelocity
+        flywheelReadyToFeed = Flywheel.targetVelocity > 500.0 &&
+            abs(flywheelVelocityError) <= FEED_READY_TOLERANCE_TPS
         val error = abs(flywheelVelocityError)
         ShooterLights.setPosition(when {
             error <= 40.0 -> 0.5
@@ -117,24 +117,8 @@ object Shooter: SubsystemGroup(Turret, Flywheel, Hood, ShooterLights) {
         flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM
         flywheelVelocityError = 0.0
         flywheelReadyToFeed = false
-        flywheelReadySinceMs = -1L
     }
     fun debug(): String = "Turret Data: \n${Turret.debug()} \nFlywheel Data: \n${Flywheel.debug()} \nHood Data: \n${Hood.debug()}"
-
-    private fun updateFlywheelReadiness(currentFlywheelVelocity: Double) {
-        flywheelVelocityError = Flywheel.targetVelocity - abs(currentFlywheelVelocity)
-        val readyNow = Flywheel.targetVelocity > 500.0 &&
-            abs(flywheelVelocityError) <= FEED_READY_TOLERANCE_TPS
-        val now = System.currentTimeMillis()
-
-        if (readyNow) {
-            if (flywheelReadySinceMs == -1L) flywheelReadySinceMs = now
-            flywheelReadyToFeed = now - flywheelReadySinceMs >= FEED_READY_STABLE_MS
-        } else {
-            flywheelReadySinceMs = -1L
-            flywheelReadyToFeed = false
-        }
-    }
 
     private fun updateTurret(vec: Vector, robotHeadingDeg: Double, robotAngularVelocityDeg: Double) {
         val newTarget = calculateTurretAngle(vec, robotHeadingDeg, robotAngularVelocityDeg)
