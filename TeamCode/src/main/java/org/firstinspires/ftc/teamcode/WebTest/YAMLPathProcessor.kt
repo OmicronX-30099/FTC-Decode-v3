@@ -1,3 +1,5 @@
+@file:Suppress("unused", "UNCHECKED_CAST")
+
 package org.firstinspires.ftc.teamcode.WebTest
 
 import android.util.Log
@@ -7,6 +9,9 @@ import com.pedropathing.geometry.Curve
 import com.pedropathing.geometry.Pose
 import com.pedropathing.paths.PathBuilder as pb
 import com.pedropathing.paths.PathChain
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower as f
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil
 import org.yaml.snakeyaml.Yaml
@@ -18,13 +23,16 @@ object YAMLPathProcessor {
     private val dir = File(AppUtil.FIRST_FOLDER, "yaml_files")
     private val paths: MutableMap<String, PathChain> = mutableMapOf()
 
-    fun loadFile(fName: String, grouping: String) {
+    fun loadFile(fName: String, gName: String) {
+        val yamlEngine = Yaml()
+        val pathFile = File(dir, fName)
+        val groupingFile = File(dir, gName)
 
     }
 
     fun loadFile(fName: String) {
         val yamlEngine = Yaml()
-        val pathFile: File = File(dir, fName)
+        val pathFile = File(dir, fName)
         paths.clear()
 
         try {
