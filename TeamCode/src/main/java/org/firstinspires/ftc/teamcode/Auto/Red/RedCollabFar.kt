@@ -39,6 +39,7 @@ class RedCollabFar(): NextFTCOpMode() {
     override fun onStartButtonPressed() {
         buildPaths()
         follower.setStartingPose(Pose(88.000, 6.250, Math.toRadians(0.0)))
+        Shooter.flywheelManual(1740.0)
 
         fun fullswipeCommand() = SequentialGroup(
             ParallelGroup(
@@ -52,7 +53,7 @@ class RedCollabFar(): NextFTCOpMode() {
 
         val main = SequentialGroup(
             FollowPath(paths.shootpreload),
-            Delay(1.8),
+            Delay(0.8),
             Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths.full3rdspike),
@@ -97,37 +98,31 @@ class RedCollabFar(): NextFTCOpMode() {
             .build()
 
         val full3rdspike: PathChain = follower.pathBuilder().addPath(
-            BezierLine(
-                Pose(88.000, 19.000),
-                Pose(88.000, 35.000)
-            )
+            BezierCurve(
+                    Pose(88.000, 19.000),
+                Pose(90.000, 35.000),
+                Pose(125.000, 35.000)
+        )
         ).setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(0.0))
             .addPath(
                 BezierLine(
-                    Pose(88.000, 35.000),
-                    Pose(130.000, 35.000)
-                )
-            ).setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(0.0))
-            .addPath(
-                BezierLine(
-                    Pose(130.000, 35.000),
+                    Pose(125.000, 35.000),
                     Pose(94.000, 9.000)
                 )
             ).setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(0.0))
-            .setReversed()
             .build()
 
         val intakecorner: PathChain = follower.pathBuilder().addPath(
             BezierLine(
                 Pose(94.000, 9.000),
-                Pose(130.300, 8.000)
+                Pose(130.000, 8.000)
             )
         ).setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(0.0))
             .build()
 
         val shootercorner: PathChain = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(130.300, 8.000),
+                Pose(130.000, 8.000),
                 Pose(94.000, 9.000)
             )
         ).setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(0.0))
@@ -136,19 +131,19 @@ class RedCollabFar(): NextFTCOpMode() {
         val fullswipe: PathChain = follower.pathBuilder().addPath(
             BezierLine(
                 Pose(94.000, 9.000),
-                Pose(130.000, 8.000)
+                Pose(125.000, 9.000)
             )
         ).setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(0.0))
             .addPath(
                 BezierCurve(
-                    Pose(130.000, 8.000),
-                    Pose(135.807, 20.155),
-                    Pose(134.000, 35.000)
+                    Pose(125.000, 9.000),
+                    Pose(132.000, 9.000),
+                    Pose(132.000, 35.000)
                 )
             ).setTangentHeadingInterpolation()
             .addPath(
                 BezierLine(
-                    Pose(134.000, 35.000),
+                    Pose(132.000, 35.000),
                     Pose(94.000, 9.000)
                 )
             ).setTangentHeadingInterpolation()
