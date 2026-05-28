@@ -6,7 +6,9 @@ import com.pedropathing.geometry.Pose
 import com.pedropathing.paths.PathChain
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import dev.nextftc.core.commands.delays.Delay
+import dev.nextftc.core.commands.delays.WaitUntil
 import dev.nextftc.core.commands.groups.ParallelGroup
+import dev.nextftc.core.commands.groups.ParallelRaceGroup
 import dev.nextftc.core.commands.groups.SequentialGroup
 import dev.nextftc.core.commands.utility.InstantCommand
 import dev.nextftc.extensions.pedro.FollowPath
@@ -43,6 +45,12 @@ class Red21Ball(): NextFTCOpMode() {
         follower.setStartingPose(Pose(112.0,130.75,Math.toRadians(90.0)))
         buildPaths()
         Shooter.flywheelManual(1420.0)
+
+        fun waitForThreeBallsOrTimeout() = ParallelRaceGroup(
+            WaitUntil { BreakBeam.refreshBallCount(minIntervalMs = 20L) >= 3 },
+            Delay(1.5)
+        )
+
         val main = SequentialGroup(
             FollowPath(paths.shootpreload),
             //Delay(0.2),
@@ -57,7 +65,7 @@ class Red21Ball(): NextFTCOpMode() {
                 FollowPath(paths.intakegate),
                 InstantCommand { Rollers.run(1.0, 0.2) }
             ),
-            Delay(1.0),
+            waitForThreeBallsOrTimeout(),
             ParallelGroup(FollowPath(paths.shootgate),
                 //Delay(0.5),
                 //InstantCommand { Rollers.run(0.0,0.0)}
@@ -68,7 +76,7 @@ class Red21Ball(): NextFTCOpMode() {
                 FollowPath(paths.intakegate),
                 InstantCommand { Rollers.run(1.0, 0.2) }
             ),
-            Delay(1.5),
+            waitForThreeBallsOrTimeout(),
             ParallelGroup(
                 FollowPath(paths.shootgate),
                 //Delay(0.5),
@@ -80,7 +88,7 @@ class Red21Ball(): NextFTCOpMode() {
                 FollowPath(paths.intakegate),
                 InstantCommand { Rollers.run(1.0, 0.2) }
             ),
-            Delay(1.5),
+            waitForThreeBallsOrTimeout(),
             ParallelGroup(
                 FollowPath(paths.shootgate),
                 //Delay(0.5),
@@ -92,7 +100,7 @@ class Red21Ball(): NextFTCOpMode() {
                 FollowPath(paths.intakegate),
                 InstantCommand { Rollers.run(1.0, 0.2) }
             ),
-            Delay(1.5),
+            waitForThreeBallsOrTimeout(),
             ParallelGroup(
                 FollowPath(paths.shootgate),
                 //Delay(0.5),
