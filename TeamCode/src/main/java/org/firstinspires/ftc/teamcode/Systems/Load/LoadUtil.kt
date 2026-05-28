@@ -74,7 +74,7 @@ object Rollers: Subsystem {
         }
 
         if (fullStartTime != -1L) {
-            if (System.currentTimeMillis() - fullStartTime > 10) {
+            if (System.currentTimeMillis() - fullStartTime > 100) {
                 stop()
                 if (ballCount < 3) {
                     fullStartTime = -1L
@@ -90,7 +90,7 @@ object Rollers: Subsystem {
 
 @Configurable
 object BreakBeam: Subsystem {
-    @JvmField var OCCUPANCY_STABLE_MS: Long = 25L
+    @JvmField var OCCUPANCY_STABLE_MS: Long = 40L
 
     private val bb1 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb1") }
     private val bb2 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb2") }

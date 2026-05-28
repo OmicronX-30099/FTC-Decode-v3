@@ -12,6 +12,7 @@ import dev.nextftc.core.commands.utility.InstantCommand
 import dev.nextftc.extensions.pedro.FollowPath
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.ftc.NextFTCOpMode
+import org.firstinspires.ftc.teamcode.Systems.Load.BreakBeam
 import org.firstinspires.ftc.teamcode.Systems.Load.Load
 import org.firstinspires.ftc.teamcode.Systems.Load.Rollers
 import org.firstinspires.ftc.teamcode.Systems.Shooter.Shooter
@@ -201,8 +202,9 @@ class Red21Ball(): NextFTCOpMode() {
             .build()
     }
     override fun onUpdate() {
+        val currentBallCount = BreakBeam.refreshBallCount(minIntervalMs = 20L)
         Shooter.update()
-        Rollers.update()
+        Rollers.update(currentBallCount)
         if(follower.pose != Pose(0.0,0.0,0.0)){
             ROBOT.teleopStartPose = follower.pose
         }
