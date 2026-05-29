@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.Util.Stage
 import kotlin.math.abs
 
 private const val FULL_CONFIRM_MS = 160L
+private const val FULL_RUMBLE_MS = 350
 private const val POWER_EPSILON = 0.001
 
 object Rollers: Subsystem {
@@ -78,34 +79,44 @@ object Rollers: Subsystem {
 
         if (BreakBeam.isFullHeld) {
             fullStartTime = -1L
-            if (ROBOT.currStage != Stage.TELEOP) stop()
+            if (ROBOT.currStage == Stage.TELEOP) {
+                rumbleFullIfNeeded()
+            } else {
+                stop()
+            }
             return
         }
 
         if (ballCount >= 3) {
+            if (ROBOT.currStage == Stage.TELEOP) {
+                fullStartTime = -1L
+                rumbleFullIfNeeded()
+                return
+            }
+
             val now = System.currentTimeMillis()
             if (fullStartTime == -1L) {
                 fullStartTime = now
             }
             if (now - fullStartTime >= FULL_CONFIRM_MS) {
-                if (ROBOT.currStage == Stage.TELEOP) {
-                    if (!fullRumbleSent) {
-                        ActiveOpMode.gamepad1.rumble(200)
-                        fullRumbleSent = true
-                    }
-                } else {
-                    stop()
-                    BreakBeam.holdFull()
-                }
+                stop()
+                BreakBeam.holdFull()
                 fullStartTime = -1L
             }
             return
         }
 
         fullStartTime = -1L
+        fullRumbleSent = false
         if (ballCount >= 1) {
             transfer(0.0)
         }
+    }
+
+    private fun rumbleFullIfNeeded() {
+        if (fullRumbleSent) return
+        ActiveOpMode.gamepad1.rumble(1.0, 1.0, FULL_RUMBLE_MS)
+        fullRumbleSent = true
     }
 }
 
