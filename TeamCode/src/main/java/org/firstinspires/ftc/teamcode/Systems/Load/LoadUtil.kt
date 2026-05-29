@@ -112,8 +112,8 @@ object Rollers: Subsystem {
 @Configurable
 object BreakBeam: Subsystem {
     @JvmField var BB1_ENABLED: Boolean = false
-    @JvmField var OCCUPANCY_STABLE_MS: Long = 40L
-    @JvmField var INTAKE_SLOT_OCCUPANCY_STABLE_MS: Long = 90L
+    @JvmField var OCCUPANCY_STABLE_MS: Long = 20L
+    @JvmField var INTAKE_SLOT_OCCUPANCY_STABLE_MS: Long = 80L
     @JvmField var EMPTY_STABLE_MS: Long = 300L
     @JvmField var FEEDING_EMPTY_STABLE_MS: Long = 70L
 
