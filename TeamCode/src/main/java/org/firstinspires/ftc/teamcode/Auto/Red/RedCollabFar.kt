@@ -40,7 +40,7 @@ class RedCollabFar(): NextFTCOpMode() {
     override fun onStartButtonPressed() {
         buildPaths()
         follower.setStartingPose(Pose(86.112, 6.250, Math.toRadians(0.0)))
-        Shooter.flywheelManual(1740.0)
+        Shooter.flywheelManual(1800.0)
 
         fun fullswipeCommand() = SequentialGroup(
             ParallelGroup(

@@ -154,13 +154,13 @@ class Red21Ball(): NextFTCOpMode() {
                 Pose(87.000, 78.000),
                 Pose(108.350, 68.500)
             )
-        ).setConstantHeadingInterpolation(Math.toRadians(0.0))
+        ).setTangentHeadingInterpolation()
             .addPath(
                 BezierLine(
                     Pose(108.350, 68.500),
                     Pose(130.700,59.000)
                 )
-            ).setLinearHeadingInterpolation(Math.toRadians(0.0),Math.toRadians(27.0))
+            ).setLinearHeadingInterpolation(Math.toRadians(0.0),Math.toRadians(23.0))
             .build()
 
         /*val intakegate = follower.pathBuilder().addPath(
@@ -186,13 +186,13 @@ class Red21Ball(): NextFTCOpMode() {
         val fullspike1: PathChain = follower.pathBuilder().addPath(
             BezierCurve(
                 Pose(87.000, 78.000),
-                Pose(105.500, 80.000),
-                Pose(126.000, 80.000)
+                Pose(105.500, 83.000),
+                Pose(120.000, 83.000)
             )
         ).setTangentHeadingInterpolation()
             .addPath(
                 BezierLine(
-                    Pose(126.000, 80.000),
+                    Pose(120.000, 83.000),
                     Pose(87.000, 78.000)
                 )
             ).setTangentHeadingInterpolation()
