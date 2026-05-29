@@ -4,14 +4,17 @@ package org.firstinspires.ftc.teamcode.Systems.Load
 
 import android.util.Log
 import com.bylazar.configurables.annotations.Configurable
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DigitalChannel
 import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.hardware.impl.MotorEx
 import dev.nextftc.hardware.impl.ServoEx
-import kotlin.math.abs
 
+@Configurable
 object Rollers: Subsystem {
+    @JvmField var FULL_CONFIRM_MS: Long = 160L
+
     init {
         Log.d("Rollers", "Initializing")
     }
@@ -33,6 +36,7 @@ object Rollers: Subsystem {
         lockShooter()
         intakePower = 0.0
         transferPower = 0.0
+        fullStartTime = -1L
         lastSideLightPosition = Double.NaN
     }
 
@@ -52,45 +56,40 @@ object Rollers: Subsystem {
     fun unlockShooter() { shooterGateServo.position = 0.475 }
 
     fun update(ballCount: Int = BreakBeam.refreshBallCount()) {
-        /*val sidePos = when (ballCount) {
-            3 -> 0.5
-            2 -> 0.388
-            1 -> 0.277
-            else -> 0.0
+        if (isFeeding) {
+            fullStartTime = -1L
+            return
         }
-        if (lastSideLightPosition.isNaN() || abs(sidePos - lastSideLightPosition) > 0.001) {
-            sideLight1.position = sidePos
-            sideLight2.position = sidePos
-            lastSideLightPosition = sidePos
-        }*/
 
-        if (isFeeding) return
-
-        if (ballCount == 3) {
+        if (ballCount >= 3) {
+            val now = System.currentTimeMillis()
             if (fullStartTime == -1L) {
-                ActiveOpMode.gamepad1.rumble(200)
-                fullStartTime = System.currentTimeMillis()
+                if (isTeleOp()) ActiveOpMode.gamepad1.rumble(200)
+                fullStartTime = now
             }
+            if (now - fullStartTime >= FULL_CONFIRM_MS) {
+                stop()
+            }
+            return
         }
 
-        if (fullStartTime != -1L) {
-            if (System.currentTimeMillis() - fullStartTime > 100) {
-                stop()
-                if (ballCount < 3) {
-                    fullStartTime = -1L
-                }
-            }
-        } else {
-            if (ballCount >= 1) {
-                transfer(0.0)
-            }
+        fullStartTime = -1L
+        if (ballCount >= 1) {
+            transfer(0.0)
         }
     }
+
+    private fun isTeleOp(): Boolean =
+        ActiveOpMode.it?.javaClass?.isAnnotationPresent(TeleOp::class.java) == true
 }
 
 @Configurable
 object BreakBeam: Subsystem {
+    @JvmField var BB1_ENABLED: Boolean = false
     @JvmField var OCCUPANCY_STABLE_MS: Long = 40L
+    @JvmField var INTAKE_SLOT_OCCUPANCY_STABLE_MS: Long = 90L
+    @JvmField var EMPTY_STABLE_MS: Long = 300L
+    @JvmField var FEEDING_EMPTY_STABLE_MS: Long = 70L
 
     private val bb1 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb1") }
     private val bb2 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb2") }
@@ -98,14 +97,10 @@ object BreakBeam: Subsystem {
     private val bb4 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb4") }
     private val bb5 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb5") }
     private val bb6 by lazy { ActiveOpMode.hardwareMap.get(DigitalChannel::class.java, "bb6") }
-    //map of bb: intake to shooter: bb1,bb2 -> bb4,bb3 -> bb6,bb5
-    //val pos1Occupied: Boolean get() = !bb1.state || !bb2.state //closest to intake, bb1 broken
-    //val pos2Occupied: Boolean get() = !bb3.state || !bb4.state
-    //val pos3Occupied: Boolean get() = !bb5.state || !bb6.state
 
-    private var oneStartTime: Long = -1L
-    private var twoStartTime: Long = -1L
-    private var threeStartTime: Long = -1L
+    private val slot1 = SlotLatch()
+    private val slot2 = SlotLatch()
+    private val slot3 = SlotLatch()
     private var lastRefreshTime: Long = 0L
     var cachedBallCount: Int = 0
         private set
@@ -135,65 +130,87 @@ object BreakBeam: Subsystem {
             return cachedBallCount
         }
 
-        cachedBb1State = bb1.state
+        cachedBb1State = if (BB1_ENABLED) bb1.state else true
         cachedBb2State = bb2.state
         cachedBb3State = bb3.state
         cachedBb4State = bb4.state
         cachedBb5State = bb5.state
         cachedBb6State = bb6.state
 
-        val p1 = !cachedBb1State || !cachedBb2State
-        val p2 = !cachedBb3State || !cachedBb4State
-        val p3 = !cachedBb5State || !cachedBb6State
-        cachedPos1Occupied = p1
-        cachedPos2Occupied = p2
-        cachedPos3Occupied = p3
-
-        if (p3) {
-            if (oneStartTime == -1L) oneStartTime = now
-        } else {
-            oneStartTime = -1L
-        }
-
-        if (p2 && p3) {
-            if (twoStartTime == -1L) twoStartTime = now
-        } else {
-            twoStartTime = -1L
-        }
-
-        if (p1 && p2 && p3) {
-            if (threeStartTime == -1L) threeStartTime = now
-        } else {
-            threeStartTime = -1L
-        }
+        val emptyStableMs = if (Rollers.isFeeding) FEEDING_EMPTY_STABLE_MS else EMPTY_STABLE_MS
+        cachedPos1Occupied = slot1.update(rawSlot1Occupied(), now, INTAKE_SLOT_OCCUPANCY_STABLE_MS, emptyStableMs)
+        cachedPos2Occupied = slot2.update(!cachedBb3State || !cachedBb4State, now, OCCUPANCY_STABLE_MS, emptyStableMs)
+        cachedPos3Occupied = slot3.update(!cachedBb5State || !cachedBb6State, now, OCCUPANCY_STABLE_MS, emptyStableMs)
 
         cachedBallCount = when {
-            threeStartTime != -1L && now - threeStartTime > OCCUPANCY_STABLE_MS -> 3
-            twoStartTime != -1L && now - twoStartTime > OCCUPANCY_STABLE_MS -> 2
-            oneStartTime != -1L && now - oneStartTime > OCCUPANCY_STABLE_MS -> 1
+            cachedPos1Occupied && cachedPos2Occupied && cachedPos3Occupied -> 3
+            cachedPos2Occupied && cachedPos3Occupied -> 2
+            cachedPos3Occupied -> 1
             else -> 0
         }
         lastRefreshTime = now
         return cachedBallCount
     }
 
-    //val isFull: Boolean get() = refreshBallCount() == 3
-
-    override fun initialize() {
-        oneStartTime = -1L
-        twoStartTime = -1L
-        threeStartTime = -1L
-        lastRefreshTime = 0L
+    fun clearStoredBalls() {
+        slot1.reset()
+        slot2.reset()
+        slot3.reset()
         cachedBallCount = 0
         cachedPos1Occupied = false
         cachedPos2Occupied = false
         cachedPos3Occupied = false
+        lastRefreshTime = 0L
+    }
+
+    override fun initialize() {
+        clearStoredBalls()
+        lastRefreshTime = 0L
         cachedBb1State = true
         cachedBb2State = true
         cachedBb3State = true
         cachedBb4State = true
         cachedBb5State = true
         cachedBb6State = true
+    }
+
+    private fun rawSlot1Occupied(): Boolean =
+        !cachedBb2State || (BB1_ENABLED && !cachedBb1State)
+
+    private class SlotLatch {
+        var occupied: Boolean = false
+            private set
+        private var occupiedStartTime: Long = -1L
+        private var emptyStartTime: Long = -1L
+
+        fun update(rawOccupied: Boolean, now: Long, occupyStableMs: Long, emptyStableMs: Long): Boolean {
+            if (rawOccupied) {
+                emptyStartTime = -1L
+                if (!occupied) {
+                    if (occupiedStartTime == -1L) occupiedStartTime = now
+                    if (now - occupiedStartTime >= occupyStableMs) {
+                        occupied = true
+                        occupiedStartTime = -1L
+                    }
+                }
+            } else {
+                occupiedStartTime = -1L
+                if (occupied) {
+                    if (emptyStartTime == -1L) emptyStartTime = now
+                    if (now - emptyStartTime >= emptyStableMs) {
+                        occupied = false
+                        emptyStartTime = -1L
+                    }
+                }
+            }
+            return occupied
+        }
+
+        fun reset() {
+            occupied = false
+            occupiedStartTime = -1L
+            emptyStartTime = -1L
+        }
     }
 }
 
