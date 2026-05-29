@@ -4,17 +4,19 @@ package org.firstinspires.ftc.teamcode.Systems.Load
 
 import android.util.Log
 import com.bylazar.configurables.annotations.Configurable
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DigitalChannel
 import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.hardware.impl.MotorEx
 import dev.nextftc.hardware.impl.ServoEx
+import org.firstinspires.ftc.teamcode.Util.ROBOT
+import org.firstinspires.ftc.teamcode.Util.Stage
+import kotlin.math.abs
 
-@Configurable
+private const val FULL_CONFIRM_MS = 160L
+private const val POWER_EPSILON = 0.001
+
 object Rollers: Subsystem {
-    @JvmField var FULL_CONFIRM_MS: Long = 160L
-
     init {
         Log.d("Rollers", "Initializing")
     }
@@ -30,6 +32,7 @@ object Rollers: Subsystem {
     var transferPower: Double = 0.0
         private set
     private var fullStartTime: Long = -1
+    private var fullRumbleSent: Boolean = false
     private var lastSideLightPosition: Double = Double.NaN
 
     override fun initialize() {
@@ -37,19 +40,30 @@ object Rollers: Subsystem {
         intakePower = 0.0
         transferPower = 0.0
         fullStartTime = -1L
+        fullRumbleSent = false
         lastSideLightPosition = Double.NaN
     }
 
     fun transfer(tPow: Double) {
+        if (abs(transferPower - tPow) <= POWER_EPSILON) return
         transferPower = tPow
         transferMotor.power = tPow
     }
     fun intake(iPow: Double) {
+        if (abs(intakePower - iPow) <= POWER_EPSILON) return
         intakePower = iPow
         intakeMotor.power = iPow
     }
 
-    fun run(iPow: Double, tPow: Double) = transfer(tPow) .also { intake(iPow) }
+    fun run(iPow: Double, tPow: Double) {
+        if (iPow < -POWER_EPSILON || tPow < -POWER_EPSILON) {
+            BreakBeam.releaseFullHold()
+            fullStartTime = -1L
+            fullRumbleSent = false
+        }
+        transfer(tPow)
+        intake(iPow)
+    }
     fun stop() = run(0.0,0.0)
 
     fun lockShooter() { shooterGateServo.position = 0.32 }
@@ -58,17 +72,32 @@ object Rollers: Subsystem {
     fun update(ballCount: Int = BreakBeam.refreshBallCount()) {
         if (isFeeding) {
             fullStartTime = -1L
+            fullRumbleSent = false
+            return
+        }
+
+        if (BreakBeam.isFullHeld) {
+            fullStartTime = -1L
+            if (ROBOT.currStage != Stage.TELEOP) stop()
             return
         }
 
         if (ballCount >= 3) {
             val now = System.currentTimeMillis()
             if (fullStartTime == -1L) {
-                if (isTeleOp()) ActiveOpMode.gamepad1.rumble(200)
                 fullStartTime = now
             }
             if (now - fullStartTime >= FULL_CONFIRM_MS) {
-                stop()
+                if (ROBOT.currStage == Stage.TELEOP) {
+                    if (!fullRumbleSent) {
+                        ActiveOpMode.gamepad1.rumble(200)
+                        fullRumbleSent = true
+                    }
+                } else {
+                    stop()
+                    BreakBeam.holdFull()
+                }
+                fullStartTime = -1L
             }
             return
         }
@@ -78,9 +107,6 @@ object Rollers: Subsystem {
             transfer(0.0)
         }
     }
-
-    private fun isTeleOp(): Boolean =
-        ActiveOpMode.it?.javaClass?.isAnnotationPresent(TeleOp::class.java) == true
 }
 
 @Configurable
@@ -102,6 +128,8 @@ object BreakBeam: Subsystem {
     private val slot2 = SlotLatch()
     private val slot3 = SlotLatch()
     private var lastRefreshTime: Long = 0L
+    var isFullHeld: Boolean = false
+        private set
     var cachedBallCount: Int = 0
         private set
     var cachedPos1Occupied: Boolean = false
@@ -125,6 +153,9 @@ object BreakBeam: Subsystem {
     val ballCount: Int get() = refreshBallCount()
 
     fun refreshBallCount(minIntervalMs: Long = 0L): Int {
+        if (isFullHeld && !Rollers.isFeeding) return cachedBallCount
+        if (isFullHeld) releaseFullHold()
+
         val now = System.currentTimeMillis()
         if (minIntervalMs > 0L && now - lastRefreshTime < minIntervalMs) {
             return cachedBallCount
@@ -152,7 +183,24 @@ object BreakBeam: Subsystem {
         return cachedBallCount
     }
 
+    fun holdFull() {
+        isFullHeld = true
+        slot1.forceOccupied()
+        slot2.forceOccupied()
+        slot3.forceOccupied()
+        cachedBallCount = 3
+        cachedPos1Occupied = true
+        cachedPos2Occupied = true
+        cachedPos3Occupied = true
+    }
+
+    fun releaseFullHold() {
+        isFullHeld = false
+        lastRefreshTime = 0L
+    }
+
     fun clearStoredBalls() {
+        isFullHeld = false
         slot1.reset()
         slot2.reset()
         slot3.reset()
@@ -208,6 +256,12 @@ object BreakBeam: Subsystem {
 
         fun reset() {
             occupied = false
+            occupiedStartTime = -1L
+            emptyStartTime = -1L
+        }
+
+        fun forceOccupied() {
+            occupied = true
             occupiedStartTime = -1L
             emptyStartTime = -1L
         }

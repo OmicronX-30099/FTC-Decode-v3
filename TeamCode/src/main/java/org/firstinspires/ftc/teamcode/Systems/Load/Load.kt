@@ -45,6 +45,7 @@ object Load: SubsystemGroup(Rollers, BreakBeam) {
                 isWaitingForShooter = false
                 shotWaitStartMs = 0L
                 lastShotWaitMs = 0L
+                BreakBeam.releaseFullHold()
                 Rollers.isFeeding = true
                 Rollers.unlockShooter()
                 Delay(0.25)
