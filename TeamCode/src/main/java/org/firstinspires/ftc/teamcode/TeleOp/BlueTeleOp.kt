@@ -63,12 +63,12 @@ class BlueTeleOp: NextFTCOpMode() {
     override fun onInit() { Shooter.reset() }
 
     override fun onStartButtonPressed() {
-        HeadingLockTurnTuning.TARGET_HEADING_DEGREES = 150.0;
+        HeadingLockTurnTuning.TARGET_HEADING_DEGREES = 180.0 - 25.0
         shooterMethod = ShooterMethod.REGRESSION
         Shooter.flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM
         ROBOT.currStage = Stage.TELEOP
         ROBOT.currAlliance = Alliance.BLUE
-        follower.setStartingPose(ROBOT.teleopStartPose)
+        follower.setStartingPose(ROBOT.blueTeleopStartPose)
         drivetrain.schedule()
         followerTelemetryItem = telemetry.addData("Follower", "").setRetained(true)
         ballTelemetryItem = telemetry.addData("balls: ", 0).setRetained(true)
@@ -76,7 +76,7 @@ class BlueTeleOp: NextFTCOpMode() {
         shooterTelemetryItem = telemetry.addData("Shooter", "").setRetained(true)
         Gamepads.gamepad1 .apply {
             rightTrigger.greaterThan(0.0)
-                .whenBecomesTrue { Rollers.run(1.0,0.67) }
+                .whenBecomesTrue { Rollers.run(1.0,0.2) }
                 .whenBecomesFalse { Rollers.stop() }
             leftTrigger.greaterThan(0.0).and(rightTrigger.inRange(0.0..0.0))
                 .whenBecomesTrue { Rollers.run(-1.0,-1.0) }

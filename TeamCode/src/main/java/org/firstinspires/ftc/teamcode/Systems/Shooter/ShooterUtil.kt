@@ -18,7 +18,7 @@ object Hood: Subsystem {
     private val hoodServo: ServoEx = ServoEx("hood", -0.1)
 
     @JvmField var compensationFactor: Double = 0.000
-    @JvmField var minHoodPos: Double = 0.20
+    @JvmField var minHoodPos: Double = 0.28
     @JvmField var maxHoodPos: Double = 0.96
     
     @JvmField var servoAt15Deg: Double = 0.92
@@ -188,7 +188,8 @@ object Turret: Subsystem {
     fun resetOffset() { offset = 0.0 }
     fun update() {
         val normalized = normalizeAngle300(targetAngle + offset)
-        val servo1Position = normalized * (GEAR_RATIO / SERVO_RANGE) + 0.495
+        val servo1Position = normalized * (GEAR_RATIO / SERVO_RANGE) + 0.505
+
         val servo2Position = normalized * (GEAR_RATIO / SERVO_RANGE) + 0.505
         if (lastServo1Position.isNaN() || abs(servo1Position - lastServo1Position) > SERVO_WRITE_EPSILON) {
             turretServo1.position = servo1Position

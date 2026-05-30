@@ -33,8 +33,8 @@ object Load: SubsystemGroup(Rollers, BreakBeam) {
 
     val shootTripleCommand: Command = IfElseCommand(
         { ROBOT.shooterPose().distanceFrom(ROBOT.currAlliance.flywheelGoalPose) > 115.0},
-        shootCommand(1.0,0.67,0.67),
-        shootCommand(0.5, 0.78, 0.78)
+        shootCommand(0.4,0.67,0.67),
+        shootCommand(0.3, 0.78, 0.78)
     ).setRequirements(Stupid)
 
     fun shootCommand(waitTime: Double, tPow: Double, iPow: Double): Command =
@@ -45,9 +45,10 @@ object Load: SubsystemGroup(Rollers, BreakBeam) {
                 isWaitingForShooter = false
                 shotWaitStartMs = 0L
                 lastShotWaitMs = 0L
+                BreakBeam.releaseFullHold()
                 Rollers.isFeeding = true
                 Rollers.unlockShooter()
-                Delay(0.2)
+                Delay(0.25)
                 Rollers.run(tPow,iPow)
             },
             Delay(waitTime),

@@ -18,6 +18,7 @@ data object ROBOT {
         set(value) {
             field = value.copy()
         }
+    var blueTeleopStartPose: Pose = Pose(112.000, 130.750,Math.toRadians(90.0)).mirror(141.0)
 
     fun shooterPose(): Pose {
         if (follower.pose.x == 0.0 && follower.pose.y == 0.0) return follower.pose
@@ -33,7 +34,6 @@ enum class Alliance {
     BLUE {
         override val resetPoses: ResetPoses  = ResetPoses(Pose(124.9,76.0,Math.toRadians(0.0)).mirror(), Pose(117.0,129.0,-2.448).mirror(), Pose(116.0,130.0,-0.939).mirror())
         override val turretGoalPose: Pose = Pose(3.62, 137.88)
-        //override val turretGoalPose: Pose = Pose(0.0,137.5)
         override val flywheelGoalPose: Pose = Pose(141.5,141.5).mirror()
     },
     RED{

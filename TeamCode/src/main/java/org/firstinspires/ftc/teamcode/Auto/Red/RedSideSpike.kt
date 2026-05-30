@@ -37,7 +37,6 @@ class RedSideSpike(): NextFTCOpMode() {
         Shooter.reset()
         ROBOT.currStage = Stage.AUTONOMOUS
         follower.poseTracker.resetIMU()
-        //resetPinpoint()
     }
     override fun onStartButtonPressed() {
         follower.setStartingPose(Pose(112.000, 133.300, Math.toRadians(-90.0)))
