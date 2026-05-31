@@ -32,6 +32,11 @@ class HeadingLockTurnController {
         }
     }
 
+    fun disable() {
+        enabled = false
+        resetControllerState()
+    }
+
     fun turnPower(rawTurnStickX: Double): Double {
         if (abs(rawTurnStickX) > HeadingLockTurnTuning.TURN_STICK_DEADBAND) {
             enabled = false

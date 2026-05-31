@@ -2,6 +2,7 @@
 
 package org.firstinspires.ftc.teamcode.TeleOp
 
+import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import dev.nextftc.extensions.pedro.PedroDriverControlled
@@ -62,6 +63,12 @@ class RedTeleOp: NextFTCOpMode() {
 
     override fun onInit() { Shooter.reset() }
 
+    private fun setRobotHeading(headingDegrees: Double) {
+        headingLock.disable()
+        val currentPose = follower.pose
+        follower.pose = Pose(currentPose.x, currentPose.y, Math.toRadians(headingDegrees))
+    }
+
     override fun onStartButtonPressed() {
         shooterMethod = ShooterMethod.REGRESSION
         Shooter.flywheelState = FlywheelState.PREDICTIVE_AUTO_AIM
@@ -106,6 +113,8 @@ class RedTeleOp: NextFTCOpMode() {
                 .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose2 }
             square
                 .whenBecomesTrue { follower.pose = ROBOT.currAlliance.resetPoses.resetPose3 }
+            circle
+                .whenBecomesTrue { setRobotHeading(0.0) }
         }
         Gamepads .apply {
             gamepad1.dpadLeft.or(gamepad2.dpadLeft)
