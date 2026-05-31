@@ -55,6 +55,7 @@ object Load: SubsystemGroup(Rollers, BreakBeam) {
             instant {
                 Rollers.stop()
                 Rollers.lockShooter()
+                BreakBeam.clearStoredBalls()
                 Rollers.isFeeding = false
             }
         ).setRequirements(Stupid)

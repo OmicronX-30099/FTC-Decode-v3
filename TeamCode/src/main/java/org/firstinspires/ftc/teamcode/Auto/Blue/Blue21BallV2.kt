@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Auto.Red
+package org.firstinspires.ftc.teamcode.Auto.Blue
 
 import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.BezierLine
@@ -26,8 +26,8 @@ import org.firstinspires.ftc.teamcode.Util.includePedro
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 
 
-@Autonomous(name = "Red 21 Ball", group = "Collab Auto", preselectTeleOp = "Red TeleOp")
-class Red21Ball(): NextFTCOpMode() {
+@Autonomous(name = "Blue 21 Ball V2", group = "Collab Auto", preselectTeleOp = "Blue TeleOp")
+class Blue21BallV2(): NextFTCOpMode() {
     init {
         addSubsystems(Load, Shooter)
         includePedro(Constants::createFollower)
@@ -36,13 +36,13 @@ class Red21Ball(): NextFTCOpMode() {
     private lateinit var paths: Paths
 
     override fun onInit() {
-        ROBOT.currAlliance = Alliance.RED
+        ROBOT.currAlliance = Alliance.BLUE
         Shooter.reset()
         ROBOT.currStage = Stage.AUTONOMOUS
         follower.poseTracker.resetIMU()
     }
     override fun onStartButtonPressed() {
-        follower.setStartingPose(Pose(112.0,130.75,Math.toRadians(90.0)))
+        follower.setStartingPose(Pose(112.0, 130.75, Math.toRadians(90.0)).mirror())
         buildPaths()
         Shooter.flywheelManual(1420.0)
 
@@ -57,7 +57,7 @@ class Red21Ball(): NextFTCOpMode() {
             Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths.fullspike2),
-                InstantCommand { Rollers.run(1.0,0.25) }
+                InstantCommand { Rollers.run(1.0, 0.25) }
             ),
             Delay(0.2),
             Load.shootTripleCommand,
@@ -69,7 +69,7 @@ class Red21Ball(): NextFTCOpMode() {
             ParallelGroup(FollowPath(paths.shootgate),
                 SequentialGroup(
                     Delay(0.5),
-                    InstantCommand { Rollers.run(0.0,0.0)}
+                    InstantCommand { Rollers.run(0.0, 0.0)}
                 )
             ),
             Delay(0.2),
@@ -83,7 +83,7 @@ class Red21Ball(): NextFTCOpMode() {
                 FollowPath(paths.shootgate),
                 SequentialGroup(
                     Delay(0.5),
-                    InstantCommand { Rollers.run(0.0,0.0)}
+                    InstantCommand { Rollers.run(0.0, 0.0)}
                 )
             ),
             Delay(0.2),
@@ -97,7 +97,7 @@ class Red21Ball(): NextFTCOpMode() {
                 FollowPath(paths.shootgate),
                 SequentialGroup(
                     Delay(0.5),
-                    InstantCommand { Rollers.run(0.0,0.0)}
+                    InstantCommand { Rollers.run(0.0, 0.0)}
                 )
             ),
             Delay(0.2),
@@ -111,7 +111,7 @@ class Red21Ball(): NextFTCOpMode() {
                 FollowPath(paths.shootgate),
                 SequentialGroup(
                     Delay(0.5),
-                    InstantCommand { Rollers.run(0.0,0.0)}
+                    InstantCommand { Rollers.run(0.0, 0.0)}
                 )
             ),
             Delay(0.2),
@@ -133,9 +133,9 @@ class Red21Ball(): NextFTCOpMode() {
     inner class Paths {
         val shootpreload: PathChain = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(112.000, 130.750),
+                Pose(112.000, 130.750).mirror(),
 
-                Pose(87.000, 78.000)
+                Pose(87.000, 78.000).mirror()
             )
         ).setTangentHeadingInterpolation()
             .setReversed()
@@ -143,18 +143,18 @@ class Red21Ball(): NextFTCOpMode() {
 
         val fullspike2: PathChain = follower.pathBuilder().addPath(
             BezierCurve(
-                Pose(87.000, 78.000),
-                Pose(100.000, 58.000),
-                Pose(130.000, 58.000)
+                Pose(87.000, 78.000).mirror(),
+                Pose(100.000, 58.000).mirror(),
+                Pose(130.000, 58.000).mirror()
             )
         ).setTangentHeadingInterpolation()
             .addPath(
                 BezierCurve(
-                    Pose(130.000, 58.000),
-                    Pose(100.000,58.000),
-                    Pose(87.000, 78.000)
+                    Pose(130.000, 58.000).mirror(),
+                    Pose(100.000, 58.000).mirror(),
+                    Pose(87.000, 78.000).mirror()
                 )
-            ).setConstantHeadingInterpolation(Math.toRadians(0.0))
+            ).setConstantHeadingInterpolation(Math.toRadians(180.0))
             .addParametricCallback(0.6) {
                 Rollers.stop()
             }
@@ -162,33 +162,33 @@ class Red21Ball(): NextFTCOpMode() {
 
         val intakegate: PathChain = follower.pathBuilder().addPath(
             BezierCurve(
-                    Pose(87.000, 58.000),
-                    Pose(100.000, 58.000),
-                    Pose(130.000, 58.000)
+                    Pose(87.000, 58.000).mirror(),
+                    Pose(100.000, 58.000).mirror(),
+                    Pose(130.000, 58.000).mirror()
                 )
-            ).setLinearHeadingInterpolation(Math.toRadians(0.0),Math.toRadians(17.0))//Math.toRadians(160.0)
+            ).setLinearHeadingInterpolation(Math.toRadians(180.0), Math.toRadians(163.0))
             .build()
 
         val shootgate: PathChain = follower.pathBuilder().addPath(
             BezierCurve(
-                Pose(130.000, 58.000),
-                Pose(100.0,58.0),
-                Pose(87.000, 78.000)
+                Pose(130.000, 58.000).mirror(),
+                Pose(100.0, 58.0).mirror(),
+                Pose(87.000, 78.000).mirror()
             )
-        ).setConstantHeadingInterpolation(Math.toRadians(0.0))
+        ).setConstantHeadingInterpolation(Math.toRadians(180.0))
             .build()
 
         val fullspike1: PathChain = follower.pathBuilder().addPath(
             BezierCurve(
-                Pose(87.000, 78.000),
-                Pose(105.500, 83.000),
-                Pose(120.000, 83.000)
+                Pose(87.000, 78.000).mirror(),
+                Pose(105.500, 83.000).mirror(),
+                Pose(120.000, 83.000).mirror()
             )
         ).setTangentHeadingInterpolation()
             .addPath(
                 BezierLine(
-                    Pose(120.000, 83.000),
-                    Pose(87.000, 78.000)
+                    Pose(120.000, 83.000).mirror(),
+                    Pose(87.000, 78.000).mirror()
                 )
             ).setTangentHeadingInterpolation()
             .setReversed()
@@ -196,11 +196,11 @@ class Red21Ball(): NextFTCOpMode() {
 
         val park: PathChain = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(87.000, 78.000),
+                Pose(87.000, 78.000).mirror(),
 
-                Pose(125.5,78.000)
+                Pose(125.5, 78.000).mirror()
             )
-        ).setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(0.0))
+        ).setLinearHeadingInterpolation(Math.toRadians(180.0), Math.toRadians(180.0))
 
             .build()
     }
@@ -208,8 +208,8 @@ class Red21Ball(): NextFTCOpMode() {
         val currentBallCount = BreakBeam.refreshBallCount(minIntervalMs = 20L)
         Shooter.update()
         Rollers.update(currentBallCount)
-        if(follower.pose != Pose(0.0,0.0,0.0)){
-            ROBOT.teleopStartPose = follower.pose
+        if(follower.pose != Pose(0.0, 0.0, 0.0)){
+            ROBOT.blueTeleopStartPose = follower.pose
         }
         telemetry.update()
     }
