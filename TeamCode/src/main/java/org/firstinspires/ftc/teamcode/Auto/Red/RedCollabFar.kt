@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.Util.Stage
 import org.firstinspires.ftc.teamcode.Util.addSubsystems
 import org.firstinspires.ftc.teamcode.Util.includePedro
 
- @Autonomous(name = "Red Collab Auto", group = "Collab Auto", preselectTeleOp = "Red TeleOp")
+ @Autonomous(name = "Red Far Auto", group = "Collab Auto", preselectTeleOp = "Red TeleOp")
 class RedCollabFar(): NextFTCOpMode() {
     init {
         addSubsystems(Shooter, Load)
@@ -33,8 +33,8 @@ class RedCollabFar(): NextFTCOpMode() {
 
     override fun onInit() {
         ROBOT.currAlliance = Alliance.RED
-        ROBOT.currStage = Stage.TELEOP
-        Shooter.enableAutoAim()
+        Shooter.reset()
+        ROBOT.currStage = Stage.AUTONOMOUS
         follower.poseTracker.resetIMU()
     }
     override fun onStartButtonPressed() {
@@ -75,7 +75,8 @@ class RedCollabFar(): NextFTCOpMode() {
             fullswipeCommand(),
             fullswipeCommand(),
             fullswipeCommand(),
-            fullswipeCommand()
+            fullswipeCommand(),
+            FollowPath(paths.park)
         )
         main.schedule()
     }
@@ -141,16 +142,23 @@ class RedCollabFar(): NextFTCOpMode() {
                 BezierCurve(
                     Pose(125.000, 9.000),
                     Pose(132.000, 9.000),
-                    Pose(132.000, 35.000)
+                    Pose(132.000, 30.000)
                 )
             ).setTangentHeadingInterpolation()
             .addPath(
                 BezierLine(
-                    Pose(132.000, 35.000),
+                    Pose(132.000, 30.000),
                     Pose(94.000, 9.000)
                 )
             ).setTangentHeadingInterpolation()
             .setReversed()
+            .build()
+        val park: PathChain = follower.pathBuilder().addPath(
+            BezierLine(
+                Pose(94.000, 9.000),
+                Pose(110.000, 9.000)
+            )
+        ).setLinearHeadingInterpolation(Math.toRadians(0.0), Math.toRadians(0.0))
             .build()
     }
 }

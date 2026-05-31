@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.Util.ROBOT
 import org.firstinspires.ftc.teamcode.Util.Stage
 import kotlin.math.abs
 
-private const val FULL_CONFIRM_MS = 160L
-private const val FULL_RUMBLE_MS = 350
+private const val FULL_CONFIRM_MS = 0L
+private const val FULL_RUMBLE_MS = 300
 private const val POWER_EPSILON = 0.001
 
 object Rollers: Subsystem {
@@ -37,7 +37,6 @@ object Rollers: Subsystem {
     private var lastSideLightPosition: Double = Double.NaN
 
     override fun initialize() {
-        lockShooter()
         intakePower = 0.0
         transferPower = 0.0
         fullStartTime = -1L

@@ -225,7 +225,7 @@ internal fun normalizeAngle(angDeg: Double): Double {
 
 internal fun normalizeAngle300(angDeg: Double): Double {
     var normalized = normalizeAngle(angDeg)
-    return (normalized.coerceIn(-167.0,167.0))
+    return (normalized.coerceIn(-110.0,110.0))
 }
 
 enum class FlywheelState {

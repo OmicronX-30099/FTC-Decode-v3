@@ -57,13 +57,13 @@ class Red21Ball(): NextFTCOpMode() {
             Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths.fullspike2),
-                InstantCommand { Rollers.run(1.0,0.2) }
+                InstantCommand { Rollers.run(1.0,0.25) }
             ),
             //Delay(0.2),
-            Load . shootTripleCommand,
+            Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths.intakegate),
-                InstantCommand { Rollers.run(1.0, 0.2) }
+                InstantCommand { Rollers.run(1.0, 0.25) }
             ),
             waitForThreeBallsOrTimeout(),
             ParallelGroup(FollowPath(paths.shootgate),
@@ -71,10 +71,10 @@ class Red21Ball(): NextFTCOpMode() {
                 //InstantCommand { Rollers.run(0.0,0.0)}
             ),
             //Delay(0.2),
-            Load . shootTripleCommand,
+            Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths.intakegate),
-                InstantCommand { Rollers.run(1.0, 0.2) }
+                InstantCommand { Rollers.run(1.0, 0.25) }
             ),
             waitForThreeBallsOrTimeout(),
             ParallelGroup(
@@ -83,10 +83,10 @@ class Red21Ball(): NextFTCOpMode() {
                 //InstantCommand { Rollers.run(0.0,0.0)}
             ),
             //Delay(0.2),
-            Load . shootTripleCommand,
+            Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths.intakegate),
-                InstantCommand { Rollers.run(1.0, 0.2) }
+                InstantCommand { Rollers.run(1.0, 0.25) }
             ),
             waitForThreeBallsOrTimeout(),
             ParallelGroup(
@@ -95,10 +95,10 @@ class Red21Ball(): NextFTCOpMode() {
                 //InstantCommand { Rollers.run(0.0,0.0)}
             ),
             //Delay(0.2),
-            Load . shootTripleCommand,
+            Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths.intakegate),
-                InstantCommand { Rollers.run(1.0, 0.2) }
+                InstantCommand { Rollers.run(1.0, 0.25) }
             ),
             waitForThreeBallsOrTimeout(),
             ParallelGroup(
@@ -107,13 +107,13 @@ class Red21Ball(): NextFTCOpMode() {
                 //InstantCommand { Rollers.run(0.0,0.0)}
             ),
             //Delay(0.2),
-            Load . shootTripleCommand,
+            Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths.fullspike1),
-                InstantCommand { Rollers.run(1.0, 0.2) }
+                InstantCommand { Rollers.run(1.0, 0.25) }
             ),
             //Delay(0.2),
-            Load . shootTripleCommand,
+            Load.shootTripleCommand,
             FollowPath(paths.park)
         )
         main.schedule()
@@ -141,46 +141,30 @@ class Red21Ball(): NextFTCOpMode() {
             )
         ).setTangentHeadingInterpolation()
             .addPath(
-                BezierLine(
+                BezierCurve(
                     Pose(130.000, 58.000),
+                    Pose(100.000,58.000),
                     Pose(87.000, 78.000)
                 )
-            ).setTangentHeadingInterpolation()
-            .setReversed()
+            ).setConstantHeadingInterpolation(Math.toRadians(0.0))
             .build()
 
         val intakegate: PathChain = follower.pathBuilder().addPath(
-            BezierLine(
-                Pose(87.000, 78.000),
-                Pose(108.350, 68.500)
-            )
-        ).setTangentHeadingInterpolation()
-            .addPath(
-                BezierLine(
-                    Pose(108.350, 68.500),
-                    Pose(130.700,59.000)
+            BezierCurve(
+                    Pose(87.000, 58.000),
+                    Pose(100.000, 58.000),
+                    Pose(130.000, 58.000)
                 )
-            ).setLinearHeadingInterpolation(Math.toRadians(0.0),Math.toRadians(23.0))
+            ).setLinearHeadingInterpolation(Math.toRadians(0.0),Math.toRadians(17.0))//Math.toRadians(160.0)
             .build()
 
-        /*val intakegate = follower.pathBuilder().addPath(
-            BezierCurve(
-                Pose(87.000, 78.000),
-                Pose(90.000, 59.000),
-                Pose(129.700, 59.000)
-            )
-        ).setConstantHeadingInterpolation(Math.toRadians(23.0))
-
-            .build()*/
-
         val shootgate: PathChain = follower.pathBuilder().addPath(
-            BezierLine(
-                Pose(130.700, 59.000),
-
+            BezierCurve(
+                Pose(130.000, 58.000),
+                Pose(100.0,58.0),
                 Pose(87.000, 78.000)
             )
-        ).setTangentHeadingInterpolation()
-            .setReversed()
+        ).setConstantHeadingInterpolation(Math.toRadians(0.0))
             .build()
 
         val fullspike1: PathChain = follower.pathBuilder().addPath(

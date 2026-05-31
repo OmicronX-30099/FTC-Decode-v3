@@ -3,6 +3,7 @@
 package org.firstinspires.ftc.teamcode.TeleOp
 
 import com.bylazar.configurables.annotations.Configurable
+import com.pedropathing.control.PIDFCoefficients
 import com.pedropathing.math.MathFunctions
 import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
@@ -10,8 +11,8 @@ import kotlin.math.abs
 
 @Configurable
 object HeadingLockTurnTuning {
-    @JvmField var TARGET_HEADING_DEGREES: Double = 30.0
-    @JvmField var SECONDARY_PIDF_THRESHOLD_DEGREES: Double = 15.0
+    @JvmField var TARGET_HEADING_DEGREES: Double = 25.0
+    @JvmField var SECONDARY_PIDF_THRESHOLD_DEGREES: Double = 30.0
     @JvmField var MAX_TURN_POWER: Double = 1.0
     @JvmField var MANUAL_TURN_SCALE: Double = 0.5
     @JvmField var TURN_STICK_DEADBAND: Double = 0.0
@@ -57,9 +58,9 @@ class HeadingLockTurnController {
         val turnDirection = MathFunctions.getTurnDirection(follower.pose.heading, targetHeading)
         val secondaryPidfThreshold = Math.toRadians(HeadingLockTurnTuning.SECONDARY_PIDF_THRESHOLD_DEGREES)
         val coeffs = if (abs(headingError) < secondaryPidfThreshold) {
-            Constants.followerConstants.coefficientsHeadingPIDF
+            PIDFCoefficients(0.1, 0.0, 0.1, 0.02)
         } else {
-            Constants.followerConstants.coefficientsSecondaryHeadingPIDF
+            PIDFCoefficients(0.6,0.0,0.1,0.02)
         }
 
         lastHeadingError = headingError

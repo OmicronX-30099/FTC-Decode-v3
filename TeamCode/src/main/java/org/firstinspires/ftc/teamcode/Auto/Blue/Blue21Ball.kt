@@ -40,7 +40,7 @@ class Blue21Ball(): NextFTCOpMode() {
         ROBOT.currAlliance = Alliance.BLUE
         Shooter.reset()
         ROBOT.currStage = Stage.AUTONOMOUS
-        resetPinpoint()
+        follower.poseTracker.resetIMU()
     }
     override fun onStartButtonPressed() {
         follower.setStartingPose(Pose(112.0,130.75,Math.toRadians(90.0)).mirror())
@@ -61,60 +61,60 @@ class Blue21Ball(): NextFTCOpMode() {
                 InstantCommand { Rollers.run(1.0,0.2) }
             ),
             //Delay(0.2),
-            Load . shootTripleCommand,
+            Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths.intakegate),
                 InstantCommand { Rollers.run(1.0, 0.2) }
             ),
-            waitForThreeBallsOrTimeout(),
+            Delay(1.5),//waitForThreeBallsOrTimeout(),
             ParallelGroup(FollowPath(paths.shootgate),
                 //Delay(0.5),
                 //InstantCommand { Rollers.run(0.0,0.0)}
             ),
             //Delay(0.2),
-            Load . shootTripleCommand,
+            Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths.intakegate),
                 InstantCommand { Rollers.run(1.0, 0.2) }
             ),
-            waitForThreeBallsOrTimeout(),
+            Delay(2.0),//waitForThreeBallsOrTimeout(),
             ParallelGroup(
                 FollowPath(paths.shootgate),
                 //Delay(0.5),
                 //InstantCommand { Rollers.run(0.0,0.0)}
             ),
             //Delay(0.2),
-            Load . shootTripleCommand,
+            Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths.intakegate),
                 InstantCommand { Rollers.run(1.0, 0.2) }
             ),
-            waitForThreeBallsOrTimeout(),
+            Delay(2.0),//waitForThreeBallsOrTimeout(),
             ParallelGroup(
                 FollowPath(paths.shootgate),
                 //Delay(0.5),
                 //InstantCommand { Rollers.run(0.0,0.0)}
             ),
             //Delay(0.2),
-            Load . shootTripleCommand,
+            Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths.intakegate),
                 InstantCommand { Rollers.run(1.0, 0.2) }
             ),
-            waitForThreeBallsOrTimeout(),
+            Delay(2.0),//waitForThreeBallsOrTimeout(),
             ParallelGroup(
                 FollowPath(paths.shootgate),
                 //Delay(0.5),
                 //InstantCommand { Rollers.run(0.0,0.0)}
             ),
             //Delay(0.2),
-            Load . shootTripleCommand,
+            Load.shootTripleCommand,
             ParallelGroup(
                 FollowPath(paths.fullspike1),
                 InstantCommand { Rollers.run(1.0, 0.2) }
             ),
             //Delay(0.2),
-            Load . shootTripleCommand,
+            Load.shootTripleCommand,
             FollowPath(paths.park)
         )
         main.schedule()
@@ -159,9 +159,9 @@ class Blue21Ball(): NextFTCOpMode() {
             .addPath(
                 BezierLine(
                     Pose(108.350, 68.500).mirror(),
-                    Pose(130.700,59.000).mirror()
+                    Pose(130.000, 58.000).mirror()//Pose(131.0,59.0).mirror()
                 )
-            ).setLinearHeadingInterpolation(Math.toRadians(180.0),Math.toRadians(157.0))
+            ).setLinearHeadingInterpolation(Math.toRadians(180.0),Math.toRadians(163.0))//Math.toRadians(160.0)
             .build()
 
         /*val intakegate = follower.pathBuilder().addPath(
@@ -176,7 +176,7 @@ class Blue21Ball(): NextFTCOpMode() {
 
         val shootgate: PathChain = follower.pathBuilder().addPath(
             BezierLine(
-                Pose(130.700, 59.000).mirror(),
+                Pose(130.000, 58.000).mirror(),//Pose(131.0,59.0).mirror()
 
                 Pose(87.000, 78.000).mirror()
             )
@@ -213,9 +213,9 @@ class Blue21Ball(): NextFTCOpMode() {
     override fun onUpdate() {
         val currentBallCount = BreakBeam.refreshBallCount(minIntervalMs = 20L)
         Shooter.update()
-        Rollers.update(currentBallCount)
+        //Rollers.update(currentBallCount)
         if(follower.pose != Pose(0.0,0.0,0.0)){
-            ROBOT.teleopStartPose = follower.pose
+            ROBOT.blueTeleopStartPose = follower.pose
         }
         telemetry.update()
     }

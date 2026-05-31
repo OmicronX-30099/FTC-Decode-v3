@@ -42,7 +42,7 @@ class RedTeleOp: NextFTCOpMode() {
 
     val drivetrain: DriverControlledCommand by lazy {
         PedroDriverControlled(
-            -Gamepads.gamepad1.leftStickY.map { it * 0.8 },
+            -Gamepads.gamepad1.leftStickY.map { it * 1.0 },
             -Gamepads.gamepad1.leftStickX,
             { headingLock.turnPower(ActiveOpMode.gamepad1.right_stick_x.toDouble()) },
             true

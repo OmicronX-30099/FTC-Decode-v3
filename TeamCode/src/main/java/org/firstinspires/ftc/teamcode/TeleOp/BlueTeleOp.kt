@@ -42,7 +42,7 @@ class BlueTeleOp: NextFTCOpMode() {
 
     val drivetrain: DriverControlledCommand by lazy {
         PedroDriverControlled(
-            -Gamepads.gamepad1.leftStickY.map { it * 0.8 },
+            -Gamepads.gamepad1.leftStickY.map { it * 1.0 },
             -Gamepads.gamepad1.leftStickX,
             { headingLock.turnPower(ActiveOpMode.gamepad1.right_stick_x.toDouble()) },
             true
@@ -76,7 +76,7 @@ class BlueTeleOp: NextFTCOpMode() {
         shooterTelemetryItem = telemetry.addData("Shooter", "").setRetained(true)
         Gamepads.gamepad1 .apply {
             rightTrigger.greaterThan(0.0)
-                .whenBecomesTrue { Rollers.run(1.0,0.2) }
+                .whenBecomesTrue { Rollers.run(1.0,0.25) }
                 .whenBecomesFalse { Rollers.stop() }
             leftTrigger.greaterThan(0.0).and(rightTrigger.inRange(0.0..0.0))
                 .whenBecomesTrue { Rollers.run(-1.0,-1.0) }
