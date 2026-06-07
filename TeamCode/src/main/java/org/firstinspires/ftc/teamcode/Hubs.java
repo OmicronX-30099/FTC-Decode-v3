@@ -26,6 +26,7 @@ public class Hubs {
 
     // Constructor
     private Hubs() {
+        System.loadLibrary("rust_sdk");
         data = ByteBuffer.allocateDirect(100).order(ByteOrder.nativeOrder());
         intData = data.asIntBuffer();
     }
