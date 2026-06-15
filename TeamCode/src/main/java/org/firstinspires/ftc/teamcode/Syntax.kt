@@ -1,7 +1,9 @@
 @file:Suppress("UNCHECKED_CAST", "SameParameterValue", "PackageDirectoryMismatch")
 
-import android.R.attr.path
 import com.pedropathing.geometry.Pose
+import com.pedropathing.paths.PathBuilder
+import com.pedropathing.paths.PathChain
+import dev.nextftc.extensions.pedro.PedroComponent.Companion.follower
 import org.yaml.snakeyaml.Yaml
 import java.io.File
 import java.io.FileInputStream
@@ -32,13 +34,21 @@ object AutoManager {
 
         val pathChains = data["pathChains"] as ArrayList<Map<String, Any>>
 
-        for (p in pathChains) {
-            println(p["name"] as String)
-            val paths = p["paths"] as ArrayList<Map<String, Any>>
-            for (path in paths) {
-                println(path)
-            }
+        for (pChain in pathChains) {
+            parsePathChain(pChain)
         }
+    }
+
+    private fun parsePathChain(data: Map<String, Any>): PathChain {
+        val pChainStart: PathBuilder = follower.pathBuilder()
+
+
+
+        return pChainStart.build()
+    }
+
+    private fun applyPath(data: Map<String, Any>, currPChain: PathBuilder): PathBuilder {
+
     }
 
     private fun parsePose(data: Map<String, Any>)
