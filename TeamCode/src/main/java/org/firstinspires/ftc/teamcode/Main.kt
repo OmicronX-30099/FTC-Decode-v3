@@ -7,9 +7,9 @@ import java.io.FileInputStream
 
 
 fun main() {
-    AutoManager.loadFile("test_path.yaml")
+    PathManager.loadFile("test_path.yaml")
 }
-object AutoManager {
+object PathManager {
     var startPose = Pose()
         private set
 
@@ -27,7 +27,7 @@ object AutoManager {
 
     private fun readPathData(data: Map<String, Any>) {
         startPose = readPose(data["startPoint"] as Map<String, Any>)
-        val lines =
+        val lines = 0.0
     }
     private fun readPose(data: Map<String, Any>): Pose
         = Pose(
