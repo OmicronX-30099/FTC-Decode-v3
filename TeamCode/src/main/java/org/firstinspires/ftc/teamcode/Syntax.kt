@@ -1,7 +1,5 @@
 @file:Suppress("UNCHECKED_CAST", "SameParameterValue", "PackageDirectoryMismatch")
 
-import android.R.attr.data
-import android.R.attr.path
 import com.pedropathing.geometry.BezierCurve
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
@@ -19,70 +17,69 @@ fun main() {
 }
 
 object AutoManager {
+    val pathList: MutableMap<String, PathChain> = mutableMapOf()
     var startPoint: Pose = Pose()
 
     fun loadFile(fileName: String) {
-        val yamlReader = Yaml()
-        val pathFile = File("Teamcode/src/main/java/org/firstinspires/ftc/teamcode", fileName)
-
-        val data: Map<String, Any> = FileInputStream(pathFile).use {
-            inputStream -> yamlReader.load(inputStream)
-        }
-
-        parsePathData(data)
+        val data = readYAML(openFile(fileName))
+        parsePathSet(data)
     }
-
-    private fun parsePathData(data: Map<String, Any>) {
+    private fun parsePathSet(data: Map<String, Any>) {
+        // Remove prev paths
+        pathList.clear()
+        // Get startpoint and save it
         startPoint = parsePose(data["startData"] as Map<String, Any>)
-        println("The Start Pose is $startPoint")
-
+        // Get pathchains and for each one, parse it and save it
         val pathChains = data["pathChains"] as ArrayList<Map<String, Any>>
-
         for (pChain in pathChains) {
-            parsePathChain(pChain)
+            val res = parsePathChain(pChain)
+            pathList.put(res.first, res.second)
         }
     }
-
-    private fun parsePathChain(data: Map<String, Any>)/*: PathChain*/ {
-        //val pChainStart: PathBuilder = follower.pathBuilder()
+    private fun parsePathChain(data: Map<String, Any>): Pair<String, PathChain> {
+        // Break down the data
         val paths = data["paths"] as ArrayList<Map<String, Any>>
+        val pathName = data["name"] as String
+        // Create the pathchain and add every path to it
+        var pChain: PathBuilder = follower.pathBuilder()
         for (path in paths) {
-            applyPath(path)
+            pChain = parsePath(path, pChain)
+        }
+        // Return the data as a pair
+        return pathName to pChain.build()
+    }
+    private fun parsePath(data: Map<String, Any>, currPChain: PathBuilder): PathBuilder {
+        // Get start, control, and end points and store in list while parsing them into Pose class
+        val headingData = data["heading"] as Map<String, Any>
+        val controlPoints = data["controlPoints"] as ArrayList<Map<String, Any>>
+        val pathPoints: ArrayList<Pose> = arrayListOf(
+            parsePose(data["startPoint"] as Map<String, Any>)
+        )
+        for (p in controlPoints) { pathPoints.add(parsePose(p)) }
+        pathPoints.add(parsePose(data["endPoint"] as Map<String, Any>))
+
+        when (controlPoints.size) {
+            2 -> { currPChain.addPath(BezierLine(pathPoints[0], pathPoints[1])) }
+            else -> { currPChain.addPath(BezierCurve(pathPoints)) }
         }
 
-        //return pChainStart.build()
-    }
-
-    private fun applyPath(data: Map<String, Any>, /*currPChain: PathBuilder*/)/*: PathBuilder*/ {
-        // Start point
-        val startPoint = parsePose(data["startPoint"] as Map<String, Any>)
-        val controlPoints: ArrayList<Pose> = arrayListOf(startPoint)
-
-        // Control Points
-        val controlPointData = data["controlPoints"] as ArrayList<Map<String, Any>>
-        for (point in controlPointData) { controlPoints.add(parsePose(point)) }
-
-        // End point
-        val endPoint = parsePose(data["endPoint"] as Map<String, Any>)
-        controlPoints.add(endPoint)
-        /*
-        // Apply to builder
-        when (controlPoints.size) {
-            2 -> {
-                currPChain.addPath(
-                    BezierLine(startPoint, endPoint)
+        when (headingData["type"]) {
+            "tangential" -> {
+                currPChain.setTangentHeadingInterpolation()
+                if (headingData["reversed"] as Boolean) { currPChain.setReversed() }
+            }
+            "constant" -> {
+                currPChain.setConstantHeadingInterpolation(
+                    Math.toRadians((headingData["degrees"] as Number).toDouble())
                 )
             }
-            else -> {
-                currPChain.addPath(
-                    BezierCurve(controlPoints)
-                )
+            "linear" -> {
+                currPChain
             }
-        }*/
-        println(controlPoints)
-        //return currPChain
-    }
+        }
 
+        return currPChain
+    }
     private fun parsePose(data: Map<String, Any>)
         = Pose(
             roundTo((data["x"] as Number).toDouble(), 5),
@@ -90,5 +87,12 @@ object AutoManager {
         )
     private fun roundTo(num: Double, digits: Int): Double
         = round(num * 10.0.pow(digits)) / 10.0.pow(digits)
-
+    private fun openFile(fName: String): File
+        = File("", fName)
+    private fun readYAML(file: File): Map<String, Any> {
+        val yamlReader = Yaml()
+        return (FileInputStream(file).use {
+            inputStream -> yamlReader.load(inputStream)
+        })
+    }
 }

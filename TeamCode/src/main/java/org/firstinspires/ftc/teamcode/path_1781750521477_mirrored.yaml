@@ -1,0 +1,286 @@
+{
+  "startPoint": {
+    "x": 72.46209386281589,
+    "y": 49.24187725631768,
+    "heading": "linear",
+    "startDeg": 90,
+    "endDeg": 0,
+    "locked": false
+  },
+  "lines": [
+    {
+      "id": "line-vqjemoo0bg",
+      "name": "Path 1",
+      "endPoint": {
+        "x": 13.198555956678696,
+        "y": 120.56317689530684,
+        "heading": "linear",
+        "startDeg": 90,
+        "endDeg": 180
+      },
+      "controlPoints": [
+        {
+          "x": 89.06859205776172,
+          "y": 85.42960288808665
+        }
+      ],
+      "color": "#ff0000",
+      "locked": true,
+      "waitBeforeMs": 0,
+      "waitAfterMs": 0,
+      "waitBeforeName": "",
+      "waitAfterName": ""
+    },
+    {
+      "id": "mqixddfc-6t1sch",
+      "name": "Path 2",
+      "endPoint": {
+        "x": 93.89169675090253,
+        "y": 99.13718411552345,
+        "heading": "constant",
+        "reverse": false,
+        "degrees": 123
+      },
+      "controlPoints": [],
+      "color": "#ff0000",
+      "waitBeforeMs": 0,
+      "waitAfterMs": 0,
+      "waitBeforeName": "",
+      "waitAfterName": "",
+      "locked": true
+    },
+    {
+      "id": "mqixggni-8gfka1",
+      "name": "Path 3",
+      "endPoint": {
+        "x": 92.8664259927798,
+        "y": 116.89169675090253,
+        "heading": "tangential",
+        "reverse": false
+      },
+      "controlPoints": [
+        {
+          "x": 122.58483754512636,
+          "y": 142.16606498194943
+        },
+        {
+          "x": 58.08303249097474,
+          "y": 132.96750902527074
+        },
+        {
+          "x": 91.99277978339353,
+          "y": 105.77617328519855
+        }
+      ],
+      "color": "#7300ff",
+      "waitBeforeMs": 0,
+      "waitAfterMs": 0,
+      "waitBeforeName": "",
+      "waitAfterName": "",
+      "locked": true
+    },
+    {
+      "id": "mqixmq4n-2eeu55",
+      "name": "Path 4",
+      "endPoint": {
+        "x": 103.63369428868138,
+        "y": 77.40770424920429,
+        "heading": "tangential",
+        "reverse": true
+      },
+      "controlPoints": [
+        {
+          "x": 119.10746086275226,
+          "y": 95.68219147478263
+        },
+        {
+          "x": 42.293983125086804,
+          "y": 78.75980880330252
+        }
+      ],
+      "color": "#00ff6e",
+      "waitBeforeMs": 0,
+      "waitAfterMs": 0,
+      "waitBeforeName": "",
+      "waitAfterName": "",
+      "locked": true
+    },
+    {
+      "id": "mqixpabf-gzeg2b",
+      "name": "Path 5",
+      "endPoint": {
+        "x": 46.307962048755385,
+        "y": 135.70842438898302,
+        "heading": "constant",
+        "reverse": false,
+        "degrees": 0
+      },
+      "controlPoints": [],
+      "color": "#00ff6e",
+      "waitBeforeMs": 0,
+      "waitAfterMs": 0,
+      "waitBeforeName": "",
+      "waitAfterName": "",
+      "locked": true
+    },
+    {
+      "id": "mqixq15p-sutiza",
+      "name": "Path 6",
+      "endPoint": {
+        "x": 55.96438024602345,
+        "y": 36.43012216188123,
+        "heading": "linear",
+        "reverse": false,
+        "startDeg": 12,
+        "endDeg": 65
+      },
+      "controlPoints": [],
+      "color": "#00ff6e",
+      "waitBeforeMs": 0,
+      "waitAfterMs": 0,
+      "waitBeforeName": "",
+      "waitAfterName": "",
+      "locked": true
+    }
+  ],
+  "shapes": [
+    {
+      "id": "triangle-1",
+      "name": "Red Goal",
+      "vertices": [
+        {
+          "x": 141.5,
+          "y": 70
+        },
+        {
+          "x": 141.5,
+          "y": 141.5
+        },
+        {
+          "x": 120,
+          "y": 141.5
+        },
+        {
+          "x": 138,
+          "y": 119
+        },
+        {
+          "x": 138,
+          "y": 70
+        }
+      ],
+      "color": "#dc2626",
+      "fillColor": "#ff6b6b"
+    },
+    {
+      "id": "triangle-2",
+      "name": "Blue Goal",
+      "vertices": [
+        {
+          "x": 6,
+          "y": 119
+        },
+        {
+          "x": 25,
+          "y": 141.5
+        },
+        {
+          "x": 0,
+          "y": 141.5
+        },
+        {
+          "x": 0,
+          "y": 70
+        },
+        {
+          "x": 6,
+          "y": 70
+        }
+      ],
+      "color": "#2563eb",
+      "fillColor": "#60a5fa"
+    }
+  ],
+  "sequence": [
+    {
+      "kind": "path",
+      "lineId": "line-vqjemoo0bg"
+    },
+    {
+      "kind": "path",
+      "lineId": "mqixddfc-6t1sch"
+    },
+    {
+      "kind": "path",
+      "lineId": "mqixggni-8gfka1"
+    },
+    {
+      "kind": "path",
+      "lineId": "mqixmq4n-2eeu55"
+    },
+    {
+      "kind": "path",
+      "lineId": "mqixpabf-gzeg2b"
+    },
+    {
+      "kind": "path",
+      "lineId": "mqixq15p-sutiza"
+    }
+  ],
+  "pathChains": [
+    {
+      "id": "chain-mqiw8onf-6kkgml",
+      "name": "example_name_1",
+      "color": "#ff0000",
+      "lineIds": [
+        "line-vqjemoo0bg",
+        "mqixddfc-6t1sch"
+      ]
+    },
+    {
+      "id": "mqixf76u-6jz9w2",
+      "name": "example_name_2",
+      "color": "#7300ff",
+      "lineIds": [
+        "mqixggni-8gfka1"
+      ]
+    },
+    {
+      "id": "mqixmw6r-pmne5d",
+      "name": "example_name_3",
+      "color": "#00ff6e",
+      "lineIds": [
+        "mqixmq4n-2eeu55",
+        "mqixpabf-gzeg2b",
+        "mqixq15p-sutiza"
+      ]
+    }
+  ],
+  "settings": {
+    "xVelocity": 75,
+    "yVelocity": 65,
+    "aVelocity": 3.141592653589793,
+    "kFriction": 0.1,
+    "rWidth": 16,
+    "rHeight": 16,
+    "safetyMargin": 1,
+    "maxVelocity": 40,
+    "maxAcceleration": 30,
+    "maxDeceleration": 30,
+    "fieldMap": "decode.webp",
+    "robotImage": "/robot.png",
+    "theme": "auto",
+    "showGhostPaths": false,
+    "showOnionLayers": false,
+    "onionLayerSpacing": 3,
+    "onionColor": "#dc2626",
+    "onionNextPointOnly": false,
+    "showHeadingArrow": false,
+    "headingArrowLength": 50,
+    "headingArrowColor": "#ffffff",
+    "headingArrowThickness": 2,
+    "pathOpacity": 1
+  },
+  "version": "1.2.1",
+  "timestamp": "2026-06-18T03:25:22.500Z"
+}
