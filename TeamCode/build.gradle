@@ -63,4 +63,6 @@ dependencies {
     implementation 'dev.frozenmilk.sinister:Sloth:0.2.4'
 
     implementation 'org.yaml:snakeyaml:2.6'
+
+    implementation("com.bylazar.sloth:fullpanels:0.2.4+1.0.12")
 }
